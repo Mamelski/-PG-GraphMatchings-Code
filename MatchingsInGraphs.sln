@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchingsGui", "MatchingsInGraphs\MatchingsGui.csproj", "{A3608154-650B-40A0-8E53-683C7C0AAE39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphMatchingsGui", "MatchingsInGraphs\GraphMatchingsGui.csproj", "{A3608154-650B-40A0-8E53-683C7C0AAE39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchingsCore", "..\MatchingsCore\MatchingsCore.csproj", "{6D65E677-3CDD-4656-BEAC-D95BBCD7511B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphMatchingsCore", "MatchingsCore\GraphMatchingsCore.csproj", "{09BF67E0-741A-4E7E-B4A0-060EA03CA22B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{A3608154-650B-40A0-8E53-683C7C0AAE39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3608154-650B-40A0-8E53-683C7C0AAE39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3608154-650B-40A0-8E53-683C7C0AAE39}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D65E677-3CDD-4656-BEAC-D95BBCD7511B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D65E677-3CDD-4656-BEAC-D95BBCD7511B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D65E677-3CDD-4656-BEAC-D95BBCD7511B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D65E677-3CDD-4656-BEAC-D95BBCD7511B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09BF67E0-741A-4E7E-B4A0-060EA03CA22B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09BF67E0-741A-4E7E-B4A0-060EA03CA22B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09BF67E0-741A-4E7E-B4A0-060EA03CA22B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09BF67E0-741A-4E7E-B4A0-060EA03CA22B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
