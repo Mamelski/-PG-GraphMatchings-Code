@@ -93,5 +93,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MatchingsCore\GraphMatchingsCore.csproj">
+      <Project>{09BF67E0-741A-4E7E-B4A0-060EA03CA22B}</Project>
+      <Name>GraphMatchingsCore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

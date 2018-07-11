@@ -1,33 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-namespace MatchingsInGraphs
+﻿namespace MatchingsInGraphs
 {
+    using System;
+    using System.Linq.Expressions;
+    using System.Windows;
+
+    using MatchingsCore.Graph;
+    using MatchingsCore.Serializers;
+
+    using Microsoft.Win32;
+
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// The graph.
+        /// </summary>
+        private Graph graph;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MainWindow" /> class.
+        /// </summary>
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        ///     The load file button click.
+        /// </summary>
+        /// <param name="sender">
+        ///     The sender.
+        /// </param>
+        /// <param name="e">
+        ///     The e.
+        /// </param>
+        private void LoadFileButtonClick(object sender, RoutedEventArgs e)
         {
+            var openFileDialog = new OpenFileDialog { InitialDirectory = Environment.CurrentDirectory };
 
+            if (openFileDialog.ShowDialog() == true)
+            {
+                var filePath = openFileDialog.FileName;
+                var serializer = new AdjacencyListSerializer();
+                this.graph = serializer.Deserialize(filePath);
+            }
+            else
+            {
+                throw new Exception("Error while showing openFileDialog");
+            }
         }
     }
 }
