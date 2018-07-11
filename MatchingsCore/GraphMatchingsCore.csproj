@@ -41,9 +41,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GraphMatchingsException.cs" />
+    <Compile Include="Graph\AdjacencyListGraph.cs" />
     <Compile Include="Graph\Graph.cs" />
+    <Compile Include="Graph\Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serializers\AdjacencyListSerializer.cs" />
+    <Compile Include="Serializers\AdjacencyListGraphSerializer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

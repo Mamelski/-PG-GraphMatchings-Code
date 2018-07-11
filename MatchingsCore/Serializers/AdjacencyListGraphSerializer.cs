@@ -8,7 +8,7 @@
     /// <summary>
     /// The adjacency list serializer.
     /// </summary>
-    public class AdjacencyListSerializer
+    public class AdjacencyListGraphSerializer
     {
         /// <summary>
         /// The deserialize.
@@ -35,6 +35,7 @@
                 }
 
                 var numberOfNodes = int.Parse(numberOfNodesString);
+                var graph = new AdjacencyListGraph();
 
                 for (var i = 0; i < numberOfNodes; ++i)
                 {
@@ -45,8 +46,14 @@
                         throw new GraphMatchingsException($"Line {i} in file {pathToFile} is null or empty. Expecting {numberOfNodesString} lines.");
                     }
 
-                    var nodeNumberString = line.First();
-                    var neighbours = line.Split(' ').Skip(1);
+                    var nodes = line.Split(' ');
+                    var nodeNumberString = nodes.First();
+                    var nodeId = int.Parse(nodeNumberString);
+
+                    var node = new Node { Id = nodeId };
+
+                    graph.Add(node);
+
                 }
             }
 

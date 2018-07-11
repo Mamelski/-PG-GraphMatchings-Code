@@ -1,7 +1,6 @@
 ﻿namespace MatchingsInGraphs
 {
     using System;
-    using System.Linq.Expressions;
     using System.Windows;
 
     using MatchingsCore.Graph;
@@ -43,7 +42,7 @@
             if (openFileDialog.ShowDialog() == true)
             {
                 var filePath = openFileDialog.FileName;
-                var serializer = new AdjacencyListSerializer();
+                var serializer = new AdjacencyListGraphSerializer();
                 this.graph = serializer.Deserialize(filePath);
             }
             else

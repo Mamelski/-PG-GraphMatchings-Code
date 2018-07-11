@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MatchingsCore.Graph
+﻿namespace MatchingsCore.Graph
 {
-    public class Graph
+    /// <summary>
+    /// The graph.
+    /// </summary>
+    public abstract class Graph
     {
+        /// <summary>
+        /// The add.
+        /// </summary>
+        /// <param name="node">
+        /// The node.
+        /// </param>
+        public abstract void Add(Node node);
     }
 }
