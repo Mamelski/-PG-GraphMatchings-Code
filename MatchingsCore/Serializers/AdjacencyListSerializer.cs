@@ -1,6 +1,5 @@
 ﻿namespace MatchingsCore.Serializers
 {
-    using System;
     using System.IO;
     using System.Linq;
 
