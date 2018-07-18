@@ -1,35 +1,47 @@
 ﻿namespace MatchingsCore.Graph
 {
-    using System;
     using System.Collections.Generic;
 
     /// <summary>
-    /// The adjacency list graph.
+    ///     The adjacency list graph.
     /// </summary>
     public class AdjacencyListGraph : Graph
     {
         /// <summary>
-        /// The nodes.
+        ///     The neighbourList.
         /// </summary>
-        private List<Node> nodes = new List<Node>();
+        private readonly List<List<int>> neighbourList;
 
-        public Node this[int i]
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdjacencyListGraph"/> class.
+        /// </summary>
+        /// <param name="numberOfNodes">
+        /// The number of neighbourList.
+        /// </param>
+        public AdjacencyListGraph(int numberOfNodes)
         {
-            get => this.nodes[i];
-            set => this.nodes[i] = value;
+            this.neighbourList = new List<List<int>>(numberOfNodes);
+
+            for (int i = 0; i < numberOfNodes; ++i)
+            {
+                this.neighbourList.Add(new List<int>());
+            }
         }
 
         /// <summary>
-        /// The add.
+        ///     The this.
         /// </summary>
-        /// <param name="node">
-        /// The node.
+        /// <param name="i">
+        ///     The i.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public override void Add(Node node)
+        /// <returns>
+        ///     The <see cref="Node" />.
+        /// </returns>
+        public List<int> this[int i]
         {
-            this.nodes[node.Id] = 
+            get => this.neighbourList[i];
+
+            set => this.neighbourList[i] = value;
         }
     }
 }
