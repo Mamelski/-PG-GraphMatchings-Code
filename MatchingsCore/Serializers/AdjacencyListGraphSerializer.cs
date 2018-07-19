@@ -36,12 +36,14 @@
                 {
                     var line = this.ReadLineFromFile(reader, i, numberOfNodes, pathToFile);
 
-                    var node = this.ParseNodeIdFromLine(line, pathToFile);
+                    var nodeId = this.ParseNodeIdFromLine(line, pathToFile);
+                    var node = new Node { Id = nodeId };
 
                     var neighbours = this.ParseNeighboursFromFile(line, pathToFile);
 
-                    foreach (var neighbour in neighbours)
+                    foreach (var neighbourId in neighbours)
                     {
+                        var neighbour = new Node() { Id = neighbourId };
                         graph[node].Add(neighbour);
                     }
                 }

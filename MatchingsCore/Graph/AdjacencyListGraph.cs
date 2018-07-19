@@ -10,7 +10,7 @@
         /// <summary>
         ///     The neighbourList.
         /// </summary>
-        private readonly List<List<int>> neighbourList;
+        private readonly List<List<Node>> neighbourList;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdjacencyListGraph"/> class.
@@ -20,28 +20,28 @@
         /// </param>
         public AdjacencyListGraph(int numberOfNodes)
         {
-            this.neighbourList = new List<List<int>>(numberOfNodes);
+            this.neighbourList = new List<List<Node>>(numberOfNodes);
 
             for (int i = 0; i < numberOfNodes; ++i)
             {
-                this.neighbourList.Add(new List<int>());
+                this.neighbourList.Add(new List<Node>());
             }
         }
 
         /// <summary>
-        ///     The this.
+        /// The this.
         /// </summary>
-        /// <param name="i">
-        ///     The i.
+        /// <param name="node">
+        /// The node.
         /// </param>
         /// <returns>
-        ///     The <see cref="Node" />.
+        /// The <see cref="List{T}"/>.
         /// </returns>
-        public List<int> this[int i]
+        public List<Node> this[Node node]
         {
-            get => this.neighbourList[i];
+            get => this.neighbourList[node.Id];
 
-            set => this.neighbourList[i] = value;
+            set => this.neighbourList[node.Id] = value;
         }
     }
 }

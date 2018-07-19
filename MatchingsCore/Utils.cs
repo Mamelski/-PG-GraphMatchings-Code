@@ -5,10 +5,19 @@
     /// </summary>
     public class Utils
     {
-
-        public bool IsBipartite(Graph.Graph graph)
+        /// <summary>
+        /// The is bipartite.
+        /// </summary>
+        /// <param name="graph">
+        /// The graph.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ColortGraphAndCheckIfItIsBipartitr(ref Graph.Graph graph)
         {
 
+            return false;
         }
     }
 }
