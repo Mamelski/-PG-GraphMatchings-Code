@@ -8,43 +8,40 @@
     public class AdjacencyListGraph : Graph
     {
         /// <summary>
-        ///     The neighbourList.
+        /// The nodes.
         /// </summary>
-        private readonly List<List<Node>> neighbourList;
-        
+        private readonly List<Node> nodes;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AdjacencyListGraph"/> class.
         /// </summary>
         /// <param name="numberOfNodes">
-        /// The number of neighbourList.
+        /// The number of nodes.
         /// </param>
         public AdjacencyListGraph(int numberOfNodes)
         {
             this.Size = numberOfNodes;
-            this.neighbourList = new List<List<Node>>(numberOfNodes);
+            this.nodes = new List<Node>(numberOfNodes);
 
             for (int i = 0; i < numberOfNodes; ++i)
             {
-                this.neighbourList.Add(new List<Node>());
+                this.nodes.Add(new Node { Id = i });
             }
         }
 
         /// <summary>
         /// The this.
         /// </summary>
-        /// <param name="node">
-        /// The node.
+        /// <param name="index">
+        /// The index.
         /// </param>
         /// <returns>
-        /// The <see cref="List{T}"/>.
+        /// The <see cref="Node"/>.
         /// </returns>
-        public List<Node> this[Node node]
+        public override Node this[int index]
         {
-            get => this.neighbourList[node.Id];
-
-            set => this.neighbourList[node.Id] = value;
+            get => this.nodes[index];
+            set => this.nodes[index] = value;
         }
-
-       
     }
 }

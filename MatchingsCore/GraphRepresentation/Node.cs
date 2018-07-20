@@ -1,5 +1,7 @@
 ﻿namespace MatchingsCore.GraphRepresentation
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// The node.
     /// </summary>
@@ -19,5 +21,10 @@
         /// Gets or sets the color.
         /// </summary>
         public int Color { get; set; }
+
+        /// <summary>
+        /// Gets or sets the neighbours.
+        /// </summary>
+        public List<Node> Neighbours { get; set; } = new List<Node>();
     }
 }
