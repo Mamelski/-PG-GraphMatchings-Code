@@ -7,6 +7,7 @@
         Title="Matchings in graphs" Height="450" Width="800">
     <Grid>
         <Button Content="LoadGraph" HorizontalAlignment="Left" Margin="216,114,0,0" VerticalAlignment="Top" Width="75" Click="LoadFileButtonClick"/>
+        <Button Content="StartFord" HorizontalAlignment="Left" Margin="359,124,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
 
     </Grid>
 </Window>

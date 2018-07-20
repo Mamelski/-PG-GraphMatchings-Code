@@ -19,8 +19,11 @@
         public bool ColortGraphAndCheckIfItIsBipartite(ref Graph graph)
         {
             var firstNode = graph[0];
+
             var isGraphBipartite = this.DFSWithTwoColors(ref firstNode, 0);
 
+            // TODO sprawdz czy cykl
+            // TODO co jeśli nie graf
             return isGraphBipartite;
         }
 
@@ -30,28 +33,31 @@
         /// <param name="node">
         /// The node.
         /// </param>
-        /// <param name="color">
-        /// The color.
+        /// <param name="currentColor">
+        /// The currentColor.
         /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        private bool DFSWithTwoColors(ref Node node, int color)
+        private bool DFSWithTwoColors(ref Node node, int currentColor)
         {
-            for (int i = 0; i < node.Neighbours.Count; ++i)
+            node.Visited = true;
+
+            var neighboursColor = currentColor == 0 ? 1 : 0;
+
+            for (var i = 0; i < node.Neighbours.Count; ++i)
             {
                 var neighour = node.Neighbours[i];
 
                 if (!neighour.Visited)
                 {
-                    neighour.Visited = true;
-                
 
-                    // We have two colors
-                    color = color == 0 ? 1 : 0;
-                    neighour.Color = color;
+                    neighour.Color = neighboursColor;
 
-                    return this.DFSWithTwoColors(ref neighour, color);
+                    if (!this.DFSWithTwoColors(ref neighour, neighboursColor))
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
@@ -62,7 +68,7 @@
                 }
             }
 
-            return false;
+            return true;
         }
     }
 }

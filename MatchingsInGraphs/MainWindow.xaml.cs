@@ -3,6 +3,7 @@
     using System;
     using System.Windows;
 
+    using MatchingsCore;
     using MatchingsCore.GraphRepresentation;
     using MatchingsCore.Serializers;
 
@@ -17,6 +18,11 @@
         /// The graph.
         /// </summary>
         private Graph graph;
+
+        /// <summary>
+        /// The utils.
+        /// </summary>
+        private Utils utils = new Utils();
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MainWindow" /> class.
@@ -49,6 +55,20 @@
             {
                 throw new Exception("Error while showing openFileDialog");
             }
+        }
+
+        /// <summary>
+        /// The button_ click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var isBigraf = this.utils.ColortGraphAndCheckIfItIsBipartite(ref this.graph);
         }
     }
 }
