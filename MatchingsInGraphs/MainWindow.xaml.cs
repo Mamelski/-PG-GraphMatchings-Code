@@ -3,7 +3,7 @@
     using System;
     using System.Windows;
 
-    using MatchingsCore.Graph;
+    using MatchingsCore.GraphRepresentation;
     using MatchingsCore.Serializers;
 
     using Microsoft.Win32;

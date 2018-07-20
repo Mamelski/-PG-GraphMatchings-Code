@@ -1,5 +1,7 @@
 ﻿namespace MatchingsCore
 {
+    using MatchingsCore.GraphRepresentation;
+
     /// <summary>
     /// The utils.
     /// </summary>
@@ -14,8 +16,26 @@
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public bool ColortGraphAndCheckIfItIsBipartitr(ref Graph.Graph graph)
+        public bool ColortGraphAndCheckIfItIsBipartitr(ref Graph graph)
         {
+            return false;
+        }
+
+        /// <summary>
+        /// The dfs.
+        /// </summary>
+        /// <param name="graph">
+        /// The graph.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool DFS(ref Graph graph)
+        {
+            for (int i = 0; i < graph.Size; ++i)
+            {
+
+            }
 
             return false;
         }

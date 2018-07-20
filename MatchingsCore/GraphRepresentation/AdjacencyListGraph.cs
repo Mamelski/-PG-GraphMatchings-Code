@@ -1,4 +1,4 @@
-﻿namespace MatchingsCore.Graph
+﻿namespace MatchingsCore.GraphRepresentation
 {
     using System.Collections.Generic;
 
@@ -11,7 +11,7 @@
         ///     The neighbourList.
         /// </summary>
         private readonly List<List<Node>> neighbourList;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="AdjacencyListGraph"/> class.
         /// </summary>
@@ -20,6 +20,7 @@
         /// </param>
         public AdjacencyListGraph(int numberOfNodes)
         {
+            this.Size = numberOfNodes;
             this.neighbourList = new List<List<Node>>(numberOfNodes);
 
             for (int i = 0; i < numberOfNodes; ++i)
@@ -43,5 +44,7 @@
 
             set => this.neighbourList[node.Id] = value;
         }
+
+       
     }
 }

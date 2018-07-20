@@ -1,4 +1,4 @@
-﻿namespace MatchingsCore.Graph
+﻿namespace MatchingsCore.GraphRepresentation
 {
     /// <summary>
     /// The node.

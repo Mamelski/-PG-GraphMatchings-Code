@@ -1,6 +1,6 @@
 ﻿namespace MatchingsCore.Algorithms.UnweightedBipartite
 {
-    using MatchingsCore.Graph;
+    using MatchingsCore.GraphRepresentation;
 
     /// <summary>
     /// The ford_ fulkerson.
@@ -13,7 +13,7 @@
         /// <param name="graph">
         /// The graph.
         /// </param>
-        public void GetMaximumMatching(Graph graph)
+        public void GetMaximumMatching(AdjacencyListGraph graph)
         {
 
         }

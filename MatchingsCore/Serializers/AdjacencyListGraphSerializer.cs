@@ -4,7 +4,7 @@
     using System.IO;
     using System.Linq;
 
-    using MatchingsCore.Graph;
+    using MatchingsCore.GraphRepresentation;
 
     /// <summary>
     ///     The adjacency list serializer.
