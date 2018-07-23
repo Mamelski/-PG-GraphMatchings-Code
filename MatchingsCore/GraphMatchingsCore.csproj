@@ -43,6 +43,7 @@
     <Compile Include="Algorithms\UnweightedBipartite\Ford-Fulkerson.cs" />
     <Compile Include="GraphMatchingsException.cs" />
     <Compile Include="GraphRepresentation\AdjacencyListGraph.cs" />
+    <Compile Include="GraphRepresentation\Edge.cs" />
     <Compile Include="GraphRepresentation\Graph.cs" />
     <Compile Include="GraphRepresentation\Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
