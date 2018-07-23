@@ -23,8 +23,8 @@
         public int Color { get; set; }
 
         /// <summary>
-        /// Gets or sets the neighbours.
+        /// Gets or sets the edges.
         /// </summary>
-        public List<Node> Neighbours { get; set; } = new List<Node>();
+        public List<Edge> Edges { get; set; } = new List<Edge>();
     }
 }

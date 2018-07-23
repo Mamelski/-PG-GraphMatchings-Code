@@ -8,7 +8,7 @@
         /// <summary>
         /// Gets or sets the weigth.
         /// </summary>
-        public int Weigth { get; set; }
+        public int Weigth { get; set; } = 1;
 
         /// <summary>
         /// Gets or sets the destination.

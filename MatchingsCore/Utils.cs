@@ -45,13 +45,12 @@
 
             var neighboursColor = currentColor == 0 ? 1 : 0;
 
-            for (var i = 0; i < node.Neighbours.Count; ++i)
+            for (var i = 0; i < node.Edges.Count; ++i)
             {
-                var neighour = node.Neighbours[i];
+                var neighour = node.Edges[i].Destination;
 
                 if (!neighour.Visited)
                 {
-
                     neighour.Color = neighboursColor;
 
                     if (!this.DFSWithTwoColors(ref neighour, neighboursColor))

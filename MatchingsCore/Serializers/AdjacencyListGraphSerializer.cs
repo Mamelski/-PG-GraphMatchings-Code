@@ -43,7 +43,8 @@
                     foreach (var neighbourId in neighbours)
                     {
                         var neighbour = graph[neighbourId];
-                        graph[nodeId].Neighbours.Add(neighbour);
+                        var edge = new Edge { Destination = neighbour };
+                        graph[nodeId].Edges.Add(edge);
                     }
                 }
             }
@@ -52,7 +53,7 @@
         }
 
         /// <summary>
-        /// The check if file exists.
+        /// The check if file exists. 
         /// </summary>
         /// <param name="path">
         /// The path.
