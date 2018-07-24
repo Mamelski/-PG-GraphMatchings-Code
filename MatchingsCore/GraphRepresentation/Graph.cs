@@ -1,8 +1,5 @@
 ﻿namespace MatchingsCore.GraphRepresentation
 {
-    
-    using System;
-    using System.Collections;
     using System.Collections.Generic;
 
     /// <summary>
@@ -29,6 +26,14 @@
             get;
             set;
         }
+
+        /// <summary>
+        /// The add node.
+        /// </summary>
+        /// <param name="node">
+        /// The node.
+        /// </param>
+        public abstract void AddNode(Node node);
 
         /*
         /// <summary>

@@ -25,7 +25,7 @@
         /// </param>
         public void GetMaximumMatching(Graph graph)
         {
-            this.AddSourceAndSink(graph);
+            this.AddSourceAndSink(ref graph);
         }
 
         /// <summary>
@@ -34,9 +34,9 @@
         /// <param name="graph">
         /// The graph.
         /// </param>
-        private void AddSourceAndSink(Graph graph)
+        private void AddSourceAndSink(ref Graph graph)
         {
-            throw new System.NotImplementedException();
+            //graph.
         }
     }
 }
