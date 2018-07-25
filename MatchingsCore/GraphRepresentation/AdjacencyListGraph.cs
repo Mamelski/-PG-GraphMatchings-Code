@@ -41,7 +41,21 @@
         public override Node this[int index]
         {
             get => this.nodes[index];
+
+            // TODO maybe look for Id
             set => this.nodes[index] = value;
+        }
+
+        /// <summary>
+        /// The add node.
+        /// </summary>
+        /// <param name="node">
+        /// The node.
+        /// </param>
+        public override void AddNode(Node node)
+        {
+            // TODO index can be different that Id
+            this.nodes.Add(node);
         }
     }
 }
