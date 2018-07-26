@@ -10,12 +10,12 @@
         /// <summary>
         /// The source id.
         /// </summary>
-        private int sourceId = -1;
+        private int sourceId;
 
         /// <summary>
         /// The sink id.
         /// </summary>
-        private int sinkId = -2;
+        private int sinkId;
         
         /// <summary>
         /// The get maximum matching.
@@ -25,7 +25,25 @@
         /// </param>
         public void GetMaximumMatching(Graph graph)
         {
+            // We are counting from zero, so last index in original graph is graph.Size -1
+            this.sourceId = graph.Size;
+            this.sinkId = graph.Size + 1;
+
             this.AddSourceAndSink(ref graph);
+            this.AddEdgesToSourceAndSink(ref graph);
+        }
+
+        /// <summary>
+        /// The add edges to source and sink.
+        /// </summary>
+        /// <param name="graph">
+        /// The graph.
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        private void AddEdgesToSourceAndSink(ref Graph graph)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
@@ -36,7 +54,11 @@
         /// </param>
         private void AddSourceAndSink(ref Graph graph)
         {
-            //graph.
+            var sourceNode = new Node { Id = this.sourceId };
+            graph.AddNode(sourceNode);
+
+            var sinkNode = new Node { Id = this.sinkId };
+            graph.AddNode(sinkNode);
         }
     }
 }

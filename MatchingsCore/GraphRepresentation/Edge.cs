@@ -14,5 +14,10 @@
         /// Gets or sets the destination.
         /// </summary>
         public Node Destination { get; set; }
+
+        /// <summary>
+        /// Gets or sets the source.
+        /// </summary>
+        public Node Source { get; set; }
     }
 }
