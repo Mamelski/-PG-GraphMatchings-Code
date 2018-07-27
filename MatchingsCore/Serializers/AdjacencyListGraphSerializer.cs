@@ -43,7 +43,7 @@
                     foreach (var neighbourId in neighbours)
                     {
                         var neighbour = graph[neighbourId];
-                        var edge = new Edge { Destination = neighbour };
+                        var edge = new Edge { Source = graph[nodeId],  Destination = neighbour };
                         graph[nodeId].Edges.Add(edge);
                     }
                 }
