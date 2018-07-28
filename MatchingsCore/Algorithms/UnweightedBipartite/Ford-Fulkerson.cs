@@ -47,10 +47,10 @@
         /// </param>
         private void AddSourceAndSink(ref Graph graph)
         {
-            var sourceNode = new Node { Id = this.sourceIndex };
+            var sourceNode = new Node { Id = this.sourceIndex, Color = -1 };
             graph.AddNode(sourceNode);
 
-            var sinkNode = new Node { Id = this.sinkIndex };
+            var sinkNode = new Node { Id = this.sinkIndex, Color = -1 };
             graph.AddNode(sinkNode);
         }
 
@@ -99,6 +99,7 @@
         bool bpm(Graph graph , Node node,
                  bool[] seen, int[] matchR)
         {
+            
             // Try every job one by one
             for (int v = 0; v < N; v++)
             {
