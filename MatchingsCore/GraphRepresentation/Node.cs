@@ -1,7 +1,5 @@
 ﻿namespace MatchingsCore.GraphRepresentation
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// The node.
     /// </summary>
@@ -21,10 +19,5 @@
         /// Gets or sets the color.
         /// </summary>
         public int Color { get; set; }
-
-        /// <summary>
-        /// Gets or sets the edges.
-        /// </summary>
-        public List<Edge> Edges { get; set; } = new List<Edge>();
     }
 }

@@ -5,12 +5,14 @@
     /// <summary>
     ///     The adjacency list graph.
     /// </summary>
-    public class AdjacencyListGraph : Graph
+    public class AdjacencyMatrixGraph
     {
         /// <summary>
         /// The nodes.
         /// </summary>
-        private readonly List<Node> nodes;
+        private readonly List<List<int>> matrix;
+
+        private List<Node> nodes = new List<Node>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdjacencyListGraph"/> class.
@@ -18,32 +20,21 @@
         /// <param name="numberOfNodes">
         /// The number of nodes.
         /// </param>
-        public AdjacencyListGraph(int numberOfNodes)
+        public AdjacencyMatrixGraph(int numberOfNodes)
         {
-            this.Size = numberOfNodes;
-            this.nodes = new List<Node>(numberOfNodes);
+            this.matrix = new List<List<int>>();
 
             for (int i = 0; i < numberOfNodes; ++i)
             {
+                this.matrix[i] = new List<int>(numberOfNodes);
                 this.nodes.Add(new Node { Id = i });
             }
         }
 
-        /// <summary>
-        /// The this.
-        /// </summary>
-        /// <param name="index">
-        /// The index.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Node"/>.
-        /// </returns>
-        public override Node this[int index]
+        public int this[int index1, int index2]
         {
-            get => this.nodes[index];
-
-            // TODO maybe look for Id
-            set => this.nodes[index] = value;
+            get => this.matrix[index1][index2];
+            set => this.matrix[index1][index2] = value;
         }
 
         /// <summary>
@@ -52,10 +43,19 @@
         /// <param name="node">
         /// The node.
         /// </param>
-        public override void AddNode(Node node)
+        public int AddNodeAtTheEndAndReturnId()
         {
-            // TODO index can be different that Id
+            var node = new Node { Id = this.nodes.Count };
+            
+            matrix.Add(new List<int>(this.nodes.Count));
             this.nodes.Add(node);
+
+            for (int i = 0; i < this.nodes.Count; ++i)
+            {
+                this.matrix[i].Add(0);
+            }
+
+            return node.Id;
         }
     }
 }

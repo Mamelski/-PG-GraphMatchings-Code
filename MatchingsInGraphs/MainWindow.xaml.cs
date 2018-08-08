@@ -17,7 +17,7 @@
         /// <summary>
         /// The graph.
         /// </summary>
-        private Graph graph;
+        private AdjacencyMatrixGraph graph;
 
         /// <summary>
         /// The utils.

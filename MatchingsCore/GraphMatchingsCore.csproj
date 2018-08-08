@@ -40,15 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algorithms\UnweightedBipartite\Ford-Fulkerson.cs" />
-    <Compile Include="GraphMatchingsException.cs" />
-    <Compile Include="GraphRepresentation\AdjacencyListGraph.cs" />
-    <Compile Include="GraphRepresentation\Edge.cs" />
-    <Compile Include="GraphRepresentation\Graph.cs" />
+    <Compile Include="Algorithms\UnweightedBipartite\AdjacencyMatrix\FordFulkerson.cs" />
+    <Compile Include="Miscellaneous\GraphMatchingsException.cs" />
+    <Compile Include="GraphRepresentation\AdjacencyMatrixGraph.cs" />
     <Compile Include="GraphRepresentation\Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serializers\AdjacencyMatrixGraphSerializer.cs" />
     <Compile Include="Serializers\AdjacencyListGraphSerializer.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="Miscellaneous\Utils.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

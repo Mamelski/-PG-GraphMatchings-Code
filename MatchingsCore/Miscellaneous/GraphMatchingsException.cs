@@ -1,4 +1,4 @@
-﻿namespace MatchingsCore
+﻿namespace MatchingsCore.Miscellaneous
 {
     using System;
 
