@@ -22,7 +22,7 @@
         /// <summary>
         /// The utils.
         /// </summary>
-        private Utils utils = new Utils();
+        //private Utils utils = new Utils();
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MainWindow" /> class.
@@ -48,7 +48,7 @@
             if (openFileDialog.ShowDialog() == true)
             {
                 var filePath = openFileDialog.FileName;
-                var serializer = new AdjacencyListGraphSerializer();
+                var serializer = new AdjacencyMatrixGraphSerializer();
                 this.graph = serializer.Deserialize(filePath);
             }
             else
@@ -68,7 +68,7 @@
         /// </param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var isBigraf = this.utils.ColortGraphAndCheckIfItIsBipartite(ref this.graph);
+            //var isBigraf = this.utils.ColortGraphAndCheckIfItIsBipartite(ref this.graph);
         }
     }
 }
