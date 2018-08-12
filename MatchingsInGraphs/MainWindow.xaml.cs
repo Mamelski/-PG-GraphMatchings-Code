@@ -4,6 +4,7 @@
     using System.Windows;
 
     using MatchingsCore;
+    using MatchingsCore.Algorithms.UnweightedBipartite;
     using MatchingsCore.GraphRepresentation;
     using MatchingsCore.Serializers;
 
@@ -69,6 +70,8 @@
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //var isBigraf = this.utils.ColortGraphAndCheckIfItIsBipartite(ref this.graph);
+            var fordFulkerson = new Ford_Fulkerson();
+            fordFulkerson.GetMaximumMatching(this.graph);
         }
     }
 }

@@ -8,31 +8,31 @@
     public class AdjacencyMatrixGraph
     {
         /// <summary>
-        /// The nodes.
-        /// </summary>
-        private readonly List<List<int>> matrix;
-
-        /// <summary>
-        /// The nodes.
-        /// </summary>
-        private List<Node> nodes = new List<Node>();
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="AdjacencyMatrixGraph"/> class.
         /// </summary>
         /// <param name="numberOfNodes">
-        /// The number of nodes.
+        /// The number of Nodes.
         /// </param>
         public AdjacencyMatrixGraph(int numberOfNodes)
         {
-            this.matrix = new List<List<int>>(new List<int>[numberOfNodes]);
+            this.Matrix = new List<List<int>>(new List<int>[numberOfNodes]);
 
-            for (int i = 0; i < numberOfNodes; ++i)
+            for (var i = 0; i < numberOfNodes; ++i)
             {
-                this.matrix[i] = new List<int>(new int[numberOfNodes]);
-                this.nodes.Add(new Node { Id = i });
+                this.Matrix[i] = new List<int>(new int[numberOfNodes]);
+                this.Nodes.Add(new Node { Id = i });
             }
         }
+
+        /// <summary>
+        /// Gets or sets the matrix.
+        /// </summary>
+        public List<List<int>> Matrix { get; set; }
+
+        /// <summary>
+        /// Gets or sets the nodes.
+        /// </summary>
+        public List<Node> Nodes { get; set; } = new List<Node>();
 
         /// <summary>
         /// The this.
@@ -48,26 +48,26 @@
         /// </returns>
         public int this[int index1, int index2]
         {
-            get => this.matrix[index1][index2];
-            set => this.matrix[index1][index2] = value;
+            get => this.Matrix[index1][index2];
+            set => this.Matrix[index1][index2] = value;
         }
 
         /// <summary>
-        /// The add node.
+        /// The add node at the end and return id.
         /// </summary>
-        /// <param name="node">
-        /// The node.
-        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
         public int AddNodeAtTheEndAndReturnId()
         {
-            var node = new Node { Id = this.nodes.Count };
-            
-            matrix.Add(new List<int>(this.nodes.Count));
-            this.nodes.Add(node);
+            var node = new Node { Id = this.Nodes.Count };
 
-            for (int i = 0; i < this.nodes.Count; ++i)
+            this.Matrix.Add(new List<int>(new int[this.Nodes.Count]));
+            this.Nodes.Add(node);
+
+            for (int i = 0; i < this.Nodes.Count; ++i)
             {
-                this.matrix[i].Add(0);
+                this.Matrix[i].Add(0);
             }
 
             return node.Id;

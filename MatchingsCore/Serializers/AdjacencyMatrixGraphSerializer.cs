@@ -19,7 +19,7 @@
         ///     The path to file.
         /// </param>
         /// <returns>
-        ///     The <see cref="Graph" />.
+        ///     The <see cref="AdjacencyMatrixGraph" />.
         /// </returns>
         public AdjacencyMatrixGraph Deserialize(string pathToFile)
         {
@@ -67,7 +67,7 @@
         }
 
         /// <summary>
-        /// The parse number of nodes from file.
+        /// The parse number of Nodes from file.
         /// </summary>
         /// <param name="reader">
         /// The reader.
@@ -83,14 +83,14 @@
             var numberOfNodesLine = reader.ReadLine();
             if (string.IsNullOrEmpty(numberOfNodesLine))
             {
-                throw new GraphMatchingsException($"First line in file \"{path}\" is empty. It should contain number of nodes");
+                throw new GraphMatchingsException($"First line in file \"{path}\" is empty. It should contain number of Nodes");
             }
 
             var isParseSuccessfull = int.TryParse(numberOfNodesLine, out var numberOfNodes);
 
             if (!isParseSuccessfull)
             {
-                throw new GraphMatchingsException($"Could not parse first line \"{numberOfNodesLine}\" from file \"{path}\" to int. This line should represent number of nodes.");
+                throw new GraphMatchingsException($"Could not parse first line \"{numberOfNodesLine}\" from file \"{path}\" to int. This line should represent number of Nodes.");
             }
 
             return numberOfNodes;
@@ -106,7 +106,7 @@
         /// The i.
         /// </param>
         /// <param name="numberOfNodes">
-        /// The number of nodes.
+        /// The number of Nodes.
         /// </param>
         /// <param name="pathToFile">
         /// The path to file.
@@ -147,7 +147,7 @@
 
             if (!isParseSuccessfull)
             {
-                throw new GraphMatchingsException($"Could not parse first line \"{line}\" from file \"{path}\" to int. This line should represent number of nodes.");
+                throw new GraphMatchingsException($"Could not parse first line \"{line}\" from file \"{path}\" to int. This line should represent number of Nodes.");
             }
 
             return nodeId;

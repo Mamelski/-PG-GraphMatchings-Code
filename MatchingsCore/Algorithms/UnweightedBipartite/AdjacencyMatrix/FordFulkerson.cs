@@ -34,58 +34,35 @@
             this.sourceIndex = this.graph.AddNodeAtTheEndAndReturnId();
             this.sinkIndex = this.graph.AddNodeAtTheEndAndReturnId();
 
-            //this.AddSourceAndSink(ref graph);
-            //this.AddEdgesToSourceAndSink(ref graph);
+            this.AddEdgesToSourceAndSink(ref graph);
 
+            int a = 0;
             //this.RunEdmondsKarpsAlgorithm(ref graph);
         }
 
-        ///// <summary>
-        ///// The add source and sink.
-        ///// </summary>
-        ///// <param name="graph">
-        ///// The graph.
-        ///// </param>
-        //private void AddSourceAndSink(ref AdjacencyListGraph graph)
-        //{
-        //    var sourceNode = new Node { Id = this.sourceIndex, Color = -1 };
-        //    graph.AddNode(sourceNode);
+        /// <summary>
+        /// The add edges to source and sink.
+        /// </summary>
+        /// <param name="graph">
+        /// The graph.
+        /// </param>
+        private void AddEdgesToSourceAndSink(ref AdjacencyMatrixGraph graph)
+        {
+            for (var i = 0; i < graph.Nodes.Count - 2; ++i)
+            {
+                // Add edge to source Source
+                if (graph.Nodes[i].Color == 0)
+                {
+                    graph.Matrix[this.sourceIndex][i] = 1;
+                }
 
-        //    var sinkNode = new Node { Id = this.sinkIndex, Color = -1 };
-        //    graph.AddNode(sinkNode);
-        //}
-
-        ///// <summary>
-        ///// The add edges to source and sink.
-        ///// </summary>
-        ///// <param name="graph">
-        ///// The graph.
-        ///// </param>
-        //private void AddEdgesToSourceAndSink(ref AdjacencyListGraph graph)
-        //{
-        //    for (var i = 0; i < graph.Size - 2; ++i)
-        //    {
-        //        // Add edge to source Source
-        //        if (graph[i].Color == 0)
-        //        {
-        //            var edge = new Edge { Source = graph[this.sourceIndex], Destination = graph[i] };
-        //            graph[this.sourceIndex].Edges.Add(edge);
-
-        //            edge = new Edge { Source = graph[i], Destination = graph[this.sourceIndex] };
-        //            graph[i].Edges.Add(edge);
-        //        }
-
-        //        // Add edge to sink
-        //        if (graph[i].Color == 1)
-        //        {
-        //            var edge = new Edge { Source = graph[this.sinkIndex], Destination = graph[i] };
-        //            graph[this.sinkIndex].Edges.Add(edge);
-
-        //            edge = new Edge { Source = graph[i], Destination = graph[this.sinkIndex] };
-        //            graph[i].Edges.Add(edge);
-        //        }
-        //    }
-        //}
+                // Add edge to sink
+                if (graph.Nodes[i].Color == 1)
+                {
+                    graph.Matrix[i][this.sourceIndex] = 1;
+                }
+            }
+        }
 
         ///// <summary>
         ///// The run edmonds karp algorithm.
@@ -100,7 +77,7 @@
         //bool CanNodeCanBeAddedToMatching(Node node, AdjacencyListGraph graph,
         //         bool[] seen, int[] matchR)
         //{
-            
+
         //    // Try every job one by one
         //    for (int v = 0; v < N; v++)
         //    {
@@ -129,8 +106,8 @@
         //    return false;
         //}
 
-       
 
-       
+
+
     }
 }
