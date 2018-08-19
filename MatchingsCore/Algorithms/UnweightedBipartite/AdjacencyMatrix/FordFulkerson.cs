@@ -1,5 +1,6 @@
-﻿namespace MatchingsCore.Algorithms.UnweightedBipartite
+﻿namespace MatchingsCore.Algorithms.UnweightedBipartite.AdjacencyMatrix
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using MatchingsCore.GraphRepresentation;
@@ -7,107 +8,126 @@
     /// <summary>
     /// The ford_ fulkerson.
     /// </summary>
-    public partial class Ford_Fulkerson
+    public class Ford_Fulkerson
     {
         /// <summary>
-        /// The source id.
+        /// The graph.
         /// </summary>
-        private int sourceIndex;
+        private AdjacencyMatrixGraph graph;
 
         /// <summary>
-        /// The sink id.
+        /// The nodes in the right part.
         /// </summary>
-        private int sinkIndex;
+        private Node[] nodesInTheRightPart;
 
-        private AdjacencyMatrixGraph graph;
-        
+        /// <summary>
+        /// The nodes in the left part.
+        /// </summary>
+        private Node[] nodesInTheLeftPart;
+
         /// <summary>
         /// The get maximum matching.
         /// </summary>
         /// <param name="graph">
         /// The graph.
         /// </param>
-        public void GetMaximumMatching(AdjacencyMatrixGraph graph)
+        /// <returns>
+        /// The <see cref="List{T}"/>.
+        /// </returns>
+        public List<Edge> GetMaximumMatching(AdjacencyMatrixGraph graph)
         {
+            // TODO https://www.geeksforgeeks.org/maximum-bipartite-matching/
             this.graph = graph;
 
-            this.sourceIndex = this.graph.AddNodeAtTheEndAndReturnId();
-            this.sinkIndex = this.graph.AddNodeAtTheEndAndReturnId();
+            // Split nodes in bipartite graph into two groups basing on their color
+            this.nodesInTheRightPart = this.graph.Nodes.Where(n => n.Color == 1).ToArray();
+            this.nodesInTheLeftPart = this.graph.Nodes.Where(n => n.Color == 0).ToArray();
 
-            this.AddEdgesToSourceAndSink(ref graph);
-
-            int a = 0;
-            //this.RunEdmondsKarpsAlgorithm(ref graph);
+            return this.RunEdmondsKarpsAlgorithm();
         }
 
         /// <summary>
-        /// The add edges to source and sink.
+        /// The run edmonds karp algorithm.
         /// </summary>
-        /// <param name="graph">
-        /// The graph.
-        /// </param>
-        private void AddEdgesToSourceAndSink(ref AdjacencyMatrixGraph graph)
+        /// <returns>
+        /// The <see cref="List{T}"/>.
+        /// </returns>
+        private List<Edge> RunEdmondsKarpsAlgorithm()
         {
-            for (var i = 0; i < graph.Nodes.Count - 2; ++i)
+            var matching = new List<Edge>();
+
+            // Dictionary with edges that belong in matching.
+            // Keys are from right part of graph and values are from left part.
+            var rightMatching = new Dictionary<int, int>();
+
+            // Initially the matching is empty
+            foreach (var rightNode in this.nodesInTheRightPart)
             {
-                // Add edge to source Source
-                if (graph.Nodes[i].Color == 0)
+                rightMatching[rightNode.Id] = -1;
+            }
+
+            foreach (var nodeInLeftPart in this.nodesInTheLeftPart)
+            {
+                foreach (var nodeInRightPart in this.nodesInTheRightPart)
                 {
-                    graph.Matrix[this.sourceIndex][i] = 1;
+                    nodeInRightPart.Visited = false;
                 }
 
-                // Add edge to sink
-                if (graph.Nodes[i].Color == 1)
+                // Try to find node in right part for node in left part
+                this.FindMatchinfForNode(nodeInLeftPart.Id, rightMatching);
+            }
+
+            foreach (var m in rightMatching)
+            {
+                if (m.Value != -1)
                 {
-                    graph.Matrix[i][this.sourceIndex] = 1;
+                    matching.Add(new Edge(m.Key, m.Value));
                 }
             }
+
+            return matching;
         }
 
-        ///// <summary>
-        ///// The run edmonds karp algorithm.
-        ///// </summary>
-        ///// <param name="graph">
-        ///// The graph.
-        ///// </param>
-        //private void RunEdmondsKarpsAlgorithm(ref AdjacencyListGraph graph)
-        //{
-        //}
+        /// <summary>
+        /// The find matchinf for node.
+        /// </summary>
+        /// <param name="nodeId">
+        /// The node id.
+        /// </param>
+        /// <param name="matchR">
+        /// The match r.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool FindMatchinfForNode(int nodeId, Dictionary<int, int> matchR)
+        {
+            // Try every job one by one
+            foreach (var v in this.nodesInTheRightPart)
+            {
+                // If applicant u is interested
+                // in job v and v is not visited
+                if (this.graph.Matrix[nodeId][v.Id] == 1 && !this.graph.Nodes[v.Id].Visited)
+                {
+                    // Mark v as visited
+                    this.graph.Nodes[v.Id].Visited = true;
 
-        //bool CanNodeCanBeAddedToMatching(Node node, AdjacencyListGraph graph,
-        //         bool[] seen, int[] matchR)
-        //{
+                    // If job 'v' is not assigned to
+                    // an applicant OR previously assigned
+                    // applicant for job v (which is matchR[v])
+                    // has an alternate job available.
+                    // Since v is marked as visited in the above
+                    // line, matchR[v] in the following recursive
+                    // call will not get job 'v' again
+                    if (matchR[v.Id] < 0 || this.FindMatchinfForNode(matchR[v.Id], matchR))
+                    {
+                        matchR[v.Id] = nodeId;
+                        return true;
+                    }
+                }
+            }
 
-        //    // Try every job one by one
-        //    for (int v = 0; v < N; v++)
-        //    {
-        //        // If applicant node is interested 
-        //        // in job v and v is not visited
-        //        if (graph[node.Id].Edges.Any(e => e.Destination.Id == v) && !seen[v])
-        //        {
-        //            // Mark v as visited
-        //            seen[v] = true;
-
-        //            // If job 'v' is not assigned to
-        //            // an applicant OR previously assigned 
-        //            // applicant for job v (which is matchR[v])
-        //            // has an alternate job available.
-        //            // Since v is marked as visited in the above 
-        //            // line, matchR[v] in the following recursive 
-        //            // call will not get job 'v' again
-        //            if (matchR[v] < 0 || bpm(bpGraph, matchR[v],
-        //                    seen, matchR))
-        //            {
-        //                matchR[v] = node;
-        //                return true;
-        //            }
-        //        }
-        //    }
-        //    return false;
-        //}
-
-
-
-
+            return false;
+        }
     }
 }

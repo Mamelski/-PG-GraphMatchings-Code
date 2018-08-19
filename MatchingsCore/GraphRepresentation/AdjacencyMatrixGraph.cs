@@ -30,6 +30,11 @@
         public List<List<int>> Matrix { get; set; }
 
         /// <summary>
+        /// The size.
+        /// </summary>
+        public int Size => this.Nodes.Count;
+
+        /// <summary>
         /// Gets or sets the nodes.
         /// </summary>
         public List<Node> Nodes { get; set; } = new List<Node>();

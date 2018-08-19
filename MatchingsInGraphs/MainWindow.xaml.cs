@@ -5,6 +5,7 @@
 
     using MatchingsCore;
     using MatchingsCore.Algorithms.UnweightedBipartite;
+    using MatchingsCore.Algorithms.UnweightedBipartite.AdjacencyMatrix;
     using MatchingsCore.GraphRepresentation;
     using MatchingsCore.Miscellaneous;
     using MatchingsCore.Serializers;

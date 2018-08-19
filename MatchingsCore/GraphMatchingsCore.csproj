@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\UnweightedBipartite\AdjacencyMatrix\FordFulkerson.cs" />
+    <Compile Include="GraphRepresentation\Edge.cs" />
     <Compile Include="Miscellaneous\GraphMatchingsException.cs" />
     <Compile Include="GraphRepresentation\AdjacencyMatrixGraph.cs" />
     <Compile Include="GraphRepresentation\Node.cs" />
