@@ -4,7 +4,7 @@
     using System.IO;
     using System.Linq;
 
-    using MatchingsCore.GraphRepresentation;
+    using GraphRepresentation;
     using MatchingsCore.Miscellaneous;
 
     /// <summary>

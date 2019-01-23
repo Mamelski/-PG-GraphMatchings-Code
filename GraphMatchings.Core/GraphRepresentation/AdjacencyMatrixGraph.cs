@@ -1,4 +1,6 @@
-﻿namespace MatchingsCore.GraphRepresentation
+﻿using GraphMatchings.Core.GraphRepresentation;
+
+namespace MatchingsCore.GraphRepresentation
 {
     using System.Collections.Generic;
 

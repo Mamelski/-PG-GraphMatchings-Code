@@ -1,4 +1,6 @@
-﻿namespace MatchingsCore.Algorithms.UnweightedBipartite.AdjacencyMatrix
+﻿using GraphMatchings.Core.GraphRepresentation;
+
+namespace MatchingsCore.Algorithms.UnweightedBipartite.AdjacencyMatrix
 {
     using System.Collections.Generic;
     using System.Linq;

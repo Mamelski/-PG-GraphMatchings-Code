@@ -1,4 +1,6 @@
-﻿namespace MatchingsCore.Miscellaneous
+﻿using GraphMatchings.Core.GraphRepresentation;
+
+namespace MatchingsCore.Miscellaneous
 {
     using System.Collections.Generic;
 
