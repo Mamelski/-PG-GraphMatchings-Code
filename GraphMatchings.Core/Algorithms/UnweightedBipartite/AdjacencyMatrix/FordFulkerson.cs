@@ -76,7 +76,7 @@ namespace MatchingsCore.Algorithms.UnweightedBipartite.AdjacencyMatrix
                 }
 
                 // Try to find node in right part for node in left part
-                this.FindMatchinfForNode(nodeInLeftPart.Id, rightMatching);
+                this.FindMatchingfForNode(nodeInLeftPart.Id, rightMatching);
             }
 
             foreach (var m in rightMatching)
@@ -102,7 +102,7 @@ namespace MatchingsCore.Algorithms.UnweightedBipartite.AdjacencyMatrix
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        private bool FindMatchinfForNode(int nodeId, Dictionary<int, int> matchR)
+        private bool FindMatchingfForNode(int nodeId, Dictionary<int, int> matchR)
         {
             // Try every job one by one
             foreach (var v in this.nodesInTheRightPart)
@@ -121,7 +121,7 @@ namespace MatchingsCore.Algorithms.UnweightedBipartite.AdjacencyMatrix
                     // Since v is marked as visited in the above
                     // line, matchR[v] in the following recursive
                     // call will not get job 'v' again
-                    if (matchR[v.Id] < 0 || this.FindMatchinfForNode(matchR[v.Id], matchR))
+                    if (matchR[v.Id] < 0 || this.FindMatchingfForNode(matchR[v.Id], matchR))
                     {
                         matchR[v.Id] = nodeId;
                         return true;
