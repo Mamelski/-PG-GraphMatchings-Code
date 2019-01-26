@@ -17,12 +17,12 @@ namespace MatchingsCore.GraphRepresentation
         /// </param>
         public AdjacencyMatrixGraph(int numberOfNodes)
         {
-            this.Matrix = new List<List<int>>(new List<int>[numberOfNodes]);
+            Matrix = new List<List<int>>(new List<int>[numberOfNodes]);
 
             for (var i = 0; i < numberOfNodes; ++i)
             {
-                this.Matrix[i] = new List<int>(new int[numberOfNodes]);
-                this.Nodes.Add(new Node { Id = i });
+                Matrix[i] = new List<int>(new int[numberOfNodes]);
+                Nodes.Add(new Node { Id = i });
             }
         }
 
@@ -34,7 +34,7 @@ namespace MatchingsCore.GraphRepresentation
         /// <summary>
         /// The size.
         /// </summary>
-        public int Size => this.Nodes.Count;
+        public int Size => Nodes.Count;
 
         /// <summary>
         /// Gets or sets the nodes.
@@ -55,8 +55,8 @@ namespace MatchingsCore.GraphRepresentation
         /// </returns>
         public int this[int index1, int index2]
         {
-            get => this.Matrix[index1][index2];
-            set => this.Matrix[index1][index2] = value;
+            get => Matrix[index1][index2];
+            set => Matrix[index1][index2] = value;
         }
 
         /// <summary>
@@ -67,14 +67,14 @@ namespace MatchingsCore.GraphRepresentation
         /// </returns>
         public int AddNodeAtTheEndAndReturnId()
         {
-            var node = new Node { Id = this.Nodes.Count };
+            var node = new Node { Id = Nodes.Count };
 
-            this.Matrix.Add(new List<int>(new int[this.Nodes.Count]));
-            this.Nodes.Add(node);
+            Matrix.Add(new List<int>(new int[Nodes.Count]));
+            Nodes.Add(node);
 
-            for (int i = 0; i < this.Nodes.Count; ++i)
+            for (int i = 0; i < Nodes.Count; ++i)
             {
-                this.Matrix[i].Add(0);
+                Matrix[i].Add(0);
             }
 
             return node.Id;

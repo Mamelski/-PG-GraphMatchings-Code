@@ -4,7 +4,7 @@ namespace MatchingsCore.Miscellaneous
 {
     using System.Collections.Generic;
 
-    using MatchingsCore.GraphRepresentation;
+    using GraphRepresentation;
 
     /// <summary>
     /// The utils.
@@ -32,11 +32,11 @@ namespace MatchingsCore.Miscellaneous
         /// </returns>
         public bool ColortGraphAndCheckIfItIsBipartite(ref AdjacencyMatrixGraph graph)
         {
-            this.numberOfNodes = graph.Nodes.Count;
+            numberOfNodes = graph.Nodes.Count;
             this.graph = graph;
             var firstNode = graph.Nodes[0];
 
-            var isGraphBipartite = this.DFSWithTwoColors(ref firstNode, 0);
+            var isGraphBipartite = DFSWithTwoColors(ref firstNode, 0);
 
             // TODO sprawdz czy cykl
             // TODO co jeśli nie graf
@@ -61,20 +61,20 @@ namespace MatchingsCore.Miscellaneous
 
             var neighboursColor = currentColor == 0 ? 1 : 0;
 
-            for (var i = 0; i < this.numberOfNodes; ++i)
+            for (var i = 0; i < numberOfNodes; ++i)
             {
-                if (this.graph.Matrix[node.Id][i] == 0)
+                if (graph.Matrix[node.Id][i] == 0)
                 {
                     continue;
                 }
 
-                var neighour = this.graph.Nodes[i];
+                var neighour = graph.Nodes[i];
 
                 if (!neighour.Visited)
                 {
                     neighour.Color = neighboursColor;
 
-                    if (!this.DFSWithTwoColors(ref neighour, neighboursColor))
+                    if (!DFSWithTwoColors(ref neighour, neighboursColor))
                     {
                         return false;
                     }

@@ -5,7 +5,7 @@ namespace MatchingsCore.Algorithms.UnweightedBipartite.AdjacencyMatrix
     using System.Collections.Generic;
     using System.Linq;
 
-    using MatchingsCore.GraphRepresentation;
+    using GraphRepresentation;
 
     /// <summary>
     /// The ford_ fulkerson.
@@ -42,10 +42,10 @@ namespace MatchingsCore.Algorithms.UnweightedBipartite.AdjacencyMatrix
             this.graph = graph;
 
             // Split nodes in bipartite graph into two groups basing on their color
-            this.nodesInTheRightPart = this.graph.Nodes.Where(n => n.Color == 1).ToArray();
-            this.nodesInTheLeftPart = this.graph.Nodes.Where(n => n.Color == 0).ToArray();
+            nodesInTheRightPart = this.graph.Nodes.Where(n => n.Color == 1).ToArray();
+            nodesInTheLeftPart = this.graph.Nodes.Where(n => n.Color == 0).ToArray();
 
-            return this.RunEdmondsKarpsAlgorithm();
+            return RunEdmondsKarpsAlgorithm();
         }
 
         /// <summary>
@@ -63,20 +63,20 @@ namespace MatchingsCore.Algorithms.UnweightedBipartite.AdjacencyMatrix
             var rightMatching = new Dictionary<int, int>();
 
             // Initially the matching is empty
-            foreach (var rightNode in this.nodesInTheRightPart)
+            foreach (var rightNode in nodesInTheRightPart)
             {
                 rightMatching[rightNode.Id] = -1;
             }
 
-            foreach (var nodeInLeftPart in this.nodesInTheLeftPart)
+            foreach (var nodeInLeftPart in nodesInTheLeftPart)
             {
-                foreach (var nodeInRightPart in this.nodesInTheRightPart)
+                foreach (var nodeInRightPart in nodesInTheRightPart)
                 {
                     nodeInRightPart.Visited = false;
                 }
 
                 // Try to find node in right part for node in left part
-                this.FindMatchingfForNode(nodeInLeftPart.Id, rightMatching);
+                FindMatchingfForNode(nodeInLeftPart.Id, rightMatching);
             }
 
             foreach (var m in rightMatching)
@@ -105,14 +105,14 @@ namespace MatchingsCore.Algorithms.UnweightedBipartite.AdjacencyMatrix
         private bool FindMatchingfForNode(int nodeId, Dictionary<int, int> matchR)
         {
             // Try every job one by one
-            foreach (var v in this.nodesInTheRightPart)
+            foreach (var v in nodesInTheRightPart)
             {
                 // If applicant u is interested
                 // in job v and v is not visited
-                if (this.graph.Matrix[nodeId][v.Id] == 1 && !this.graph.Nodes[v.Id].Visited)
+                if (graph.Matrix[nodeId][v.Id] == 1 && !graph.Nodes[v.Id].Visited)
                 {
                     // Mark v as visited
-                    this.graph.Nodes[v.Id].Visited = true;
+                    graph.Nodes[v.Id].Visited = true;
 
                     // If job 'v' is not assigned to
                     // an applicant OR previously assigned
@@ -121,7 +121,7 @@ namespace MatchingsCore.Algorithms.UnweightedBipartite.AdjacencyMatrix
                     // Since v is marked as visited in the above
                     // line, matchR[v] in the following recursive
                     // call will not get job 'v' again
-                    if (matchR[v.Id] < 0 || this.FindMatchingfForNode(matchR[v.Id], matchR))
+                    if (matchR[v.Id] < 0 || FindMatchingfForNode(matchR[v.Id], matchR))
                     {
                         matchR[v.Id] = nodeId;
                         return true;

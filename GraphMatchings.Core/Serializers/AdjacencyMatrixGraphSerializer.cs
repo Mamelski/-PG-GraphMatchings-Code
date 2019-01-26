@@ -5,7 +5,7 @@
     using System.Linq;
 
     using GraphRepresentation;
-    using MatchingsCore.Miscellaneous;
+    using Miscellaneous;
 
     /// <summary>
     ///     The adjacency list serializer.
@@ -23,23 +23,23 @@
         /// </returns>
         public AdjacencyMatrixGraph Deserialize(string pathToFile)
         {
-            this.CheckIfFileExists(pathToFile);
+            CheckIfFileExists(pathToFile);
 
             AdjacencyMatrixGraph graph;
 
             using (var reader = File.OpenText(pathToFile))
             {
-                var numberOfNodes = this.ParseNumberOfNodesFromFile(reader, pathToFile);
+                var numberOfNodes = ParseNumberOfNodesFromFile(reader, pathToFile);
 
                 graph = new AdjacencyMatrixGraph(numberOfNodes);
 
                 for (var i = 0; i < numberOfNodes; ++i)
                 {
-                    var line = this.ReadLineFromFile(reader, i, numberOfNodes, pathToFile);
+                    var line = ReadLineFromFile(reader, i, numberOfNodes, pathToFile);
 
-                    var nodeId = this.ParseNodeIdFromLine(line, pathToFile);
+                    var nodeId = ParseNodeIdFromLine(line, pathToFile);
 
-                    var neighbours = this.ParseNeighboursFromFile(line, pathToFile);               
+                    var neighbours = ParseNeighboursFromFile(line, pathToFile);               
 
                     foreach (var neighbourId in neighbours)
                     {
