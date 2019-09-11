@@ -1,6 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphMatchings", "GraphMatchings.csproj", "{611D8A6C-D969-4CE4-940A-A008BA9E1576}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.852
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphMatchings.Console", "GraphMatchings.Console.csproj", "{611D8A6C-D969-4CE4-940A-A008BA9E1576}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphMatchings.Core", "..\GraphMatchings.Core\GraphMatchings.Core.csproj", "{86407DB8-DA5B-46D5-9203-8B75E359CE03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +17,15 @@ Global
 		{611D8A6C-D969-4CE4-940A-A008BA9E1576}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{611D8A6C-D969-4CE4-940A-A008BA9E1576}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{611D8A6C-D969-4CE4-940A-A008BA9E1576}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86407DB8-DA5B-46D5-9203-8B75E359CE03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86407DB8-DA5B-46D5-9203-8B75E359CE03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86407DB8-DA5B-46D5-9203-8B75E359CE03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86407DB8-DA5B-46D5-9203-8B75E359CE03}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08DBBBDE-A9E5-40F1-B857-ABD8435FC47B}
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,4 @@
-namespace GraphMatchings
+namespace GraphMatchings.Core
 {
     using System;
     using System.Collections.Generic;

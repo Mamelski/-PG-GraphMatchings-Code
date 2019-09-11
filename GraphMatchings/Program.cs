@@ -1,12 +1,17 @@
-﻿using System;
-
-namespace GraphMatchings
+﻿namespace GraphMatchings.Console
 {
-    class Program
+    using CommandLine;
+
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Parser.Default.ParseArguments<CommandLineOptions>(args).WithParsed(o => { ParseInputAndRunAlgorithm(o.InputFile); });
+        }
+
+        static void ParseInputAndRunAlgorithm(string pathToFile)
+        {
+            int b = 0;
         }
     }
 }
