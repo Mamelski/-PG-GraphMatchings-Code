@@ -1,14 +1,13 @@
-using System;
-
 namespace GraphMatchings
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    
+
     public class GraphParser
     {
-        public int[,] Parse(string pathToFile)
+        public static int[,] Parse(string pathToFile)
         {
             CheckIfFileExists(pathToFile);
 
@@ -18,15 +17,15 @@ namespace GraphMatchings
             {
                 var numberOfNodes = ParseNumberOfNodesFromFile(reader, pathToFile);
 
-                graph = new AdjacencyMatrixGraph(numberOfNodes);
+                graph = new int[numberOfNodes, numberOfNodes];
 
                 for (var i = 0; i < numberOfNodes; ++i)
                 {
-                    var line = ReadLineFromFile(reader, i, numberOfNodes, pathToFile);
+                    var line = GetLineFromFile(reader, i, numberOfNodes, pathToFile);
 
-                    var nodeId = ParseNodeIdFromLine(line, pathToFile);
+                    var nodeId = GetNodeIdFromLine(line, pathToFile);
 
-                    var neighbours = ParseNeighboursFromFile(line, pathToFile);               
+                    var neighbours = GetNeighboursFromLine(line, pathToFile);
 
                     foreach (var neighbourId in neighbours)
                     {
@@ -38,103 +37,61 @@ namespace GraphMatchings
 
             return graph;
         }
-        
-        private void CheckIfFileExists(string path)
+
+        private static void CheckIfFileExists(string path)
         {
             if (!File.Exists(path))
             {
                 throw new FileNotFoundException($"File \"{path}\" does not exist.");
             }
         }
-        
-        private int ParseNumberOfNodesFromFile(StreamReader reader, string path)
+
+        private static int ParseNumberOfNodesFromFile(TextReader reader, string path)
         {
             var numberOfNodesLine = reader.ReadLine();
             if (string.IsNullOrEmpty(numberOfNodesLine))
             {
-                throw new GraphMatchingsException($"First line in file \"{path}\" is empty. It should contain number of Nodes");
+                throw new Exception($"First line in file \"{path}\" is empty. It should contain number of Nodes");
             }
 
             var isParseSuccessfull = int.TryParse(numberOfNodesLine, out var numberOfNodes);
 
             if (!isParseSuccessfull)
             {
-                throw new GraphMatchingsException($"Could not parse first line \"{numberOfNodesLine}\" from file \"{path}\" to int. This line should represent number of Nodes.");
+                throw new Exception($"Could not parse first line \"{numberOfNodesLine}\" from file \"{path}\" to int. This line should represent number of Nodes.");
             }
 
             return numberOfNodes;
         }
 
-        /// <summary>
-        /// The read line from file.
-        /// </summary>
-        /// <param name="reader">
-        /// The reader.
-        /// </param>
-        /// <param name="i">
-        /// The i.
-        /// </param>
-        /// <param name="numberOfNodes">
-        /// The number of Nodes.
-        /// </param>
-        /// <param name="pathToFile">
-        /// The path to file.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        private string ReadLineFromFile(StreamReader reader, int i, int numberOfNodes, string pathToFile)
+        private static string GetLineFromFile(StreamReader reader, int i, int numberOfNodes, string pathToFile)
         {
             var line = reader.ReadLine();
 
             if (string.IsNullOrEmpty(line))
             {
-                throw new GraphMatchingsException($"Line {i} in file {pathToFile} is null or empty. Expecting {numberOfNodes} lines.");
+                throw new Exception($"Line {i} in file {pathToFile} is null or empty. Expecting {numberOfNodes} lines.");
             }
 
             return line;
         }
 
-        /// <summary>
-        /// The parse node id from line.
-        /// </summary>
-        /// <param name="line">
-        /// The line.
-        /// </param>
-        /// <param name="path">
-        /// The path.
-        /// </param>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
-        private int ParseNodeIdFromLine(string line, string path)
+        private static int GetNodeIdFromLine(string line, string path)
         {
             var nodes = line.Split(' ');
             var nodeNumberString = nodes.First();
 
-            var isParseSuccessfull = int.TryParse(nodeNumberString, out var nodeId);
+            var isNodeNumberCorrect = int.TryParse(nodeNumberString, out var nodeId);
 
-            if (!isParseSuccessfull)
+            if (!isNodeNumberCorrect)
             {
-                throw new GraphMatchingsException($"Could not parse first line \"{line}\" from file \"{path}\" to int. This line should represent number of Nodes.");
+                throw new Exception($"Could not parse first line \"{line}\" from file \"{path}\" to int. This line should represent number of Nodes.");
             }
 
             return nodeId;
         }
 
-        /// <summary>
-        /// The parse neighbours from file.
-        /// </summary>
-        /// <param name="line">
-        /// The line.
-        /// </param>
-        /// <param name="path">
-        /// The path.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{T}"/>.
-        /// </returns>
-        private List<int> ParseNeighboursFromFile(string line, string path)
+        private static List<int> GetNeighboursFromLine(string line, string path)
         {
             var splitedLine = line.Split(' ');
             var neighbours = new List<int>();
@@ -146,7 +103,7 @@ namespace GraphMatchings
 
                 if (!isParseSuccessfull)
                 {
-                    throw new GraphMatchingsException($"Could not parse character \"{splitedLine[i]}\" from file \"{path}\" to int. This string should represent node.");
+                    throw new Exception($"Could not parse character \"{splitedLine[i]}\" from file \"{path}\" to int. This string should represent node.");
                 }
 
                 neighbours.Add(nodeId);
