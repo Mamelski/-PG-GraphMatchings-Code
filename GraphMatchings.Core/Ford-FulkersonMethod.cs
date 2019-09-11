@@ -63,7 +63,11 @@
                     {
                         visited[sink] = true;
                         parents[sink] = v;
+                        queue.Clear();
+                        break;
                     }
+
+                    // TODO
                 }
             }
         }
