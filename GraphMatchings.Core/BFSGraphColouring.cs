@@ -1,11 +1,13 @@
-﻿namespace GraphMatchings.Core.Utils
+﻿namespace GraphMatchings.Core
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    public static class BipartitenessChecker
+    using GraphMatchings.Core.Utils;
+
+    public class BFSGraphColouring
     {
-        public static bool IsGraphBipartite(int[,] graph)
+        public static int[] Run(int[,] graph)
         {
             var colors = new int[graph.GetLength(0)];
             var visited = new bool[graph.GetLength(0)];
@@ -27,16 +29,10 @@
                         colors[w] = 3 - colors[u];
                         queue.Enqueue(w);
                     }
-                    else if (colors[w] == colors[u])
-                    {
-                        return false;
-                    }
                 }
             }
 
-            return true;
+            return colors;
         }
-
-
     }
 }

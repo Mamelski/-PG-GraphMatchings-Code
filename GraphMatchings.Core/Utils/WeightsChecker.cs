@@ -10,12 +10,12 @@
                 {
                     if (graph[i, j] != 0 && graph[i, j] != 1)
                     {
-                        return false;
+                        return true;
                     }
                 }
             }
 
-            return true;
+            return false;
         }
     }
 }
