@@ -1,8 +1,11 @@
 ﻿namespace GraphMatchings.Console
 {
+    using System;
+
     using CommandLine;
 
     using GraphMatchings.Core;
+    using GraphMatchings.Core.Utils;
 
     public class Program
     {
@@ -19,7 +22,11 @@
         private static void ParseInputAndRunAlgorithm(string pathToFile)
         {
             var graph = GraphParser.Parse(pathToFile);
-            int b = 0;
+
+            if (!GraphChecker.IsGraphBipartite(graph))
+            {
+                throw new Exception("Given graph is not bipartire");
+            }
         }
     }
 }
