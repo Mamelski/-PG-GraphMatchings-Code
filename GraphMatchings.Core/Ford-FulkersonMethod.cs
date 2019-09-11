@@ -47,6 +47,7 @@
             var source = flowNetwork.GetLength(0) - 2;
             var sink = flowNetwork.GetLength(0) - 1;
             var visited = new bool[flowNetwork.GetLength(0)];
+            var parents = new int[flowNetwork.GetLength(0)];
             var queue = new Queue<int>();
 
             visited[source] = true;
@@ -54,7 +55,16 @@
 
             while (queue.Any())
             {
+                var v = queue.Dequeue();
 
+                foreach (var w in GraphHelper.GetNeighbours(flowNetwork,v))
+                {
+                    if (w == sink)
+                    {
+                        visited[sink] = true;
+                        parents[sink] = v;
+                    }
+                }
             }
         }
     }
