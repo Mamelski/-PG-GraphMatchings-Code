@@ -6,7 +6,7 @@ namespace GraphMatchings.Core
 {
     public class HungarianMethod
     {
-        static void Run(int[,] graph)
+        public static void Run(int[,] graph)
         {
 
         }

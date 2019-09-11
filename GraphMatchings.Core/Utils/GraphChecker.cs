@@ -10,9 +10,9 @@
 
         public static bool IsGraphWeighted(int[,] graph)
         {
-            for (var i = 0; i < graph.Length; ++i)
+            for (var i = 0; i < graph.GetLength(0); ++i)
             {
-                for (var j = 0; j < graph.Length; ++j)
+                for (var j = 0; j < graph.GetLength(1); ++j)
                 {
                     if (graph[i, j] != 0 && graph[i, j] != 1)
                     {

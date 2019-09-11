@@ -27,6 +27,15 @@
             {
                 throw new Exception("Given graph is not bipartire");
             }
+
+            if (GraphChecker.IsGraphWeighted(graph))
+            {
+                HungarianMethod.Run(graph);
+            }
+            else
+            {
+                Ford_FulkersonMethod.Run(graph);
+            }
         }
     }
 }

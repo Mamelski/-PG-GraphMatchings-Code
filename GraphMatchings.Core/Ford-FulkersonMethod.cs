@@ -6,7 +6,7 @@ namespace GraphMatchings.Core
 {
     public class Ford_FulkersonMethod
     {
-        static void Run(int[,] graph)
+        public static void Run(int[,] graph)
         {
 
         }
