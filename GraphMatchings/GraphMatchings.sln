@@ -7,13 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphMatchings.Console", "G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphMatchings.Core", "..\GraphMatchings.Core\GraphMatchings.Core.csproj", "{86407DB8-DA5B-46D5-9203-8B75E359CE03}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SampleGraphs", "SampleGraphs", "{27AEA5C5-9914-47E4-A6F6-A360D665578A}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\-Old\Old\bigraph.txt = ..\..\-Old\Old\bigraph.txt
-		..\..\-Old\Old\bigraph2.txt = ..\..\-Old\Old\bigraph2.txt
-		..\..\-Old\Old\bigraph3.txt = ..\..\-Old\Old\bigraph3.txt
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
