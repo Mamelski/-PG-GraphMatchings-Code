@@ -19,6 +19,7 @@ namespace GraphMatchings.Core
 
                 graph = new int[numberOfNodes, numberOfNodes];
 
+                //TODO nody po kolei
                 for (var i = 0; i < numberOfNodes; ++i)
                 {
                     var line = GetLineFromFile(reader, i, numberOfNodes, pathToFile);

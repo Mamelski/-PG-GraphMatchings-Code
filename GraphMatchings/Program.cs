@@ -23,12 +23,12 @@
         {
             var graph = GraphParser.Parse(pathToFile);
 
-            if (!GraphChecker.IsGraphBipartite(graph))
+            if (!BipartitenessChecker.IsGraphBipartite(graph))
             {
                 throw new Exception("Given graph is not bipartire");
             }
 
-            if (GraphChecker.IsGraphWeighted(graph))
+            if (WeightsChecker.IsGraphWeighted(graph))
             {
                 HungarianMethod.Run(graph);
             }

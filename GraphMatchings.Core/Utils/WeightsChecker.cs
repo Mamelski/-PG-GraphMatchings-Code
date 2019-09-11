@@ -1,13 +1,7 @@
 ﻿namespace GraphMatchings.Core.Utils
 {
-    public class GraphChecker
+    public class WeightsChecker
     {
-
-        public static bool IsGraphBipartite(int[,] graph)
-        {
-            return true;
-        }
-
         public static bool IsGraphWeighted(int[,] graph)
         {
             for (var i = 0; i < graph.GetLength(0); ++i)
