@@ -1,25 +1,18 @@
+using System;
+
 namespace GraphMatchings
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     
-    public class AdjacencyMatrixGraphSerializer
+    public class GraphParser
     {
-        /// <summary>
-        ///     The deserialize.
-        /// </summary>
-        /// <param name="pathToFile">
-        ///     The path to file.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="AdjacencyMatrixGraph" />.
-        /// </returns>
-        public AdjacencyMatrixGraph Deserialize(string pathToFile)
+        public int[,] Parse(string pathToFile)
         {
             CheckIfFileExists(pathToFile);
 
-            AdjacencyMatrixGraph graph;
+            int[,] graph;
 
             using (var reader = File.OpenText(pathToFile))
             {
@@ -45,33 +38,15 @@ namespace GraphMatchings
 
             return graph;
         }
-
-        /// <summary>
-        /// The check if file exists. 
-        /// </summary>
-        /// <param name="path">
-        /// The path.
-        /// </param>
+        
         private void CheckIfFileExists(string path)
         {
             if (!File.Exists(path))
             {
-                throw new GraphMatchingsException($"File \"{path}\" does not exist.");
+                throw new FileNotFoundException($"File \"{path}\" does not exist.");
             }
         }
-
-        /// <summary>
-        /// The parse number of Nodes from file.
-        /// </summary>
-        /// <param name="reader">
-        /// The reader.
-        /// </param>
-        /// <param name="path">
-        /// The path.
-        /// </param>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
+        
         private int ParseNumberOfNodesFromFile(StreamReader reader, string path)
         {
             var numberOfNodesLine = reader.ReadLine();
