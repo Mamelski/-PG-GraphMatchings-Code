@@ -17,7 +17,10 @@
             while (path.Any())
             {
                 SendFlow(flowNetwork, path);
+                path = FindAugmentingPath(flowNetwork);
             }
+
+
         }
 
         private static int[,] TranformGraphToFlowNetwork(int[,] graph)
@@ -109,6 +112,11 @@
                 graph[edge.Item1, edge.Item2] = 0;
                 graph[edge.Item2, edge.Item1] = 1;
             }
+        }
+
+        private static void ReadMatching(int[,] graph)
+        {
+            int a = 0;
         }
     }
 }
