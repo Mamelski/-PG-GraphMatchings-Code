@@ -30,11 +30,11 @@
 
             if (WeightsChecker.IsGraphWeighted(graph))
             {
-                HungarianMethod.Run(graph);
+                var matching = HungarianMethod.Run(graph);
             }
             else
             {
-                Ford_FulkersonMethod.Run(graph);
+               var matching = Ford_FulkersonMethod.Run(graph);
             }
         }
     }

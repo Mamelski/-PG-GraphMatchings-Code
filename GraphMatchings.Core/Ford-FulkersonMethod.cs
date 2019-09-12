@@ -8,7 +8,7 @@
 
     public class Ford_FulkersonMethod
     {
-        public static void Run(int[,] graph)
+        public static List<Tuple<int, int>> Run(int[,] graph)
         {
             var flowNetwork = TranformGraphToFlowNetwork(graph, out var colors);
             var path = FindAugmentingPath(flowNetwork);
@@ -19,8 +19,8 @@
                 path = FindAugmentingPath(flowNetwork);
             }
 
-            ReadMatching(flowNetwork, colors);
-
+            var matching = ReadMatching(flowNetwork, colors);
+            return matching;
         }
 
         private static int[,] TranformGraphToFlowNetwork(int[,] graph, out int[] colors)
