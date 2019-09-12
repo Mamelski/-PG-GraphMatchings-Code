@@ -66,12 +66,16 @@
                         queue.Clear();
                         break;
                     }
-
-                    // TODO
+                    if (!visited[w])
+                    {
+                        visited[w] = true;
+                        parents[w] = v;
+                        queue.Enqueue(w);
+                    }
                 }
             }
 
-            return BuildPath(parents, sink);
+            return !visited[sink] ? new List<int>() : BuildPath(parents, sink);
         }
 
         private static List<int> BuildPath(int[] parents, int sink)
