@@ -11,7 +11,8 @@
     {
         public static void Run(int[,] graph)
         {
-            var flowNetwork = TranformGraphToFlowNetwork(graph);
+            var colors = new int[graph.GetLength(0)];
+            var flowNetwork = TranformGraphToFlowNetwork(graph, out colors);
             var path = FindAugmentingPath(flowNetwork);
 
             while (path.Any())
@@ -20,10 +21,11 @@
                 path = FindAugmentingPath(flowNetwork);
             }
 
+            ReadMatching(flowNetwork,colors);
 
         }
 
-        private static int[,] TranformGraphToFlowNetwork(int[,] graph)
+        private static int[,] TranformGraphToFlowNetwork(int[,] graph, out int[] colors)
         {
             var source = graph.GetLength(0);
             var sink = graph.GetLength(0) + 1;
@@ -31,7 +33,7 @@
 
             var flowNetwork = new int[flowNetworkNodesNumber, flowNetworkNodesNumber];
 
-            var colors = BFSGraphColouring.Run(graph);
+            colors = BFSGraphColouring.Run(graph);
 
             for (var v = 0; v < flowNetworkNodesNumber - 2; ++v)
             {
@@ -114,9 +116,25 @@
             }
         }
 
-        private static void ReadMatching(int[,] graph)
+        private static void ReadMatching(int[,] flowNetwork, int[] colors)
         {
-            int a = 0;
+            var matching = new List<Tuple<int, int>>();
+            var sink = flowNetwork.GetLength(0) - 1;
+            for (int v = 0; v < flowNetwork.GetLength(0) - 2; ++v)
+            {
+                if (colors[v] == 2)
+                {
+                    foreach (var u in GraphHelper.GetNeighbours(flowNetwork, v))
+                    {
+                        if (u != sink)
+                        {
+                            matching.Add(new Tuple<int, int>(u,v));
+                        }
+                    }
+            }
+
+                int a = 0;
+            }
         }
     }
 }
