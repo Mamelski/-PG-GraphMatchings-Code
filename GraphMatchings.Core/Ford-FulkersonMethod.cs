@@ -70,6 +70,13 @@
                     // TODO
                 }
             }
+
+            return BuildPath(parents, sink);
+        }
+
+        private static List<int> BuildPath(int[] parents, int sink)
+        {
+            return null;
         }
     }
 }

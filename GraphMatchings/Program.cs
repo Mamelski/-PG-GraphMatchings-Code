@@ -4,8 +4,8 @@
 
     using CommandLine;
 
-    using GraphMatchings.Core;
-    using GraphMatchings.Core.Utils;
+    using Core;
+    using Core.Utils;
 
     public class Program
     {
