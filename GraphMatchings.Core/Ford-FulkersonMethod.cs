@@ -1,7 +1,9 @@
 ﻿namespace GraphMatchings.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.InteropServices.WindowsRuntime;
 
     using GraphMatchings.Core.Utils;
 
@@ -11,6 +13,11 @@
         {
             var flowNetwork = TranformGraphToFlowNetwork(graph);
             var path = FindAugmentingPath(flowNetwork);
+
+            while (path.Any())
+            {
+                SendFlow(flowNetwork, path);
+            }
         }
 
         private static int[,] TranformGraphToFlowNetwork(int[,] graph)
@@ -42,7 +49,7 @@
             return flowNetwork;
         }
 
-        private static List<int> FindAugmentingPath(int[,] flowNetwork)
+        private static List<Tuple<int, int>> FindAugmentingPath(int[,] flowNetwork)
         {
             var source = flowNetwork.GetLength(0) - 2;
             var sink = flowNetwork.GetLength(0) - 1;
@@ -66,6 +73,7 @@
                         queue.Clear();
                         break;
                     }
+
                     if (!visited[w])
                     {
                         visited[w] = true;
@@ -75,12 +83,32 @@
                 }
             }
 
-            return !visited[sink] ? new List<int>() : BuildPath(parents, sink);
+            return !visited[sink] ? new List<Tuple<int, int>>()  : BuildPath(parents, source, sink);
         }
 
-        private static List<int> BuildPath(int[] parents, int sink)
+        private static List<Tuple<int, int>> BuildPath(int[] parents, int source, int sink)
         {
-            return null;
+            var path = new List<Tuple<int, int>>();
+            var current = sink;
+
+            while (current != source)
+            {
+                path.Add(new Tuple<int, int>(parents[current], current));
+                current = parents[current];
+            }
+
+            path.Reverse();
+
+            return path;
+        }
+
+        private static void SendFlow(int[,] graph, List<Tuple<int, int>> path)
+        {
+            foreach (var edge in path)
+            {
+                graph[edge.Item1, edge.Item2] = 0;
+                graph[edge.Item2, edge.Item1] = 1;
+            }
         }
     }
 }
