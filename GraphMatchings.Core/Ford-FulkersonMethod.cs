@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.InteropServices.WindowsRuntime;
 
     using GraphMatchings.Core.Utils;
 
@@ -11,8 +10,7 @@
     {
         public static void Run(int[,] graph)
         {
-            var colors = new int[graph.GetLength(0)];
-            var flowNetwork = TranformGraphToFlowNetwork(graph, out colors);
+            var flowNetwork = TranformGraphToFlowNetwork(graph, out var colors);
             var path = FindAugmentingPath(flowNetwork);
 
             while (path.Any())
@@ -21,7 +19,7 @@
                 path = FindAugmentingPath(flowNetwork);
             }
 
-            ReadMatching(flowNetwork,colors);
+            ReadMatching(flowNetwork, colors);
 
         }
 
@@ -37,7 +35,7 @@
 
             for (var v = 0; v < flowNetworkNodesNumber - 2; ++v)
             {
-                if (colors[v] == v)
+                if (colors[v] == 1)
                 {
                     flowNetwork[source, v] = 1;
                     foreach (var u in GraphHelper.GetNeighbours(graph, v))
@@ -116,7 +114,7 @@
             }
         }
 
-        private static void ReadMatching(int[,] flowNetwork, int[] colors)
+        private static List<Tuple<int, int>> ReadMatching(int[,] flowNetwork, int[] colors)
         {
             var matching = new List<Tuple<int, int>>();
             var sink = flowNetwork.GetLength(0) - 1;
@@ -128,13 +126,13 @@
                     {
                         if (u != sink)
                         {
-                            matching.Add(new Tuple<int, int>(u,v));
+                            matching.Add(new Tuple<int, int>(u, v));
                         }
                     }
+                }
             }
 
-                int a = 0;
-            }
+            return matching;
         }
     }
 }
