@@ -1,6 +1,6 @@
 ﻿namespace GraphMatchings.Core.Utils
 {
-    public class WeightsChecker
+    public static class WeightsChecker
     {
         public static bool IsGraphWeighted(int[,] graph)
         {

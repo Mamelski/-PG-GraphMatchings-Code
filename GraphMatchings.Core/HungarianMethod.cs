@@ -4,7 +4,7 @@ namespace GraphMatchings.Core
     using System;
     using System.Collections.Generic;
 
-    public class HungarianMethod
+    public static class HungarianMethod
     {
         public static List<Tuple<int, int>> Run(int[,] graph)
         {

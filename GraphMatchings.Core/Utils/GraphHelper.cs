@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class GraphHelper
+    public static class GraphHelper
     {
         public static IEnumerable<int> GetNeighbours(int[,] graph, int node)
         {

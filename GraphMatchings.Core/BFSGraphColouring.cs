@@ -3,9 +3,9 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using GraphMatchings.Core.Utils;
+    using Utils;
 
-    public class BFSGraphColouring
+    public static class BFSGraphColouring
     {
         public static int[] Run(int[,] graph)
         {

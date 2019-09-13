@@ -5,7 +5,7 @@ namespace GraphMatchings.Core
     using System.IO;
     using System.Linq;
 
-    public class GraphParser
+    public static class GraphParser
     {
         public static int[,] Parse(string pathToFile)
         {

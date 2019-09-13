@@ -4,9 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using GraphMatchings.Core.Utils;
+    using Utils;
 
-    public class Ford_FulkersonMethod
+    public static class Ford_FulkersonMethod
     {
         public static List<Tuple<int, int>> Run(int[,] graph)
         {
