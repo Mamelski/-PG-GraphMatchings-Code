@@ -14,6 +14,8 @@ namespace GraphMatchings.Core
 
         private static int[,] Step0(int[,] graph)
         {
+            var colors = BFSGraphColouring.Run(graph);
+
             throw new NotImplementedException();
         }
     }
