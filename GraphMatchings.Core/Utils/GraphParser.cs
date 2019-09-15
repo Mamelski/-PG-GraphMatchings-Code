@@ -1,4 +1,4 @@
-namespace GraphMatchings.Core
+namespace GraphMatchings.Core.Utils
 {
     using System;
     using System.Collections.Generic;
@@ -11,6 +11,24 @@ namespace GraphMatchings.Core
         {
             CheckIfFileExists(pathToFile);
 
+            if (IsWeighted(pathToFile))
+            {
+                return ParseWeighted(pathToFile);
+            }
+            else
+            {
+                return ParseUnweighted(pathToFile);
+               
+            }
+        }
+
+        private static int[,] ParseWeighted(string pathToFile)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static int[,] ParseUnweighted(string pathToFile)
+        {
             int[,] graph;
 
             using (var reader = File.OpenText(pathToFile))
@@ -19,7 +37,6 @@ namespace GraphMatchings.Core
 
                 graph = new int[numberOfNodes, numberOfNodes];
 
-                //TODO nody po kolei
                 for (var i = 0; i < numberOfNodes; ++i)
                 {
                     var line = GetLineFromFile(reader, i, numberOfNodes, pathToFile);
@@ -49,7 +66,9 @@ namespace GraphMatchings.Core
 
         private static int ParseNumberOfNodesFromFile(TextReader reader, string path)
         {
+            reader.ReadLine();
             var numberOfNodesLine = reader.ReadLine();
+
             if (string.IsNullOrEmpty(numberOfNodesLine))
             {
                 throw new Exception($"First line in file \"{path}\" is empty. It should contain number of Nodes");
@@ -111,6 +130,20 @@ namespace GraphMatchings.Core
             }
 
             return neighbours;
+        }
+
+        private static bool IsWeighted(string pathToFile)
+        {
+            using (var reader = File.OpenText(pathToFile))
+            {
+                var c = reader.ReadLine();
+                if (c[0] == 'w')
+                {
+                    return true;
+                }
+
+                return false;
+            }
         }
     }
 }
