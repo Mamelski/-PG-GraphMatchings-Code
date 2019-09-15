@@ -6,6 +6,8 @@ namespace GraphMatchings.Core
     using System.ComponentModel;
     using System.Linq;
 
+    using GraphMatchings.Core.Utils;
+
     public static class HungarianMethod
     {
         public static List<Tuple<int, int>> Run(int[,] graph)
@@ -34,10 +36,23 @@ namespace GraphMatchings.Core
 
             if (index1.Count > index2.Count)
             {
-                // reverse
+                var tmp = index1;
+                index1 = index2;
+                index2 = tmp;
             }
 
-            throw new NotImplementedException();
+            var matrix = new int[index1.Count, index2.Count];
+
+            for (int i = 0; i < index1.Count; ++i)
+            {
+                for (int j = 0; j < index2.Count; ++j)
+                {
+                    matrix[i, j] = 0 - graph[index1[i], index2[j]];
+                }
+            }
+
+            MatrixHelper.PrintMatrix(matrix);
+            return matrix;
         }
     }
 }
