@@ -11,20 +11,37 @@ namespace GraphMatchings.Core.Utils
         {
             CheckIfFileExists(pathToFile);
 
-            if (IsWeighted(pathToFile))
-            {
-                return ParseWeighted(pathToFile);
-            }
-            else
-            {
-                return ParseUnweighted(pathToFile);
-               
-            }
+            return IsWeighted(pathToFile) ? ParseWeighted(pathToFile) : ParseUnweighted(pathToFile);
         }
 
         private static int[,] ParseWeighted(string pathToFile)
         {
-            throw new NotImplementedException();
+            int[,] graph;
+
+            using (var reader = File.OpenText(pathToFile))
+            {
+                var numberOfNodes = ParseNumberOfNodesFromFile(reader, pathToFile);
+
+                graph = new int[numberOfNodes, numberOfNodes];
+
+                for (var i = 0; i < numberOfNodes; ++i)
+                {
+                    var line = GetLineFromFile(reader, i, numberOfNodes, pathToFile);
+
+                    var nodeId = GetNodeIdFromLine(line, pathToFile);
+
+                    var neighboursAndWeighths = GetNeighboursAndWeightsFromLine(line, pathToFile);
+
+                    for (var j = 0; i < neighboursAndWeighths.Count; ++j)
+                    {
+                        graph[nodeId, neighboursAndWeighths[j]] = neighboursAndWeighths[j + 1];
+                        graph[neighboursAndWeighths[j], nodeId] = neighboursAndWeighths[j + 1];
+                        ++j;
+                    }
+                }
+            }
+
+            return graph;
         }
 
         private static int[,] ParseUnweighted(string pathToFile)
@@ -130,6 +147,27 @@ namespace GraphMatchings.Core.Utils
             }
 
             return neighbours;
+        }
+
+        private static List<int> GetNeighboursAndWeightsFromLine(string line, string path)
+        {
+            var splitedLine = line.Split(' ');
+            var neighboursAndWeights = new List<int>();
+
+            // We are starting from 1 because first number in the line is the node and neighbours start from 1.
+            for (int i = 1; i < splitedLine.Length; ++i)
+            {
+                var isParseSuccessfull = int.TryParse(splitedLine[i], out var nodeId);
+
+                if (!isParseSuccessfull)
+                {
+                    throw new Exception($"Could not parse character \"{splitedLine[i]}\" from file \"{path}\" to int. This string should represent node.");
+                }
+
+                neighboursAndWeights.Add(nodeId);
+            }
+
+            return neighboursAndWeights;
         }
 
         private static bool IsWeighted(string pathToFile)

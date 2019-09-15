@@ -22,6 +22,7 @@
         private static void ParseInputAndRunAlgorithm(string pathToFile)
         {
             var graph = GraphParser.Parse(pathToFile);
+            MatrixHelper.PrintMatrix(graph);
 
             if (!BipartitenessChecker.IsGraphBipartite(graph))
             {
