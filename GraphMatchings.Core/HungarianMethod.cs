@@ -163,7 +163,6 @@ namespace GraphMatchings.Core
             Step6();
         }
 
-
         private static void Step5(int row, int column)
         {
             var path = new List<Tuple<int, int>> { new Tuple<int, int>(row, column) };
@@ -208,12 +207,36 @@ namespace GraphMatchings.Core
 
         private static void Step6()
         {
-            throw new NotImplementedException();
+            var min = matrix[0, 0];
+            for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            {
+                for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                {
+                    min = Math.Min(min, matrix[row, column]);
+                }
+            }
+
+            for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            {
+                for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                {
+                    if (isRowCovered[row])
+                    {
+                        matrix[row, column] += min;
+                    }
+
+                    if (!isColumnCovered[column])
+                    {
+                        matrix[row, column] -= min;
+                    }
+                }
+            }
         }
 
         private static void Step7()
         {
-
+            MatrixHelper.PrintMatrix(stars);
+            int a = 0;
 
         }
 
