@@ -34,6 +34,7 @@ namespace GraphMatchings.Core
 
         private static void Step0(int[,] graph)
         {
+            Console.WriteLine("Step 0");
             var colors = BFSGraphColouring.Run(graph);
             var index1 = new List<int>();
             var index2 = new List<int>();
@@ -72,6 +73,7 @@ namespace GraphMatchings.Core
 
         private static void Step1()
         {
+            Console.WriteLine("Step 1");
             var minInRow = int.MaxValue;
 
             for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
@@ -94,6 +96,7 @@ namespace GraphMatchings.Core
 
         private static void Step2()
         {
+            Console.WriteLine("Step 2");
             for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
             {
                 for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
@@ -112,6 +115,8 @@ namespace GraphMatchings.Core
 
         private static void Step3()
         {
+            Console.WriteLine("Step 3");
+
             var numberOfCoveredColumns = 0;
             for (int column = 0; column < MatrixHelper.ColumnsCount(stars); column++)
             {
@@ -134,6 +139,7 @@ namespace GraphMatchings.Core
 
         private static void Step4()
         {
+            Console.WriteLine("Step 4");
             var rowWith0 = -1;
             var columnWith0 = -1;
             while (IsUncoveredZero(ref rowWith0, ref columnWith0))
@@ -165,6 +171,7 @@ namespace GraphMatchings.Core
 
         private static void Step5(int row, int column)
         {
+            Console.WriteLine("Step 5");
             var path = new List<Tuple<int, int>> { new Tuple<int, int>(row, column) };
 
             while (true)
@@ -201,18 +208,26 @@ namespace GraphMatchings.Core
             }
 
             primes = new bool[MatrixHelper.RowsCount(matrix), MatrixHelper.ColumnsCount(matrix)];
+            isRowCovered = new bool[MatrixHelper.RowsCount(matrix)];
+            isColumnCovered = new bool[MatrixHelper.ColumnsCount(matrix)];
+
+            MatrixHelper.PrintMatrix(stars);
 
             Step3();
         }
 
         private static void Step6()
         {
-            var min = matrix[0, 0];
+            Console.WriteLine("Step 6");
+            var min = int.MaxValue;
             for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
             {
                 for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
                 {
-                    min = Math.Min(min, matrix[row, column]);
+                    if (!isRowCovered[row] && !isColumnCovered[column])
+                    {
+                        min = Math.Min(min, matrix[row, column]);
+                    }
                 }
             }
 
@@ -231,10 +246,13 @@ namespace GraphMatchings.Core
                     }
                 }
             }
+
+            Step4();
         }
 
         private static void Step7()
         {
+            Console.WriteLine("Step 7");
             MatrixHelper.PrintMatrix(stars);
             int a = 0;
 
@@ -242,7 +260,7 @@ namespace GraphMatchings.Core
 
         private static int? Find0StarInColumn(int column)
         {
-            for (var row = 0; row < MatrixHelper.ColumnsCount(matrix); ++row)
+            for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
             {
                 if (stars[row, column])
                 {
@@ -255,7 +273,7 @@ namespace GraphMatchings.Core
 
         private static int? Find0PrimeInRow(int row)
         {
-            for (var column = 0; column < MatrixHelper.RowsCount(matrix); ++column)
+            for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
             {
                 if (primes[row, column])
                 {
