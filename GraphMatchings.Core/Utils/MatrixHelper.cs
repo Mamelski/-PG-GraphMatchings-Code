@@ -4,17 +4,27 @@
 
     public static class MatrixHelper
     {
-        public static void PrintMatrix(int[,] matrix)
+        public static void PrintMatrix<T>(T[,] matrix)
         {
-            for (var i = 0; i < matrix.GetLength(0); ++i)
+            for (var row = 0; row < RowsCount(matrix); ++row)
             {
-                for (var j = 0; j < matrix.GetLength(1); ++j)
+                for (var column = 0; column < ColumnsCount(matrix); ++column)
                 {
-                    Console.Write($"{matrix[i, j]} ");
+                    Console.Write($"{matrix[row, column]} ");
                 }
 
                 Console.WriteLine();
             }
+        }
+
+        public static int RowsCount<T>(T[,] matrix)
+        {
+            return matrix.GetLength(0);
+        }
+
+        public static int ColumnsCount<T>(T[,] matrix)
+        {
+            return matrix.GetLength(1);
         }
     }
 }

@@ -3,16 +3,24 @@ namespace GraphMatchings.Core
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Linq;
 
     using GraphMatchings.Core.Utils;
 
     public static class HungarianMethod
     {
+        private static bool[,] stars;
+        private static bool[,] primes;
+        private static bool[] isRowCovered;
+        private static bool[] isColumnCovered;
+
         public static List<Tuple<int, int>> Run(int[,] graph)
         {
             var matrix = Step0(graph);
+
+            stars = new bool[MatrixHelper.RowsCount(matrix), MatrixHelper.ColumnsCount(matrix)];
+            primes = new bool[MatrixHelper.RowsCount(matrix), MatrixHelper.ColumnsCount(matrix)];
+            isRowCovered = new bool[MatrixHelper.RowsCount(matrix)];
+            isColumnCovered = new bool[MatrixHelper.ColumnsCount(matrix)];
 
             Step1(matrix);
             return null;
@@ -80,7 +88,79 @@ namespace GraphMatchings.Core
 
         private static void Step2(int[,] matrix)
         {
+            for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            {
+                for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                {
+                    if (matrix[row, column] == 0 && !IsStarInRow(row) && !IsStarInColumn(column))
+                    {
+                        stars[row, column] = true;
+                    }
+                }
+            }
+
+            MatrixHelper.PrintMatrix(stars);
+
+            Step3(matrix);
+        }
+
+        private static void Step3(int[,] matrix)
+        {
+            var numberOfCoveredColumns = 0;
+            for (int column = 0; column < MatrixHelper.ColumnsCount(stars); column++)
+            {
+                if (IsStarInColumn(column))
+                {
+                    isColumnCovered[column] = true;
+                    ++numberOfCoveredColumns;
+                }
+            }
+
+            if (numberOfCoveredColumns == MatrixHelper.RowsCount(matrix))
+            {
+                Step7(matrix);
+            }
+            else
+            {
+                Step4(matrix);
+            }
+        }
+
+        private static void Step4(int[,] matrix)
+        {
             throw new NotImplementedException();
+        }
+
+        private static void Step7(int[,] matrix)
+        {
+
+
+        }
+
+        private static bool IsStarInRow(int row)
+        {
+            for (int column = 0; column < MatrixHelper.ColumnsCount(stars); column++)
+            {
+                if (stars[row, column])
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsStarInColumn(int column)
+        {
+            for (int row = 0; row < MatrixHelper.RowsCount(stars); row++)
+            {
+                if (stars[row, column])
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
