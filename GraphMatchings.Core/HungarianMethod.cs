@@ -131,33 +131,30 @@ namespace GraphMatchings.Core
 
         private static void Step4(int[,] matrix)
         {
-            for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            var rowWith0 = -1;
+            var columnWith0 = -1;
+
+            while (IsUncoveredZero(matrix, ref rowWith0, ref columnWith0))
             {
-                if (isRowCovered[row])
+                primes[rowWith0, columnWith0] = true;
+
+                if (!IsStarInRow(rowWith0))
                 {
-                    continue;
+                    Step5(rowWith0, columnWith0, matrix);
                 }
-
-                for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                else
                 {
-                    if (isColumnCovered[column])
+                    var columnWith0Star = 0;
+                    for (int column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
                     {
-                        continue;
+                        if (stars[rowWith0, column])
+                        {
+                            columnWith0Star = column;
+                        }
                     }
 
-                    if (matrix[row, column] == 0)
-                    {
-                        primes[row, column] = true;
-                        if (!IsStarInRow(row))
-                        {
-                            Step5(row, column, matrix);
-                        }
-                        else
-                        {
-                            isColumnCovered[column] = false;
-                            isRowCovered[row] = true;
-                        }
-                    }
+                    isColumnCovered[columnWith0Star] = false;
+                    isRowCovered[rowWith0] = true;
                 }
             }
         }
