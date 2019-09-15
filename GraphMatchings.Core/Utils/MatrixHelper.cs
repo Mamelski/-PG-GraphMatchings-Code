@@ -1,22 +1,20 @@
 ﻿namespace GraphMatchings.Core.Utils
 {
-    using System.Collections.Generic;
+    using System;
 
     public static class MatrixHelper
     {
-        public static IEnumerable<int> GetNeighbours(int[,] graph, int node)
+        public static void PrintMatrix(int[,] matrix)
         {
-            var neighbours = new List<int>();
-
-            for (var i = 0; i < graph.GetLength(1); ++i)
+            for (var i = 0; i < matrix.GetLength(0); ++i)
             {
-                if (graph[node, i] != 0)
+                for (var j = 0; j < matrix.GetLength(1); ++j)
                 {
-                    neighbours.Add(i);
+                    Console.WriteLine($"{matrix[i, j]} ");
                 }
-            }
 
-            return neighbours;
+                Console.WriteLine();
+            }
         }
     }
 }
