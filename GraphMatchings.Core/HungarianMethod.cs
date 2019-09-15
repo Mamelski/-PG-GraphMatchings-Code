@@ -13,6 +13,8 @@ namespace GraphMatchings.Core
         public static List<Tuple<int, int>> Run(int[,] graph)
         {
             var matrix = Step0(graph);
+
+            Step1(matrix);
             return null;
         }
 
@@ -53,6 +55,32 @@ namespace GraphMatchings.Core
 
             MatrixHelper.PrintMatrix(matrix);
             return matrix;
+        }
+
+        private static void Step1(int[,] matrix)
+        {
+            var min = int.MaxValue;
+            for (int i = 0; i < matrix.GetLength(0); ++i)
+            {
+                for (var j = 0; j < matrix.GetLength(1); ++j)
+                {
+                    min = Math.Min(min, matrix[i, j]);
+                }
+
+                for (var j = 0; j < matrix.GetLength(1); ++j)
+                {
+                    matrix[i, j] -= min;
+                }
+            }
+
+            MatrixHelper.PrintMatrix(matrix);
+
+            Step2(matrix);
+        }
+
+        private static void Step2(int[,] matrix)
+        {
+            throw new NotImplementedException();
         }
     }
 }
