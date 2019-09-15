@@ -32,7 +32,10 @@ namespace GraphMatchings.Core
                 }
             }
 
-            if(index1.Count > )
+            if (index1.Count > index2.Count)
+            {
+                // reverse
+            }
 
             throw new NotImplementedException();
         }
