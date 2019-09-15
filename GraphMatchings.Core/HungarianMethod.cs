@@ -133,7 +133,6 @@ namespace GraphMatchings.Core
         {
             var rowWith0 = -1;
             var columnWith0 = -1;
-
             while (IsUncoveredZero(matrix, ref rowWith0, ref columnWith0))
             {
                 primes[rowWith0, columnWith0] = true;
@@ -157,6 +156,13 @@ namespace GraphMatchings.Core
                     isRowCovered[rowWith0] = true;
                 }
             }
+
+            Step6(matrix);
+        }
+
+        private static void Step6(int[,] matrix)
+        {
+            throw new NotImplementedException();
         }
 
         private static void Step5(int row, int column, int[,] matrix)
