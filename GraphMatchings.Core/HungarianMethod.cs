@@ -1,29 +1,23 @@
-﻿
-namespace GraphMatchings.Core
+﻿namespace GraphMatchings.Core
 {
     using System;
     using System.Collections.Generic;
-
     using GraphMatchings.Core.Utils;
 
     public static class HungarianMethod
     {
         private static int[,] originalGraph;
-
         private static int[,] matrix;
-
         private static bool[,] stars;
-
         private static bool[,] primes;
-
         private static bool[] isRowCovered;
-
         private static bool[] isColumnCovered;
 
-        private static List<int> index1 = new List<int>();
-        private static List<int> index2 = new List<int>();
+        private static List<int> rowIndexes = new List<int>();
+        private static List<int> columnIndexes = new List<int>();
 
-        public static int step;
+        private static int step;
+
         private static int rowWith0;
         private static int columnWith0;
 
@@ -31,9 +25,10 @@ namespace GraphMatchings.Core
         {
             originalGraph = graph;
 
-            bool done = false;
+            var done = false;
             while (!done)
             {
+                Console.WriteLine($"Step {step}");
                 switch (step)
                 {
                     case 0:
@@ -58,7 +53,6 @@ namespace GraphMatchings.Core
                         Step6();
                         break;
                     case 7:
-                        Step7();
                         done = true;
                         break;
                 }
@@ -67,44 +61,52 @@ namespace GraphMatchings.Core
             return Step7();
         }
 
+        // Prepare graph
         private static void Step0()
         {
-            Console.WriteLine("Step 0");
+            // Color graph using BFS
             var colors = BFSGraphColouring.Run(originalGraph);
 
+            // Nodes with color 1 are row indexes in new matrix
+            // Nodes with color 2 are column indexes in new matrix
             for (int node = 0; node < colors.Length; ++node)
             {
                 if (colors[node] == 1)
                 {
-                    index1.Add(node);
+                    rowIndexes.Add(node);
                 }
-                else
+
+                if (colors[node] == 2)
                 {
-                    index2.Add(node);
+                    columnIndexes.Add(node);
                 }
             }
 
-            if (index1.Count > index2.Count)
+            // Number of rows can't be bigger that number of columns
+            // Swap if needed
+            if (rowIndexes.Count > columnIndexes.Count)
             {
-                var tmp = index1;
-                index1 = index2;
-                index2 = tmp;
+                var tmp = rowIndexes;
+                rowIndexes = columnIndexes;
+                columnIndexes = tmp;
             }
 
-            matrix = new int[index1.Count, index2.Count];
-
-            for (int i = 0; i < index1.Count; ++i)
-            {
-                for (int j = 0; j < index2.Count; ++j)
-                {
-                    matrix[i, j] = 0 - originalGraph[index1[i], index2[j]];
-                }
-            }
-
+            // Init matrix and helper structures
+            matrix = new int[rowIndexes.Count, columnIndexes.Count];
             stars = new bool[MatrixHelper.RowsCount(matrix), MatrixHelper.ColumnsCount(matrix)];
             primes = new bool[MatrixHelper.RowsCount(matrix), MatrixHelper.ColumnsCount(matrix)];
             isRowCovered = new bool[MatrixHelper.RowsCount(matrix)];
             isColumnCovered = new bool[MatrixHelper.ColumnsCount(matrix)];
+
+            for (int i = 0; i < rowIndexes.Count; ++i)
+            {
+                for (int j = 0; j < columnIndexes.Count; ++j)
+                {
+                    matrix[i, j] = 0 - originalGraph[rowIndexes[i], columnIndexes[j]];
+                }
+            }
+
+
 
             MatrixHelper.PrintMatrix(matrix);
             step = 1;
@@ -112,7 +114,6 @@ namespace GraphMatchings.Core
 
         private static void Step1()
         {
-            Console.WriteLine("Step 1");
             var minInRow = int.MaxValue;
 
             for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
@@ -135,7 +136,6 @@ namespace GraphMatchings.Core
 
         private static void Step2()
         {
-            Console.WriteLine("Step 2");
             for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
             {
                 for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
@@ -154,8 +154,6 @@ namespace GraphMatchings.Core
 
         private static void Step3()
         {
-            Console.WriteLine("Step 3");
-
             var numberOfCoveredColumns = 0;
             for (int column = 0; column < MatrixHelper.ColumnsCount(stars); column++)
             {
@@ -178,8 +176,6 @@ namespace GraphMatchings.Core
 
         private static void Step4()
         {
-            Console.WriteLine("Step 4");
-
             while (IsUncoveredZero())
             {
                 primes[rowWith0, columnWith0] = true;
@@ -212,7 +208,7 @@ namespace GraphMatchings.Core
         {
             int row = rowWith0;
             int column = columnWith0;
-            Console.WriteLine("Step 5");
+
             var path = new List<Tuple<int, int>> { new Tuple<int, int>(row, column) };
 
             while (true)
@@ -259,7 +255,6 @@ namespace GraphMatchings.Core
 
         private static void Step6()
         {
-            Console.WriteLine("Step 6");
             var min = int.MaxValue;
             for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
             {
@@ -293,7 +288,6 @@ namespace GraphMatchings.Core
 
         private static List<Tuple<int, int>> Step7()
         {
-            Console.WriteLine("Step 7");
             MatrixHelper.PrintMatrix(stars);
 
             var res = new List<Tuple<int, int>>();
@@ -304,14 +298,12 @@ namespace GraphMatchings.Core
                 {
                     if (stars[row, column])
                     {
-                        res.Add(new Tuple<int, int>(index1[row], index2[column]));
+                        res.Add(new Tuple<int, int>(rowIndexes[row], columnIndexes[column]));
                     }
                 }
             }
 
-            int a = 0;
             return res;
-
         }
 
         private static int? Find0StarInColumn(int column)
