@@ -32,7 +32,7 @@ namespace GraphMatchings.Core.Utils
 
                     var neighboursAndWeighths = GetNeighboursAndWeightsFromLine(line, pathToFile);
 
-                    for (var j = 0; i < neighboursAndWeighths.Count; ++j)
+                    for (var j = 0; j < neighboursAndWeighths.Count; ++j)
                     {
                         graph[nodeId, neighboursAndWeighths[j]] = neighboursAndWeighths[j + 1];
                         graph[neighboursAndWeighths[j], nodeId] = neighboursAndWeighths[j + 1];
@@ -175,7 +175,7 @@ namespace GraphMatchings.Core.Utils
             using (var reader = File.OpenText(pathToFile))
             {
                 var c = reader.ReadLine();
-                if (c[0] == 'w')
+                if (c[0] == 'W')
                 {
                     return true;
                 }
