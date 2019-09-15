@@ -9,8 +9,11 @@ namespace GraphMatchings.Core
     public static class HungarianMethod
     {
         private static bool[,] stars;
+
         private static bool[,] primes;
+
         private static bool[] isRowCovered;
+
         private static bool[] isColumnCovered;
 
         public static List<Tuple<int, int>> Run(int[,] graph)
@@ -128,6 +131,39 @@ namespace GraphMatchings.Core
 
         private static void Step4(int[,] matrix)
         {
+            for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            {
+                if (isRowCovered[row])
+                {
+                    continue;
+                }
+
+                for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                {
+                    if (isColumnCovered[column])
+                    {
+                        continue;
+                    }
+
+                    if (matrix[row, column] == 0)
+                    {
+                        primes[row, column] = true;
+                        if (!IsStarInRow(row))
+                        {
+                            Step5(row, column, matrix);
+                        }
+                        else
+                        {
+                            isColumnCovered[column] = false;
+                            isRowCovered[row] = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void Step5(int row, int column, int[,] matrix)
+        {
             throw new NotImplementedException();
         }
 
@@ -157,6 +193,35 @@ namespace GraphMatchings.Core
                 if (stars[row, column])
                 {
                     return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsUncoveredZero(int[,] matrix, ref int rowWith0, ref int columnWith0)
+        {
+            for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            {
+                if (isRowCovered[row])
+                {
+                    continue;
+                }
+
+                for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                {
+                    if (isColumnCovered[column])
+                    {
+                        continue;
+                    }
+
+                    if (matrix[row, column] == 0)
+                    {
+                        rowWith0 = row;
+                        columnWith0 = column;
+
+                        return true;
+                    }
                 }
             }
 
