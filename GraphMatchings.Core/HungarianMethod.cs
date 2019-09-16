@@ -212,8 +212,8 @@
 
         private static void Step5()
         {
-            int row = rowWith0;
-            int column = columnWith0;
+            var row = rowWith0;
+            var column = columnWith0;
 
             // Add Z_0 as first path element
             var path = new List<Tuple<int, int>> { new Tuple<int, int>(row, column) };
@@ -239,25 +239,26 @@
                 }
             }
 
-            foreach (var cell in path)
+            foreach (var (i, j) in path)
             {
-                if (stars[cell.Item1, cell.Item2])
+                // Remove star from 0 star in the path
+                if (stars[i, j])
                 {
-                    stars[cell.Item1, cell.Item2] = false;
+                    stars[i, j] = false;
                 }
 
-                if (primes[cell.Item1, cell.Item2])
+                // Change 0 prime to 0 star
+                if (primes[i, j])
                 {
-                    primes[cell.Item1, cell.Item2] = false;
-                    stars[cell.Item1, cell.Item2] = true;
+                    primes[i, j] = false;
+                    stars[i, j] = true;
                 }
             }
 
+            // Remove primes and uncover all
             primes = new bool[MatrixHelper.RowsCount(matrix), MatrixHelper.ColumnsCount(matrix)];
             isRowCovered = new bool[MatrixHelper.RowsCount(matrix)];
             isColumnCovered = new bool[MatrixHelper.ColumnsCount(matrix)];
-
-            MatrixHelper.PrintMatrix(stars);
 
             step = 3;
         }
