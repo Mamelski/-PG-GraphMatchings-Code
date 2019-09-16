@@ -193,6 +193,7 @@
                     return;
                 }
 
+                // Find 0 star in the same row
                 var columnWith0Star = 0;
                 for (int column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
                 {
@@ -202,10 +203,10 @@
                     }
                 }
 
+                // Cover column with 0 star and uncover row
                 isColumnCovered[columnWith0Star] = false;
                 isRowCovered[rowWith0] = true;
             }
-
             step = 6;
         }
 
@@ -214,10 +215,12 @@
             int row = rowWith0;
             int column = columnWith0;
 
+            // Add Z_0 as first path element
             var path = new List<Tuple<int, int>> { new Tuple<int, int>(row, column) };
 
             while (true)
             {
+                // Find 0 star in a column
                 var rowWith0Star = Find0StarInColumn(column);
                 if (!rowWith0Star.HasValue)
                 {
@@ -227,6 +230,7 @@
                 row = rowWith0Star.Value;
                 path.Add(new Tuple<int, int>(row, column));
 
+                // Find 0 prime in a row 
                 var columnWith0Prime = Find0PrimeInRow(row);
                 if (columnWith0Prime.HasValue)
                 {
