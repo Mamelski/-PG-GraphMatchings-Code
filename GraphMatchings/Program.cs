@@ -35,7 +35,7 @@
             }
             else
             {
-               var matching = Ford_FulkersonMethod.Run(graph);
+               var matching = FordFulkersonMethod.Run(graph);
             }
         }
     }

@@ -6,13 +6,15 @@
 
     using Utils;
 
-    public static class Ford_FulkersonMethod
+    public static class FordFulkersonMethod
     {
+        // Entry point, runs Edmonds-Karp algorithm for given graph
+        // Returns collection of edges that are maximum weighted matching
         public static List<Tuple<int, int>> Run(int[,] graph)
         {
             var flowNetwork = TranformGraphToFlowNetwork(graph, out var colors);
-            var path = FindAugmentingPath(flowNetwork);
 
+            var path = FindAugmentingPath(flowNetwork);
             while (path.Any())
             {
                 SendFlow(flowNetwork, path);
@@ -25,27 +27,33 @@
 
         private static int[,] TranformGraphToFlowNetwork(int[,] graph, out int[] colors)
         {
-            var source = graph.GetLength(0);
-            var sink = graph.GetLength(0) + 1;
-            var flowNetworkNodesNumber = graph.GetLength(0) + 2;
+            var source = GraphHelper.NumberOfNodes(graph);
+            var sink = GraphHelper.NumberOfNodes(graph) + 1;
+            var flowNetworkNodesNumber = GraphHelper.NumberOfNodes(graph) + 2;
 
+            // New modified graph
             var flowNetwork = new int[flowNetworkNodesNumber, flowNetworkNodesNumber];
 
-            colors = BFSGraphColouring.Run(graph);
+            colors = GraphColoringBfs.Run(graph);
 
-            for (var v = 0; v < flowNetworkNodesNumber - 2; ++v)
+            for (var node = 0; node < colors.Length; ++node)
             {
-                if (colors[v] == 1)
+                // Node is in first partition
+                if (colors[node] == 1)
                 {
-                    flowNetwork[source, v] = 1;
-                    foreach (var u in GraphHelper.GetNeighbours(graph, v))
+                    // Add edge from source
+                    flowNetwork[source, node] = 1;
+
+                    // Add directed edge to all neighbours (they are in partition 2)
+                    foreach (var neighbour in GraphHelper.GetNeighbours(graph, node))
                     {
-                        flowNetwork[v, u] = 1;
+                        flowNetwork[node, neighbour] = 1;
                     }
                 }
                 else
                 {
-                    flowNetwork[v, sink] = 1;
+                    // Node is in second partition, add edge to sink
+                    flowNetwork[node, sink] = 1;
                 }
             }
 
@@ -54,38 +62,43 @@
 
         private static List<Tuple<int, int>> FindAugmentingPath(int[,] flowNetwork)
         {
-            var source = flowNetwork.GetLength(0) - 2;
-            var sink = flowNetwork.GetLength(0) - 1;
-            var visited = new bool[flowNetwork.GetLength(0)];
-            var parents = new int[flowNetwork.GetLength(0)];
+            var source = GraphHelper.NumberOfNodes(flowNetwork) - 2;
+            var sink = GraphHelper.NumberOfNodes(flowNetwork) - 1;
+
+            var visited = new bool[GraphHelper.NumberOfNodes(flowNetwork)];
+            var parents = new int[GraphHelper.NumberOfNodes(flowNetwork)];
             var queue = new Queue<int>();
 
+            // Starting from source
             visited[source] = true;
             queue.Enqueue(source);
 
+            // While any node to visit
             while (queue.Any())
             {
-                var v = queue.Dequeue();
+                var node = queue.Dequeue();
 
-                foreach (var w in GraphHelper.GetNeighbours(flowNetwork,v))
+                foreach (var neighbour in GraphHelper.GetNeighbours(flowNetwork, node))
                 {
-                    if (w == sink)
+                    // We found sink
+                    if (neighbour == sink)
                     {
                         visited[sink] = true;
-                        parents[sink] = v;
+                        parents[sink] = node;
                         queue.Clear();
                         break;
                     }
 
-                    if (!visited[w])
+                    if (!visited[neighbour])
                     {
-                        visited[w] = true;
-                        parents[w] = v;
-                        queue.Enqueue(w);
+                        visited[neighbour] = true;
+                        parents[neighbour] = node;
+                        queue.Enqueue(neighbour);
                     }
                 }
             }
 
+            // If we did not reach sink return empty path, otherwise return path
             return !visited[sink] ? new List<Tuple<int, int>>()  : BuildPath(parents, source, sink);
         }
 
@@ -94,6 +107,7 @@
             var path = new List<Tuple<int, int>>();
             var current = sink;
 
+            // Going back from sink to source adding edges to path, based on parents
             while (current != source)
             {
                 path.Add(new Tuple<int, int>(parents[current], current));
@@ -107,6 +121,7 @@
 
         private static void SendFlow(int[,] graph, List<Tuple<int, int>> path)
         {
+            // Reverse edge for each edge in a path
             foreach (var edge in path)
             {
                 graph[edge.Item1, edge.Item2] = 0;
@@ -117,16 +132,19 @@
         private static List<Tuple<int, int>> ReadMatching(int[,] flowNetwork, int[] colors)
         {
             var matching = new List<Tuple<int, int>>();
-            var sink = flowNetwork.GetLength(0) - 1;
-            for (int v = 0; v < flowNetwork.GetLength(0) - 2; ++v)
+            var sink = GraphHelper.NumberOfNodes(flowNetwork) - 1;
+
+            for (var node = 0; node < GraphHelper.NumberOfNodes(flowNetwork) - 2; ++node)
             {
-                if (colors[v] == 2)
+                // Node from second partition
+                if (colors[node] == 2)
                 {
-                    foreach (var u in GraphHelper.GetNeighbours(flowNetwork, v))
+                    // Find reversed edges and add to matching
+                    foreach (var u in GraphHelper.GetNeighbours(flowNetwork, node))
                     {
                         if (u != sink)
                         {
-                            matching.Add(new Tuple<int, int>(u, v));
+                            matching.Add(new Tuple<int, int>(u, node));
                         }
                     }
                 }

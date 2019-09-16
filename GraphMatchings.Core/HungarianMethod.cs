@@ -23,6 +23,7 @@
         private static int columnWith0;
 
         // Entry point, runs Kuhn-Munkres algorithm for given graph
+        // Returns collection of edges that are maximum weighted matching
         public static List<Tuple<int, int>> Run(int[,] graph)
         {
             originalGraph = graph;
