@@ -21,22 +21,24 @@
 
         private static void ParseInputAndRunAlgorithm(string pathToFile)
         {
-            var graph = GraphParser.Parse(pathToFile);
-            MatrixHelper.PrintMatrix(graph);
+            var isWeighted = false;
+            var graph = GraphParser.Parse(pathToFile, ref isWeighted);
 
             if (!BipartitenessChecker.IsGraphBipartite(graph))
             {
                 throw new Exception("Given graph is not bipartire");
             }
 
-            if (WeightsChecker.IsGraphWeighted(graph))
+            if (isWeighted)
             {
                 var matching = HungarianMethod.Run(graph);
             }
             else
             {
-               var matching = FordFulkersonMethod.Run(graph);
+                var matching = FordFulkersonMethod.Run(graph);
             }
+
+            // TODO print
         }
     }
 }

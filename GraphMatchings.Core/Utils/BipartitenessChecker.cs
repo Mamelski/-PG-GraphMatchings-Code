@@ -7,28 +7,30 @@
     {
         public static bool IsGraphBipartite(int[,] graph)
         {
-            var colors = new int[graph.GetLength(0)];
-            var visited = new bool[graph.GetLength(0)];
+            var colors = new int[GraphHelper.NumberOfNodes(graph)];
+            var visited = new bool[GraphHelper.NumberOfNodes(graph)];
             var queue = new Queue<int>();
+            var startingNode = 0;
 
-            visited[0] = true;
-            colors[0] = 1;
-            queue.Enqueue(0);
+            visited[startingNode] = true;
+            colors[startingNode] = 1;
+            queue.Enqueue(startingNode);
 
             while (queue.Any())
             {
-                var u = queue.Dequeue();
+                var node = queue.Dequeue();
 
-                foreach (var w in GraphHelper.GetNeighbours(graph, u))
+                foreach (var neighbour in GraphHelper.GetNeighbours(graph, node))
                 {
-                    if (!visited[w])
+                    if (!visited[neighbour])
                     {
-                        visited[w] = true;
-                        colors[w] = 3 - colors[u];
-                        queue.Enqueue(w);
+                        visited[neighbour] = true;
+                        colors[neighbour] = 3 - colors[node];
+                        queue.Enqueue(neighbour);
                     }
-                    else if (colors[w] == colors[u])
+                    else if (colors[neighbour] == colors[node])
                     {
+                        // Neighbours cant have the same color in bipartite graph
                         return false;
                     }
                 }
@@ -36,7 +38,5 @@
 
             return true;
         }
-
-
     }
 }

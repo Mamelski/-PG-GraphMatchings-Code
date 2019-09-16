@@ -7,11 +7,50 @@ namespace GraphMatchings.Core.Utils
 
     public static class GraphParser
     {
-        public static int[,] Parse(string pathToFile)
+        public static int[,] Parse(string pathToFile, ref bool isWeighted)
         {
             CheckIfFileExists(pathToFile);
 
-            return IsWeighted(pathToFile) ? ParseWeighted(pathToFile) : ParseUnweighted(pathToFile);
+            CheckIfGraphIsWeighted(pathToFile, ref isWeighted);
+
+            return isWeighted ? ParseWeighted(pathToFile) : ParseUnweighted(pathToFile);
+        }
+
+        private static void CheckIfFileExists(string path)
+        {
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException($"File \"{path}\" does not exist.");
+            }
+        }
+
+        private static void CheckIfGraphIsWeighted(string pathToFile, ref bool isWeighted)
+        {
+            using (var reader = File.OpenText(pathToFile))
+            {
+                var c = reader.ReadLine();
+
+                if (string.IsNullOrEmpty(c))
+                {
+                    throw new Exception($"First line in file should contain \"W\" or \"N\" to determine if given graph is weighted or not. Current line is {c}");
+                }
+
+                if (char.ToLower(c[0]) == 'w')
+                {
+                    isWeighted = true;
+                }
+                else
+                {
+                    if (char.ToLower(c[0]) == 'n')
+                    {
+                        isWeighted = false;
+                    }
+                    else
+                    {
+                        throw new Exception($"First line in file should contain \"W\" or \"N\" to determine if given graph is weighted or not. Current line is {c}");
+                    }
+                }
+            }
         }
 
         private static int[,] ParseWeighted(string pathToFile)
@@ -20,6 +59,9 @@ namespace GraphMatchings.Core.Utils
 
             using (var reader = File.OpenText(pathToFile))
             {
+                // Skip line with "W" or "N"
+                reader.ReadLine();
+
                 var numberOfNodes = ParseNumberOfNodesFromFile(reader, pathToFile);
 
                 graph = new int[numberOfNodes, numberOfNodes];
@@ -32,11 +74,11 @@ namespace GraphMatchings.Core.Utils
 
                     var neighboursAndWeighths = GetNeighboursAndWeightsFromLine(line, pathToFile);
 
-                    for (var j = 0; j < neighboursAndWeighths.Count; ++j)
+                    for (var j = 0; j < neighboursAndWeighths.Count; j += 2)
                     {
+                        // j is neighbour and j + 1 is weight of edge to neighbour
                         graph[nodeId, neighboursAndWeighths[j]] = neighboursAndWeighths[j + 1];
                         graph[neighboursAndWeighths[j], nodeId] = neighboursAndWeighths[j + 1];
-                        ++j;
                     }
                 }
             }
@@ -50,6 +92,8 @@ namespace GraphMatchings.Core.Utils
 
             using (var reader = File.OpenText(pathToFile))
             {
+                // Skip line with "W" or "N"
+                reader.ReadLine();
                 var numberOfNodes = ParseNumberOfNodesFromFile(reader, pathToFile);
 
                 graph = new int[numberOfNodes, numberOfNodes];
@@ -73,22 +117,13 @@ namespace GraphMatchings.Core.Utils
             return graph;
         }
 
-        private static void CheckIfFileExists(string path)
-        {
-            if (!File.Exists(path))
-            {
-                throw new FileNotFoundException($"File \"{path}\" does not exist.");
-            }
-        }
-
         private static int ParseNumberOfNodesFromFile(TextReader reader, string path)
         {
-            reader.ReadLine();
             var numberOfNodesLine = reader.ReadLine();
 
             if (string.IsNullOrEmpty(numberOfNodesLine))
             {
-                throw new Exception($"First line in file \"{path}\" is empty. It should contain number of Nodes");
+                throw new Exception($"Second line in file \"{path}\" is empty. It should contain number of nodes");
             }
 
             var isParseSuccessfull = int.TryParse(numberOfNodesLine, out var numberOfNodes);
@@ -134,7 +169,7 @@ namespace GraphMatchings.Core.Utils
             var neighbours = new List<int>();
 
             // We are starting from 1 because first number in the line is the node and neighbours start from 1.
-            for (int i = 1; i < splitedLine.Length; ++i)
+            for (var i = 1; i < splitedLine.Length; ++i)
             {
                 var isParseSuccessfull = int.TryParse(splitedLine[i], out var nodeId);
 
@@ -155,33 +190,19 @@ namespace GraphMatchings.Core.Utils
             var neighboursAndWeights = new List<int>();
 
             // We are starting from 1 because first number in the line is the node and neighbours start from 1.
-            for (int i = 1; i < splitedLine.Length; ++i)
+            for (var i = 1; i < splitedLine.Length; ++i)
             {
                 var isParseSuccessfull = int.TryParse(splitedLine[i], out var nodeId);
 
                 if (!isParseSuccessfull)
                 {
-                    throw new Exception($"Could not parse character \"{splitedLine[i]}\" from file \"{path}\" to int. This string should represent node.");
+                    throw new Exception($"Could not parse character \"{splitedLine[i]}\" from file \"{path}\" to int. This string should represent node or weight.");
                 }
 
                 neighboursAndWeights.Add(nodeId);
             }
 
             return neighboursAndWeights;
-        }
-
-        private static bool IsWeighted(string pathToFile)
-        {
-            using (var reader = File.OpenText(pathToFile))
-            {
-                var c = reader.ReadLine();
-                if (c[0] == 'W')
-                {
-                    return true;
-                }
-
-                return false;
-            }
         }
     }
 }

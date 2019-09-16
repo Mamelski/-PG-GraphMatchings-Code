@@ -1,6 +1,5 @@
 ﻿namespace GraphMatchings.Core.Utils
 {
-    using System;
     using System.Collections.Generic;
 
     public static class GraphHelper
