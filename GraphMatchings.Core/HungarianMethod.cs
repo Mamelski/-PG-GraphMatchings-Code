@@ -114,8 +114,7 @@
             }
             step = 1;
         }
-
-        // Step 1
+        
         private static void Step1()
         {
             var minInRow = int.MaxValue;
@@ -136,39 +135,42 @@
             }
             step = 2;
         }
-
+        
         private static void Step2()
         {
-            for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
             {
                 for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
                 {
-                    if (matrix[row, column] == 0 && !IsStarInRow(row) && !IsStarInColumn(column))
+                    // Star each 0 in row and column without other starred 0
+                    if (matrix[row, column] == 0
+                        && !IsStarInRow(row)
+                        && !IsStarInColumn(column))
                     {
                         stars[row, column] = true;
                     }
                 }
             }
-
-            MatrixHelper.PrintMatrix(stars);
-
             step = 3;
         }
 
         private static void Step3()
         {
-            var numberOfCoveredColumns = 0;
-            for (int column = 0; column < MatrixHelper.ColumnsCount(stars); column++)
+            var coveredColumns = 0;
+            
+            // Cover columns with 0 star and count them
+            for (var column = 0; column < MatrixHelper.ColumnsCount(stars); column++)
             {
                 if (IsStarInColumn(column))
                 {
                     isColumnCovered[column] = true;
-                    ++numberOfCoveredColumns;
+                    ++coveredColumns;
                 }
             }
-
-            if (numberOfCoveredColumns == MatrixHelper.RowsCount(matrix))
+            
+            if (coveredColumns == MatrixHelper.RowsCount(matrix))
             {
+                // Assigment is done, ready to read result
                 done = true;
             }
             else
@@ -179,8 +181,10 @@
 
         private static void Step4()
         {
+            // Find uncovered 0
             while (IsUncoveredZero())
             {
+                // Prime uncovered 0
                 primes[rowWith0, columnWith0] = true;
 
                 if (!IsStarInRow(rowWith0))
@@ -188,20 +192,18 @@
                     step = 5;
                     return;
                 }
-                else
-                {
-                    var columnWith0Star = 0;
-                    for (int column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
-                    {
-                        if (stars[rowWith0, column])
-                        {
-                            columnWith0Star = column;
-                        }
-                    }
 
-                    isColumnCovered[columnWith0Star] = false;
-                    isRowCovered[rowWith0] = true;
+                var columnWith0Star = 0;
+                for (int column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                {
+                    if (stars[rowWith0, column])
+                    {
+                        columnWith0Star = column;
+                    }
                 }
+
+                isColumnCovered[columnWith0Star] = false;
+                isRowCovered[rowWith0] = true;
             }
 
             step = 6;
