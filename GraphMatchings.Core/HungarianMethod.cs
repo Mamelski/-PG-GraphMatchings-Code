@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using GraphMatchings.Core.Utils;
+    using Utils;
 
     public static class HungarianMethod
     {
@@ -17,50 +17,56 @@
         private static List<int> columnIndexes = new List<int>();
 
         private static int step;
+        private static bool done;
 
         private static int rowWith0;
         private static int columnWith0;
 
+        // Entry point, runs Kuhn-Munkres algorithm for given graph
         public static List<Tuple<int, int>> Run(int[,] graph)
         {
             originalGraph = graph;
-
-            var done = false;
+            
             while (!done)
             {
-                Console.WriteLine($"Step {step}");
-                switch (step)
-                {
-                    case 0:
-                        Step0();
-                        break;
-                    case 1:
-                        Step1();
-                        break;
-                    case 2:
-                        Step2();
-                        break;
-                    case 3:
-                        Step3();
-                        break;
-                    case 4:
-                        Step4();
-                        break;
-                    case 5:
-                        Step5();
-                        break;
-                    case 6:
-                        Step6();
-                        break;
-                    case 7:
-                        done = true;
-                        break;
-                }
+                RunSteps();
             }
 
-            return Step7();
+            var matching = Step7();
+            return matching;
         }
 
+        // Runs algorithm steps, based on "step" variable
+        private static void RunSteps()
+        {
+            Console.WriteLine($"Step {step}");
+            
+            switch (step)
+            {
+                case 0:
+                    Step0();
+                    break;
+                case 1:
+                    Step1();
+                    break;
+                case 2:
+                    Step2();
+                    break;
+                case 3:
+                    Step3();
+                    break;
+                case 4:
+                    Step4();
+                    break;
+                case 5:
+                    Step5();
+                    break;
+                case 6:
+                    Step6();
+                    break;
+            }
+        }
+        
         // Prepare graph
         private static void Step0()
         {
@@ -69,7 +75,7 @@
 
             // Nodes with color 1 are row indexes in new matrix
             // Nodes with color 2 are column indexes in new matrix
-            for (int node = 0; node < colors.Length; ++node)
+            for (var node = 0; node < colors.Length; ++node)
             {
                 if (colors[node] == 1)
                 {
@@ -98,39 +104,36 @@
             isRowCovered = new bool[MatrixHelper.RowsCount(matrix)];
             isColumnCovered = new bool[MatrixHelper.ColumnsCount(matrix)];
 
-            for (int i = 0; i < rowIndexes.Count; ++i)
+            // Fill matrix with values from original graph
+            for (var row = 0; row < rowIndexes.Count; ++row)
             {
-                for (int j = 0; j < columnIndexes.Count; ++j)
+                for (var column = 0; column < columnIndexes.Count; ++column)
                 {
-                    matrix[i, j] = 0 - originalGraph[rowIndexes[i], columnIndexes[j]];
+                    matrix[row, column] = 0 - originalGraph[rowIndexes[row], columnIndexes[column]];
                 }
             }
-
-
-
-            MatrixHelper.PrintMatrix(matrix);
             step = 1;
         }
 
+        // Step 1
         private static void Step1()
         {
             var minInRow = int.MaxValue;
 
-            for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
             {
+                // Update min in row
                 for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
                 {
                     minInRow = Math.Min(minInRow, matrix[row, column]);
                 }
-
+                
+                // Delete min in row from each row cell
                 for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
                 {
                     matrix[row, column] -= minInRow;
                 }
             }
-
-            MatrixHelper.PrintMatrix(matrix);
-
             step = 2;
         }
 
@@ -166,7 +169,7 @@
 
             if (numberOfCoveredColumns == MatrixHelper.RowsCount(matrix))
             {
-                step = 7;
+                done = true;
             }
             else
             {
