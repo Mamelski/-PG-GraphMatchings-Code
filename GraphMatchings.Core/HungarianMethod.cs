@@ -26,7 +26,7 @@
         public static List<Tuple<int, int>> Run(int[,] graph)
         {
             originalGraph = graph;
-            
+
             while (!done)
             {
                 RunSteps();
@@ -40,7 +40,7 @@
         private static void RunSteps()
         {
             Console.WriteLine($"Step {step}");
-            
+
             switch (step)
             {
                 case 0:
@@ -66,12 +66,12 @@
                     break;
             }
         }
-        
+
         // Prepare graph
         private static void Step0()
         {
             // Color graph using BFS
-            var colors = BFSGraphColouring.Run(originalGraph);
+            var colors = GraphColoringBfs.Run(originalGraph);
 
             // Nodes with color 1 are row indexes in new matrix
             // Nodes with color 2 are column indexes in new matrix
@@ -112,9 +112,10 @@
                     matrix[row, column] = 0 - originalGraph[rowIndexes[row], columnIndexes[column]];
                 }
             }
+
             step = 1;
         }
-        
+
         private static void Step1()
         {
             var minInRow = int.MaxValue;
@@ -126,16 +127,17 @@
                 {
                     minInRow = Math.Min(minInRow, matrix[row, column]);
                 }
-                
+
                 // Delete min in row from each row cell
                 for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
                 {
                     matrix[row, column] -= minInRow;
                 }
             }
+
             step = 2;
         }
-        
+
         private static void Step2()
         {
             for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
@@ -151,13 +153,14 @@
                     }
                 }
             }
+
             step = 3;
         }
 
         private static void Step3()
         {
             var coveredColumns = 0;
-            
+
             // Cover columns with 0 star and count them
             for (var column = 0; column < MatrixHelper.ColumnsCount(stars); column++)
             {
@@ -167,7 +170,7 @@
                     ++coveredColumns;
                 }
             }
-            
+
             if (coveredColumns == MatrixHelper.RowsCount(matrix))
             {
                 // Assigment is done, ready to read result
@@ -207,6 +210,7 @@
                 isColumnCovered[columnWith0Star] = false;
                 isRowCovered[rowWith0] = true;
             }
+
             step = 6;
         }
 
@@ -230,7 +234,7 @@
                 row = rowWith0Star.Value;
                 path.Add(new Tuple<int, int>(row, column));
 
-                // Find 0 prime in a row 
+                // Find 0 prime in a row
                 var columnWith0Prime = Find0PrimeInRow(row);
                 if (columnWith0Prime.HasValue)
                 {
@@ -239,19 +243,19 @@
                 }
             }
 
-            foreach (var (i, j) in path)
+            foreach (var cell in path)
             {
                 // Remove star from 0 star in the path
-                if (stars[i, j])
+                if (stars[cell.Item1, cell.Item2])
                 {
-                    stars[i, j] = false;
+                    stars[cell.Item1, cell.Item2] = false;
                 }
 
                 // Change 0 prime to 0 star
-                if (primes[i, j])
+                if (primes[cell.Item1, cell.Item2])
                 {
-                    primes[i, j] = false;
-                    stars[i, j] = true;
+                    primes[cell.Item1, cell.Item2] = false;
+                    stars[cell.Item1, cell.Item2] = true;
                 }
             }
 
@@ -266,7 +270,9 @@
         private static void Step6()
         {
             var min = int.MaxValue;
-            for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+
+            // Find min uncovered value in matrix
+            for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
             {
                 for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
                 {
@@ -277,15 +283,17 @@
                 }
             }
 
-            for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
             {
                 for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
                 {
+                    // Add min to covered rows
                     if (isRowCovered[row])
                     {
                         matrix[row, column] += min;
                     }
 
+                    // Delete min from uncovered columns
                     if (!isColumnCovered[column])
                     {
                         matrix[row, column] -= min;
@@ -298,14 +306,13 @@
 
         private static List<Tuple<int, int>> Step7()
         {
-            MatrixHelper.PrintMatrix(stars);
-
             var res = new List<Tuple<int, int>>();
 
-            for (int row = 0; row < MatrixHelper.RowsCount(stars); ++row)
+            for (var row = 0; row < MatrixHelper.RowsCount(stars); ++row)
             {
                 for (var column = 0; column < MatrixHelper.ColumnsCount(stars); ++column)
                 {
+                    // Read cells with 0 star in matrix and map them to original graph edges
                     if (stars[row, column])
                     {
                         res.Add(new Tuple<int, int>(rowIndexes[row], columnIndexes[column]));
@@ -316,6 +323,7 @@
             return res;
         }
 
+        // If there is 0 starred in given column returns row of this 0 star
         private static int? Find0StarInColumn(int column)
         {
             for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
@@ -329,6 +337,7 @@
             return null;
         }
 
+        // If there is 0 primed in given row returns column of this 0 prime
         private static int? Find0PrimeInRow(int row)
         {
             for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
@@ -342,9 +351,10 @@
             return null;
         }
 
+        // Checks if there is a starred 0 in a given row
         private static bool IsStarInRow(int row)
         {
-            for (int column = 0; column < MatrixHelper.ColumnsCount(stars); column++)
+            for (var column = 0; column < MatrixHelper.ColumnsCount(stars); column++)
             {
                 if (stars[row, column])
                 {
@@ -355,6 +365,7 @@
             return false;
         }
 
+        // Checks if there is a starred 0 in a given column
         private static bool IsStarInColumn(int column)
         {
             for (int row = 0; row < MatrixHelper.RowsCount(stars); row++)
@@ -368,9 +379,11 @@
             return false;
         }
 
+        // Checks if there is uncovered zero in the matrix
+        // Sets "rowWith0" and "columnWith0" fields
         private static bool IsUncoveredZero()
         {
-            for (int row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
             {
                 if (isRowCovered[row])
                 {

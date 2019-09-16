@@ -1,5 +1,6 @@
 ﻿namespace GraphMatchings.Core.Utils
 {
+    using System;
     using System.Collections.Generic;
 
     public static class GraphHelper
@@ -17,6 +18,11 @@
             }
 
             return neighbours;
+        }
+
+        public static int NumberOfNodes(int[,] graph)
+        {
+            return graph.GetLength(0);
         }
     }
 }
