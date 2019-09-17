@@ -14,23 +14,30 @@ namespace GraphMatchings.Core
         
         public static void Run()
         {
-            
+            Step(0);
         }
         
-        private static void Step(int currentRow)
+        private static void Step(int row)
         {
 
-            if (currentRow == lastRow)
+            if (row == lastRow)
             {
+                // TODO zapisz wynik
                 return;
             }
             
-            // 
+            // Find all possible column values for given row
             foreach (var column in availableColumns)
             {   
-                matchingEdges.Push(new Tuple<int, int>(currentRow, column));
-                Step(currentRow+1);
+                // Add edge to matching, column is not available
+                matchingEdges.Push(new Tuple<int, int>(row, column));
+                availableColumns.Remove(column);
+                
+                Step(row+1);
+                
+                // Remove edge from matching, column is now available
                 matchingEdges.Pop();
+                availableColumns.Add(column);
             }
         }
         
