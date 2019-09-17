@@ -31,7 +31,8 @@
 
             if (isWeighted)
             {
-                var matching = HungarianMethod.Run(graph);
+                //var matching = HungarianMethod.Run(graph);
+                BruteForceMatchingAlgorithm.Run(graph);
             }
             else
             {
