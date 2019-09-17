@@ -36,7 +36,8 @@
             }
             else
             {
-                var matching = FordFulkersonMethod.Run(graph);
+                //var matching = FordFulkersonMethod.Run(graph);
+                BruteForceMatchingAlgorithm.Run(graph);
             }
 
             // TODO print

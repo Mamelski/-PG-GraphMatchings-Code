@@ -36,7 +36,16 @@ namespace GraphMatchings.Core
             {
                 if (matching.All(e => originalGraph[rowIndexes[e.Item1], columnIndexes[e.Item2]] != 0))
                 {
-                    resultMatchings.Add(matching);
+                    var resultMatching = new List<Tuple<int, int>>();
+
+                    foreach (var edge in matching)
+                    {
+                        var v = rowIndexes[edge.Item1];
+                        var w = columnIndexes[edge.Item2];
+                        resultMatching.Add(new Tuple<int, int>(v, w));
+                    }
+
+                    resultMatchings.Add(resultMatching);
                 }
             }
         }
