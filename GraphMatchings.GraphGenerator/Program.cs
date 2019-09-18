@@ -2,17 +2,27 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Text;
 
     public class Program
     {
 
-        private static bool isWeighted;
+        private static bool isWeighted = true;
         public static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+            var g = 10;
 
-            var x =GenerateGraph(10, 10);
+            var res = new List<int[,]>();
+            for (int i = 0; i < g; ++i)
+            {
+                var x = GenerateGraph(10, 10);
+                res.Add(x);
+            }
+            SaveGeneratedGraphs(res,10,10, true);
+
             int a = 0;
         }
 
@@ -80,6 +90,35 @@
             }
 
             return matrix;
+        }
+
+        private static void SaveGeneratedGraphs(List<int[,]> graphs, int numberOfNodes, int numberOfEdges, bool isWeighted)
+        {
+            var typeString = isWeighted ? "W" : "N";
+
+            var folderName = Directory.CreateDirectory(DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")).Name;
+
+            for (var g = 0; g < graphs.Count; g++)
+            {
+                var fileName = $"{numberOfNodes}-{numberOfEdges}-{typeString}-{g}.txt";
+                var path = Path.Combine(folderName, fileName);
+                using (StreamWriter sw = File.CreateText(path))
+                {
+                    sw.WriteLine(numberOfNodes);
+                    for (int i = 0; i < graphs[g].GetLength(0); i++)
+                    {
+                        var sb = new StringBuilder();
+                        for (int j = 0; j < graphs[g].GetLength(1); j++)
+                        {
+                            sb.Append($"{graphs[g][i, j]} ");
+                        }
+
+                        sw.WriteLine(sb);
+                    }
+                }
+            }
+
+            int a = 0;
         }
     }
 }
