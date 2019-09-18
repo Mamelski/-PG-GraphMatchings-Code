@@ -6,24 +6,49 @@
     using System.Linq;
     using System.Text;
 
+    using CommandLine;
+
     public class Program
     {
 
-        private static bool isWeighted = true;
+        private static bool isWeighted;
+
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            var g = 10;
+            Parser.Default.ParseArguments<CommandLineOptions>(args)
+                .WithParsed(
+                    o =>
+                        {
+                            ParseInputAndRunAlgorithm(o);
+                        });
+        }
+
+        private static void ParseInputAndRunAlgorithm(CommandLineOptions options)
+        {
+            if (char.ToLower(options.GraphType[0]) == 'w')
+            {
+                isWeighted = true;
+            }
+            else
+            {
+                if (char.ToLower(options.GraphType[0]) == 'n')
+                {
+                    isWeighted = false;
+                }
+                else
+                {
+                    throw new Exception($"First line in file should contain \"W\" or \"N\" to determine if given graph is weighted or not. Current line is {options.GraphType}");
+                }
+            }
 
             var res = new List<int[,]>();
-            for (int i = 0; i < g; ++i)
+            for (int i = 0; i < options.NumberOfGraphs; ++i)
             {
-                var x = GenerateGraph(10, 10);
+                var x = GenerateGraph(options.NumberOfNodes, options.NumberOfEdges);
                 res.Add(x);
             }
-            SaveGeneratedGraphs(res,10,10, true);
 
-            int a = 0;
+            SaveGeneratedGraphs(res, options.NumberOfNodes, options.NumberOfEdges, true);
         }
 
         private static int[,] GenerateGraph(int numberOfNodes, int numberOfEdges)
@@ -96,12 +121,12 @@
         {
             var typeString = isWeighted ? "W" : "N";
 
-            var folderName = Directory.CreateDirectory(DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")).Name;
+            var folder = Directory.CreateDirectory(DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss"));
 
             for (var g = 0; g < graphs.Count; g++)
             {
                 var fileName = $"{numberOfNodes}-{numberOfEdges}-{typeString}-{g}.txt";
-                var path = Path.Combine(folderName, fileName);
+                var path = Path.Combine(folder.Name, fileName);
                 using (StreamWriter sw = File.CreateText(path))
                 {
                     sw.WriteLine(numberOfNodes);
@@ -117,6 +142,11 @@
                     }
                 }
             }
+
+            Console.WriteLine();
+            Console.WriteLine("OK");
+            Console.WriteLine($"Graphs saven in folder {folder.FullName}");
+            Console.WriteLine();
 
             int a = 0;
         }
