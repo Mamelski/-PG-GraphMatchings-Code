@@ -6,47 +6,31 @@
 
     public class Program
     {
+
+        private static bool isWeighted;
         public static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
 
-            GenerateGraph(11,10);
-            //if(n%2 ==1){
-            // max edges = n/2 * n+1/2
-            // else
-
+            var x =GenerateGraph(10, 10);
+            int a = 0;
         }
 
-        private static void GenerateGraph(int numberOfNodes, int numberOfEdges)
+        private static int[,] GenerateGraph(int numberOfNodes, int numberOfEdges)
         {
             var random = new Random();
             var rowIndexes = new List<int>();
             var columnIndexes = new List<int>();
 
             // Split nodes into two partitions
-            if (numberOfNodes % 2 == 0)
+            for (var node = 0; node < numberOfNodes / 2; node++)
             {
-                for (var node = 0; node < numberOfNodes / 2; node++)
-                {
-                    rowIndexes.Add(node);
-                }
-
-                for (var node = numberOfNodes / 2; node < numberOfNodes; node++)
-                {
-                    columnIndexes.Add(node);
-                }
+                rowIndexes.Add(node);
             }
-            else
-            {
-                for (var node = 0; node < numberOfNodes / 2; node++)
-                {
-                    rowIndexes.Add(node);
-                }
 
-                for (var node = numberOfNodes / 2; node < numberOfNodes; node++)
-                {
-                    columnIndexes.Add(node);
-                }
+            for (var node = numberOfNodes / 2; node < numberOfNodes; node++)
+            {
+                columnIndexes.Add(node);
             }
 
             var matrix = new int[numberOfNodes, numberOfNodes];
@@ -54,35 +38,48 @@
             // Make graph connected
             var notConnectedNodes = rowIndexes.Select(c => c).ToList();
 
-            // TODO najpier połącz
-            for (int i = 0; i < columnIndexes.Count; ++i)
+            foreach (var node in columnIndexes)
             {
                 if (notConnectedNodes.Count == 0)
                 {
                     notConnectedNodes = rowIndexes.Select(c => c).ToList();
                 }
 
-                var e = random.Next(notConnectedNodes.Count-1);
-                matrix[notConnectedNodes[e], columnIndexes[i]] = 1;
-                matrix[columnIndexes[i], notConnectedNodes[e]] = 1;
-                notConnectedNodes.Remove(notConnectedNodes[e]);
+                var neighbour = random.Next(notConnectedNodes.Count - 1);
+
+                var weight = isWeighted ? random.Next(10000) : 1;
+
+
+                matrix[notConnectedNodes[neighbour], node] = weight;
+                matrix[node, notConnectedNodes[neighbour]] = weight;
+
+                notConnectedNodes.Remove(notConnectedNodes[neighbour]);
             }
 
-            for (var row = 0; row < numberOfNodes; ++row)
+            var numberOfEdgesToAdd = numberOfEdges - columnIndexes.Count;
+            for (var i = 0; i < numberOfEdgesToAdd; ++i)
             {
-                for (var column = 0; column < numberOfNodes; ++column)
+                var isHit = false;
+
+                while (!isHit)
                 {
-                    Console.Write($"{matrix[row, column]} ");
+                    var node1 = random.Next(columnIndexes.Count);
+                    var node2 = random.Next(rowIndexes.Count);
+
+                    if (matrix[columnIndexes[node1], rowIndexes[node2]] != 0)
+                    {
+                        continue;
+                    }
+
+                    var weight = isWeighted ? random.Next(10000) : 1;
+
+                    matrix[columnIndexes[node1], rowIndexes[node2]] = weight;
+                    matrix[rowIndexes[node2], columnIndexes[node1]] = weight;
+                    isHit = true;
                 }
-
-                Console.WriteLine();
-            }
-            var generatedEdges = 0;
-            while (generatedEdges != numberOfEdges)
-            {
-
             }
 
+            return matrix;
         }
     }
 }
