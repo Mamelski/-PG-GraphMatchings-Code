@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class Program
     {
@@ -48,11 +49,34 @@
                 }
             }
 
-            // TODO najpier połącz
-
-
             var matrix = new int[numberOfNodes, numberOfNodes];
 
+            // Make graph connected
+            var notConnectedNodes = rowIndexes.Select(c => c).ToList();
+
+            // TODO najpier połącz
+            for (int i = 0; i < columnIndexes.Count; ++i)
+            {
+                if (notConnectedNodes.Count == 0)
+                {
+                    notConnectedNodes = rowIndexes.Select(c => c).ToList();
+                }
+
+                var e = random.Next(notConnectedNodes.Count-1);
+                matrix[notConnectedNodes[e], columnIndexes[i]] = 1;
+                matrix[columnIndexes[i], notConnectedNodes[e]] = 1;
+                notConnectedNodes.Remove(notConnectedNodes[e]);
+            }
+
+            for (var row = 0; row < numberOfNodes; ++row)
+            {
+                for (var column = 0; column < numberOfNodes; ++column)
+                {
+                    Console.Write($"{matrix[row, column]} ");
+                }
+
+                Console.WriteLine();
+            }
             var generatedEdges = 0;
             while (generatedEdges != numberOfEdges)
             {
