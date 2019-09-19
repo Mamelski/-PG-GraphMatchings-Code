@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -13,14 +14,50 @@
 
         private static bool isWeighted;
 
+       // private static string NautyFolder = @"C:\Users\Jakub\Documents\GitHub\-PG-GraphMatchings-Code\nauty26r10\";
+
         public static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<CommandLineOptions>(args)
-                .WithParsed(
-                    o =>
+            //Parser.Default.ParseArguments<CommandLineOptions>(args)
+            //    .WithParsed(
+            //        o =>
+            //            {
+            //                ParseInputAndRunAlgorithm(o);
+            //            });
+
+            GenerateAllBipartiteConnectedGraphsWithMax10Nodes();
+        }
+
+        private static void GenerateAllBipartiteConnectedGraphsWithMax10Nodes()
+        {
+            var nautyFolder = @"C:\Users\Jakub\Documents\GitHub\-PG-GraphMatchings-Code\nauty26r10\";
+
+            for (var i = 1; i <= 10; ++i)
+            {
+                for (var j = i; i + j <= 10; ++j)
+                {
+                    var command = $"genbg -c {i} {j} > \"Bigraphs\\{i}-{j}.txt\"";
+
+                    var cmdProcess = new Process
+                    {
+                        StartInfo =
                         {
-                            ParseInputAndRunAlgorithm(o);
-                        });
+                            FileName = @"cmd.exe",
+                            RedirectStandardInput = true,
+                            RedirectStandardOutput = true,
+                            CreateNoWindow = true,
+                            UseShellExecute = false,
+                            Arguments = $"/C {nautyFolder}{command}"
+                        }
+                    };
+
+                    cmdProcess.Start();
+
+                    cmdProcess.StandardInput.Flush();
+                    cmdProcess.StandardInput.Close();
+                    cmdProcess.WaitForExit();
+                }
+            }
         }
 
         private static void ParseInputAndRunAlgorithm(CommandLineOptions options)
