@@ -36,13 +36,13 @@
             {
                 for (var j = i; i + j <= 10; ++j)
                 {
-                    var command = $"genbg -c {i} {j} > \"Bigraphs\\{i}-{j}.txt\"";
+                    var command = $"genbg -c {i} {j} > \"Bigraphs\\Graph6Format\\{i}-{j}.txt\"";
 
                     var cmdProcess = new Process
                     {
                         StartInfo =
                         {
-                            FileName = @"cmd.exe",
+                            FileName = "cmd.exe",
                             RedirectStandardInput = true,
                             RedirectStandardOutput = true,
                             CreateNoWindow = true,
