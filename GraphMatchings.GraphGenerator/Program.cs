@@ -1,6 +1,5 @@
 ﻿namespace GraphMatchings.GraphGenerator
 {
-    using System;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -8,12 +7,14 @@
 
     public class Program
     {
-        private static string nautyFolder = @"C:\Users\Jakub\Documents\GitHub\-PG-GraphMatchings-Code\nauty26r10\";
+        private const string NautyFolder = @"C:\Users\Jakub\Documents\GitHub\-PG-GraphMatchings-Code\nauty26r10\";
 
-        private static string graph6FormatDirectory = @"SmallGraphs\Graph6Format\";
+        private const string Graph6FormatDirectory = @"SmallGraphs\Graph6Format\";
 
-        private static string adjacencyMatrixFormatDirectory = @"SmallGraphs\AdjacencyMatrixFormat\";
-        private static string myFormatDirectory = @"SmallGraphs\MyFormat\";
+        private const string AdjacencyMatrixFormatDirectory = @"SmallGraphs\AdjacencyMatrixFormat\";
+
+        private const string MyFormatDirectory = @"SmallGraphs\MyFormat\";
+
         public static void Main(string[] args)
         {
            GenerateAllBipartiteConnectedGraphsWithMax10Nodes();
@@ -27,14 +28,14 @@
             {
                 for (var j = i; i + j <= 10; ++j)
                 {
-                    var command = $"genbg -c {i} {j} > {graph6FormatDirectory}{i}-{j}.txt";
+                    var command = $"genbg -c {i} {j} > {Graph6FormatDirectory}{i}-{j}.txt";
 
                     var cmdProcess = new Process
                     {
                         StartInfo =
                         {
                             FileName = "cmd.exe",
-                            Arguments = $"/C {nautyFolder}{command}",
+                            Arguments = $"/C {NautyFolder}{command}",
                             RedirectStandardInput = true,
                             RedirectStandardOutput = true,
                             CreateNoWindow = true,
@@ -53,18 +54,17 @@
 
         private static void ChangeGeneratedBipartiteConnectedGraphsWithMax10NodesToVisibleFormat()
         {
-            foreach (var filePath in Directory.GetFiles(graph6FormatDirectory))
+            foreach (var filePath in Directory.GetFiles(Graph6FormatDirectory))
             {
                 var fileName = Path.GetFileName(filePath);
-                var command =
-                    $"showg -a {graph6FormatDirectory}{fileName} > {adjacencyMatrixFormatDirectory}{fileName}\"";
+                var command = $"showg -a {Graph6FormatDirectory}{fileName} > {AdjacencyMatrixFormatDirectory}{fileName}";
 
                 var cmdProcess = new Process
                                      {
                                          StartInfo =
                                              {
                                                  FileName = "cmd.exe",
-                                                 Arguments = $"/C {nautyFolder}{command}",
+                                                 Arguments = $"/C {NautyFolder}{command}",
                                                  RedirectStandardInput = true,
                                                  RedirectStandardOutput = true,
                                                  CreateNoWindow = true,
@@ -82,7 +82,7 @@
 
         private static void ChangeVisibleFormatToCustom()
         {
-            foreach (var filePath in Directory.GetFiles(adjacencyMatrixFormatDirectory))
+            foreach (var filePath in Directory.GetFiles(AdjacencyMatrixFormatDirectory))
             {
                 var graphNumber = 0;
                 var fileName = Path.GetFileNameWithoutExtension(filePath);
@@ -99,7 +99,7 @@
                         var numberOfNodes = int.Parse(numberOfNodesString);
                         ++line;
 
-                        var outpuPath = $"{myFormatDirectory}{fileName}-{graphNumber}.txt";
+                        var outpuPath = $"{MyFormatDirectory}{fileName}-{graphNumber}.txt";
 
                         // Single graph in file
                         using (var sw = File.CreateText(outpuPath))
@@ -117,6 +117,7 @@
 
                                 sb.Remove(sb.Length - 1, 1);
                                 sw.WriteLine(sb);
+
                                 ++line;
                             }
                         }
