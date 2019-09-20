@@ -11,9 +11,8 @@ namespace GraphMatchings.Core.Utils
         {
             CheckIfFileExists(pathToFile);
 
-            CheckIfGraphIsWeighted(pathToFile, ref isWeighted);
 
-            return isWeighted ? ParseWeighted(pathToFile) : ParseUnweighted(pathToFile);
+            return ParseWeighted(pathToFile);
         }
 
         private static void CheckIfFileExists(string path)
@@ -24,62 +23,21 @@ namespace GraphMatchings.Core.Utils
             }
         }
 
-        private static void CheckIfGraphIsWeighted(string pathToFile, ref bool isWeighted)
-        {
-            using (var reader = File.OpenText(pathToFile))
-            {
-                var c = reader.ReadLine();
-
-                if (string.IsNullOrEmpty(c))
-                {
-                    throw new Exception($"First line in file should contain \"W\" or \"N\" to determine if given graph is weighted or not. Current line is {c}");
-                }
-
-                if (char.ToLower(c[0]) == 'w')
-                {
-                    isWeighted = true;
-                }
-                else
-                {
-                    if (char.ToLower(c[0]) == 'n')
-                    {
-                        isWeighted = false;
-                    }
-                    else
-                    {
-                        throw new Exception($"First line in file should contain \"W\" or \"N\" to determine if given graph is weighted or not. Current line is {c}");
-                    }
-                }
-            }
-        }
-
         private static int[,] ParseWeighted(string pathToFile)
         {
             int[,] graph;
 
-            using (var reader = File.OpenText(pathToFile))
+            string[] lines = File.ReadAllLines(pathToFile);
+
+            graph = new int[lines.Length, lines.Length];
+
+            for (int i = 0; i < lines.Length; i++)
             {
-                // Skip line with "W" or "N"
-                reader.ReadLine();
-
-                var numberOfNodes = ParseNumberOfNodesFromFile(reader, pathToFile);
-
-                graph = new int[numberOfNodes, numberOfNodes];
-
-                for (var i = 0; i < numberOfNodes; ++i)
+                var split = lines[i].Split();
+                for (int j = 0; j < split.Length; ++j)
                 {
-                    var line = GetLineFromFile(reader, i, numberOfNodes, pathToFile);
-
-                    var nodeId = GetNodeIdFromLine(line, pathToFile);
-
-                    var neighboursAndWeighths = GetNeighboursAndWeightsFromLine(line, pathToFile);
-
-                    for (var j = 0; j < neighboursAndWeighths.Count; j += 2)
-                    {
-                        // j is neighbour and j + 1 is weight of edge to neighbour
-                        graph[nodeId, neighboursAndWeighths[j]] = neighboursAndWeighths[j + 1];
-                        graph[neighboursAndWeighths[j], nodeId] = neighboursAndWeighths[j + 1];
-                    }
+                    var value = int.Parse(split[j]);
+                    graph[i, j] = value;
                 }
             }
 

@@ -1,11 +1,15 @@
 ﻿namespace GraphMatchings.Console
 {
     using System;
+    using System.Linq;
+    using System.Security.Principal;
 
     using CommandLine;
 
     using Core;
     using Core.Utils;
+
+    using Microsoft.VisualBasic.CompilerServices;
 
     public class Program
     {
@@ -24,10 +28,43 @@
             var isWeighted = false;
             var graph = GraphParser.Parse(pathToFile, ref isWeighted);
 
-            if (!BipartitenessChecker.IsGraphBipartite(graph))
+            var bruteForceOutput = BruteForceMatchingAlgorithm.Run(graph);
+            var fordFulkersonOutput = FordFulkersonMethod.Run(graph);
+
+
+            // Sort bruteforce
+            foreach (var result in bruteForceOutput)
             {
-                throw new Exception("Given graph is not bipartire");
+                for(var i =0; i < result.Count;++i)
+                {
+                    if (result[i].Item1 > result[i].Item2)
+                    {
+                        result[i] = new Tuple<int, int>(result[i].Item2, result[i].Item1);
+                    }
+                }
             }
+
+            // Sort Ford output
+            for (var i = 0; i < fordFulkersonOutput.Count; ++i)
+            {
+                if (fordFulkersonOutput[i].Item1 > fordFulkersonOutput[i].Item2)
+                {
+                    fordFulkersonOutput[i] = new Tuple<int, int>(fordFulkersonOutput[i].Item2, fordFulkersonOutput[i].Item1);
+                }
+            }
+
+            // Check
+            foreach (var result in bruteForceOutput)
+            {
+                if (result.Count == fordFulkersonOutput.Count)
+                {
+                    if (result.All(r => fordFulkersonOutput.Contains(r)))
+                    {
+                        Console.WriteLine("OK");
+                    }
+                }
+            }
+
 
             if (isWeighted)
             {
