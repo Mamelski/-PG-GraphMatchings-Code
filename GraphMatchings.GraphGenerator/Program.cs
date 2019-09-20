@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Text;
 
     public class Program
     {
@@ -11,7 +12,7 @@
         private static string graph6FormatDirectory = @"SmallGraphs\Graph6Format\";
 
         private static string adjacencyMatrixFormatDirectory = @"SmallGraphs\AdjacencyMatrixFormat\";
-        private static string myFormatDirectory = @"MyFormat\AdjacencyMatrixFormat\";
+        private static string myFormatDirectory = @"SmallGraphs\MyFormat\";
         public static void Main(string[] args)
         {
            // GenerateAllBipartiteConnectedGraphsWithMax10Nodes();
@@ -85,27 +86,42 @@
                 var graphNumber = 0;
                 var fileName = Path.GetFileNameWithoutExtension(filePath);
 
-                var outpuPath = $"{myFormatDirectory}{fileName}-{graphNumber}.txt";
                 string[] lines = File.ReadAllLines(filePath);
 
-                for (var i = 0; i < lines.Length; ++i)
+                // Every line in adjcency matrix file
+                for (var line = 0; line < lines.Length; ++line)
                 {
-                    if (!string.IsNullOrEmpty(lines[i]))
+                    if (!string.IsNullOrEmpty(lines[line]))
                     {
-                        var numberOfNodesString = lines[i][lines[i].Length - 2].ToString();
+                        var numberOfNodesString = lines[line][lines[line].Length - 2].ToString();
                         var numberOfNodes = int.Parse(numberOfNodesString);
-                       // using (StreamWriter sw = File.CreateText(path))
+                        ++line;
+
+                        var outpuPath = $"{myFormatDirectory}{fileName}-{graphNumber}.txt";
+
+                        // Single graph in file
+                        using (var sw = File.CreateText(outpuPath))
                         {
+                            int graphLine = 0;
+                            for (; graphLine < numberOfNodes; ++graphLine)
+                            {
+                                var sb = new StringBuilder();
 
+                                // Single line
+                                for (int j = 0; j < numberOfNodes; ++j)
+                                {
+                                    sb.Append($"{lines[line][j]} ");
+                                }
+
+                                sb.Remove(sb.Length - 1, 1);
+                                sw.WriteLine(sb);
+                                ++line;
+                            }
                         }
-
-                        int c= 0;
+                        ++graphNumber;
                     }
                 }
-
             }
-
-            int a = 0;
         }
     }
 }
