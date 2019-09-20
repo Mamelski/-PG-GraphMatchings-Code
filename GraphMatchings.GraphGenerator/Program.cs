@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Text;
 
     public class Program
@@ -15,9 +16,9 @@
         private static string myFormatDirectory = @"SmallGraphs\MyFormat\";
         public static void Main(string[] args)
         {
-           // GenerateAllBipartiteConnectedGraphsWithMax10Nodes();
-           //ChangeGeneratedBipartiteConnectedGraphsWithMax10NodesToVisibleFormat();
-            ChangeVisibleFormatToCustom();
+           GenerateAllBipartiteConnectedGraphsWithMax10Nodes();
+           ChangeGeneratedBipartiteConnectedGraphsWithMax10NodesToVisibleFormat();
+           ChangeVisibleFormatToCustom();
         }
 
         private static void GenerateAllBipartiteConnectedGraphsWithMax10Nodes()
@@ -93,7 +94,8 @@
                 {
                     if (!string.IsNullOrEmpty(lines[line]))
                     {
-                        var numberOfNodesString = lines[line][lines[line].Length - 2].ToString();
+                        var split = lines[line].Split();
+                        var numberOfNodesString = split.Last().Replace(".", string.Empty);
                         var numberOfNodes = int.Parse(numberOfNodesString);
                         ++line;
 
