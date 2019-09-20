@@ -11,11 +11,11 @@
         private static string graph6FormatDirectory = @"SmallGraphs\Graph6Format\";
 
         private static string adjacencyMatrixFormatDirectory = @"SmallGraphs\AdjacencyMatrixFormat\";
-
+        private static string myFormatDirectory = @"MyFormat\AdjacencyMatrixFormat\";
         public static void Main(string[] args)
         {
-            GenerateAllBipartiteConnectedGraphsWithMax10Nodes();
-            ChangeGeneratedBipartiteConnectedGraphsWithMax10NodesToVisibleFormat();
+           // GenerateAllBipartiteConnectedGraphsWithMax10Nodes();
+           //ChangeGeneratedBipartiteConnectedGraphsWithMax10NodesToVisibleFormat();
             ChangeVisibleFormatToCustom();
         }
 
@@ -80,7 +80,32 @@
 
         private static void ChangeVisibleFormatToCustom()
         {
-            throw new NotImplementedException();
+            foreach (var filePath in Directory.GetFiles(adjacencyMatrixFormatDirectory))
+            {
+                var graphNumber = 0;
+                var fileName = Path.GetFileNameWithoutExtension(filePath);
+
+                var outpuPath = $"{myFormatDirectory}{fileName}-{graphNumber}.txt";
+                string[] lines = File.ReadAllLines(filePath);
+
+                for (var i = 0; i < lines.Length; ++i)
+                {
+                    if (!string.IsNullOrEmpty(lines[i]))
+                    {
+                        var numberOfNodesString = lines[i][lines[i].Length - 2].ToString();
+                        var numberOfNodes = int.Parse(numberOfNodesString);
+                       // using (StreamWriter sw = File.CreateText(path))
+                        {
+
+                        }
+
+                        int c= 0;
+                    }
+                }
+
+            }
+
+            int a = 0;
         }
     }
 }
