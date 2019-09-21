@@ -11,71 +11,72 @@ namespace GraphMatchings.Tester
     using GraphMatchings.Core;
     using GraphMatchings.Core.Utils;
 
-    public class SmallGraphsTester
+    public class SmallWeightedGraphsTester
     {
         private static readonly Stopwatch Stopwatch = new Stopwatch();
+        private static readonly Random random = new Random();
 
         private static readonly Dictionary<string, List<long>> BruteForceAlgorithmTimes = new Dictionary<string, List<long>>();
-        private static readonly Dictionary<string, List<long>> FordFulkersonTimes = new Dictionary<string, List<long>>();
         private static readonly Dictionary<string, List<long>> KuhnMunkresTimes = new Dictionary<string, List<long>>();
 
-        public static void TestSmallGraphs(string myFormatDirectory)
+        public static void TestWeightedSmallGraphs(string myFormatDirectory)
         {
-            foreach (var filePath in Directory.GetFiles(myFormatDirectory))
+            var possibleWeights = new List<Tuple<int, int>>
+                                      {
+                                          new Tuple<int, int>(1, 100),
+                                          new Tuple<int, int>(1, 1000),
+                                          new Tuple<int, int>(1, 10000),
+                                          new Tuple<int, int>(1, 100000),
+                                          new Tuple<int, int>(1000, 10000),
+                                          new Tuple<int, int>(10000, 100000)
+                                      };
+
+            foreach (var pw in possibleWeights)
             {
-              //  Console.WriteLine(Path.GetFileNameWithoutExtension(filePath));
+                foreach (var filePath in Directory.GetFiles(myFormatDirectory))
+                {
+                    //  Console.WriteLine(Path.GetFileNameWithoutExtension(filePath));
 
-                var split = Path.GetFileNameWithoutExtension(filePath).Split('-');
-                var fileType = $"{split[0]}-{split[1]}";
+                    var split = Path.GetFileNameWithoutExtension(filePath).Split('-');
+                    var fileType = $"{split[0]}-{split[1]}";
 
-                var graph = GraphParser.Parse(filePath);
+                    var graph = GraphParser.Parse(filePath);
+                    AddWeights(ref graph, 1, 1000);
 
-                RunAndCheckResults(fileType, graph);
+                    RunAndCheckResults(fileType, graph);
+                }
+
+                PrintResult($"weighted-{pw.Item1}-{pw.Item2}.txt");
             }
-
-            PrintResult();
         }
 
-        private static void PrintResult()
+        private static void PrintResult(string fileName)
         {
-            var outputPath = @"SmallTestsResults\results.txt";
+            var outputPath = $"SmallWeightedTestsResults\\{fileName}";
             using (var sw = File.CreateText(outputPath))
             {
-                sw.WriteLine("file\tsumOfNodes\tnumberOfTests\tBruteForce\tFordFulkerson\tKuhnMunkers\tMicroseconds");
+                sw.WriteLine("file\tsumOfNodes\tnumberOfTests\tBruteForce\tKuhnMunkers\tMicroseconds");
                 foreach (var key in BruteForceAlgorithmTimes.Keys)
                 {
                     var avgBruteForce = BruteForceAlgorithmTimes[key].Average(ticks => (ticks * 1000000) / Stopwatch.Frequency);
-                    var avgFordFulkerson = FordFulkersonTimes[key].Average(ticks => ((ticks * 1000000) / Stopwatch.Frequency));
                     var avgKuhnMunkres = KuhnMunkresTimes[key].Average(ticks => ((ticks * 1000000) / Stopwatch.Frequency));
 
                     var split = key.Split('-');
 
                     var sumOfNodes = int.Parse(split[0]) + int.Parse(split[1]);
-                    sw.WriteLine($"{key}\t{sumOfNodes}\t{BruteForceAlgorithmTimes[key].Count}\t{Math.Round(avgBruteForce,4)}\t{Math.Round(avgFordFulkerson,4)}\t{Math.Round(avgKuhnMunkres,4)}");
+                    sw.WriteLine($"{key}\t{sumOfNodes}\t{BruteForceAlgorithmTimes[key].Count}\t{Math.Round(avgBruteForce,4)}\t{Math.Round(avgKuhnMunkres,4)}");
                 }
             }
         }
 
         public static void RunAndCheckResults(string fileType, int[,] graph)
         {
-            //if (fileType.Equals("2-2"))
-            //{
-            //    int a = 0;
-            //}
-
             AddFileTypeToDictionaryIfNeeded(fileType);
 
-            
             Stopwatch.Start();
             var bruteForceAlgorithmResults = BruteForceMatchingAlgorithm.Run(graph);
             Stopwatch.Stop();
             BruteForceAlgorithmTimes[fileType].Add(Stopwatch.ElapsedTicks);
-
-            Stopwatch.Reset();
-            Stopwatch.Start();
-            var fordFulkersonResult = FordFulkersonMethod.Run(graph);
-            Stopwatch.Stop();
-            FordFulkersonTimes[fileType].Add(Stopwatch.ElapsedTicks);
 
             Stopwatch.Reset();
             Stopwatch.Start();
@@ -84,13 +85,11 @@ namespace GraphMatchings.Tester
             KuhnMunkresTimes[fileType].Add(Stopwatch.ElapsedTicks);
 
             SortEdgesInBruteForceResults(ref bruteForceAlgorithmResults);
-            SortEdgesResult(ref fordFulkersonResult);
             SortEdgesResult(ref kuhnMunkersResult);
 
-            var fordFulkersonOk = AreResultsTheSame(bruteForceAlgorithmResults, fordFulkersonResult);
             var kuhnMunkersOk = AreResultsTheSame(bruteForceAlgorithmResults, kuhnMunkersResult);
 
-            if (!fordFulkersonOk || !kuhnMunkersOk)
+            if (!kuhnMunkersOk)
             {
                 Console.WriteLine("Not working");
             }
@@ -101,11 +100,6 @@ namespace GraphMatchings.Tester
             if (!BruteForceAlgorithmTimes.ContainsKey(fileType))
             {
                 BruteForceAlgorithmTimes.Add(fileType, new List<long>());
-            }
-
-            if (!FordFulkersonTimes.ContainsKey(fileType))
-            {
-                FordFulkersonTimes.Add(fileType, new List<long>());
             }
 
             if (!KuhnMunkresTimes.ContainsKey(fileType))
@@ -156,6 +150,22 @@ namespace GraphMatchings.Tester
                     result[i] = new Tuple<int, int>(
                         result[i].Item2,
                         result[i].Item1);
+                }
+            }
+        }
+
+        private static void AddWeights(ref int[,] graph, int min, int max)
+        {
+            for (int i = 0; i < graph.GetLength(0); ++i)
+            {
+                for(var j = i; j < graph.GetLength(1); ++j)
+                {
+                    if (graph[i, j] > 0)
+                    {
+                        var value = random.Next(min, max);
+                        graph[i, j] = value;
+                        graph[j, i] = value;
+                    }
                 }
             }
         }

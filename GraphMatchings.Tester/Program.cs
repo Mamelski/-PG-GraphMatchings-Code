@@ -7,7 +7,8 @@
 
         public static void Main(string[] args)
         {
-            SmallGraphsTester.TestSmallGraphs(MyFormatDirectory);
+            //SmallGraphsTester.TestSmallGraphs(MyFormatDirectory);
+            SmallWeightedGraphsTester.TestWeightedSmallGraphs(MyFormatDirectory);
         }
     }
 }

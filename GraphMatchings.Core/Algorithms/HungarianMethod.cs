@@ -13,8 +13,8 @@
         private static bool[] isRowCovered;
         private static bool[] isColumnCovered;
 
-        private static List<int> rowIndexes = new List<int>();
-        private static List<int> columnIndexes = new List<int>();
+        private static List<int> rowIndexes;
+        private static List<int> columnIndexes;
 
         private static int step;
         private static bool done;
@@ -26,6 +26,11 @@
         // Returns collection of edges that are maximum weighted matching
         public static List<Tuple<int, int>> Run(int[,] graph)
         {
+            done = false;
+            rowIndexes = new List<int>();
+            columnIndexes = new List<int>();
+            step = 0;
+
             originalGraph = graph;
 
             while (!done)
