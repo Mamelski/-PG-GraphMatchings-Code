@@ -26,7 +26,7 @@
         private static void ParseInputAndRunAlgorithm(string pathToFile)
         {
             var isWeighted = false;
-            var graph = GraphParser.Parse(pathToFile, ref isWeighted);
+            var graph = GraphParser.Parse(pathToFile);
 
             var bruteForceOutput = BruteForceMatchingAlgorithm.Run(graph);
             var fordFulkersonOutput = FordFulkersonMethod.Run(graph);
@@ -53,6 +53,7 @@
                 }
             }
 
+            var isOK = false;
             // Check
             foreach (var result in bruteForceOutput)
             {
@@ -60,7 +61,7 @@
                 {
                     if (result.All(r => fordFulkersonOutput.Contains(r)))
                     {
-                        Console.WriteLine("OK");
+                        isOK = true;
                     }
                 }
             }

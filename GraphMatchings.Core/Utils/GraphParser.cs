@@ -7,10 +7,9 @@ namespace GraphMatchings.Core.Utils
 
     public static class GraphParser
     {
-        public static int[,] Parse(string pathToFile, ref bool isWeighted)
+        public static int[,] Parse(string pathToFile)
         {
             CheckIfFileExists(pathToFile);
-
 
             return ParseWeighted(pathToFile);
         }

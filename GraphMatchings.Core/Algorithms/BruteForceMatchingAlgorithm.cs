@@ -9,23 +9,34 @@ namespace GraphMatchings.Core
         private static int[,] matrix;
         private static int[,] originalGraph;
 
-        private static List<int> rowIndexes = new List<int>();
-        private static List<int> columnIndexes = new List<int>();
+        private static List<int> rowIndexes;
+        private static List<int> columnIndexes;
 
         private static bool[] isColumnTaken;
         private static int lastRow;
 
-        private static Stack<Tuple<int, int>> matchingEdges = new Stack<Tuple<int, int>>();
-        private static List<List<Tuple<int, int>>> maksimumMatchings = new List<List<Tuple<int, int>>>();
-        private static List<List<Tuple<int, int>>> resultMatchings = new List<List<Tuple<int, int>>>();
+        private static Stack<Tuple<int, int>> matchingEdges;
+
+        private static List<List<Tuple<int, int>>> maksimumMatchings;
+
+        private static List<List<Tuple<int, int>>> resultMatchings;
+
         private static int bestScore;
 
         public static List<List<Tuple<int, int>>> Run(int[,] graph)
         {
+            rowIndexes = new List<int>();
+            columnIndexes = new List<int>();
+            matchingEdges = new Stack<Tuple<int, int>>();
+            maksimumMatchings = new List<List<Tuple<int, int>>>();
+            resultMatchings = new List<List<Tuple<int, int>>>();
+            bestScore = 0;
+            lastRow = 0;
+            
             originalGraph = graph;
             TransformGraph();
             RunStep(0);
-            CleanUpMatchings();
+           CleanUpMatchings();
 
             return resultMatchings;
         }
@@ -34,19 +45,19 @@ namespace GraphMatchings.Core
         {
             foreach (var matching in maksimumMatchings)
             {
-                if (matching.All(e => originalGraph[rowIndexes[e.Item1], columnIndexes[e.Item2]] != 0))
-                {
+                //if (matching.All(e => originalGraph[e.Item1, e.Item2] != 0))
+                //{
                     var resultMatching = new List<Tuple<int, int>>();
 
-                    foreach (var edge in matching)
-                    {
-                        var v = rowIndexes[edge.Item1];
-                        var w = columnIndexes[edge.Item2];
-                        resultMatching.Add(new Tuple<int, int>(v, w));
-                    }
-
-                    resultMatchings.Add(resultMatching);
+                foreach (var edge in matching)
+                {
+                    var v = rowIndexes[edge.Item1];
+                    var w = columnIndexes[edge.Item2];
+                    resultMatching.Add(new Tuple<int, int>(v, w));
                 }
+
+                resultMatchings.Add(resultMatching);
+              //  }
             }
         }
 

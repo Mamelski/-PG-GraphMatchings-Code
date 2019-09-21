@@ -24,9 +24,9 @@
 
         private static void GenerateAllBipartiteConnectedGraphsWithMax10Nodes()
         {
-            for (var i = 1; i <= 10; ++i)
+            for (var i = 1; i <= 11; ++i)
             {
-                for (var j = i; i + j <= 10; ++j)
+                for (var j = i; i + j <= 11; ++j)
                 {
                     var command = $"genbg -c {i} {j} > {Graph6FormatDirectory}{i}-{j}.txt";
 
