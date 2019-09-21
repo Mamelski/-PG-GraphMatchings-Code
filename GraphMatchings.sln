@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphMatchings.Console", "G
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphMatchings.Core", "GraphMatchings.Core\GraphMatchings.Core.csproj", "{8360EA34-9B0F-4FD4-A90A-0BA310E0B3C3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphMatchings.GraphGenerator", "GraphMatchings.GraphGenerator\GraphMatchings.GraphGenerator.csproj", "{941A7A54-9708-459F-A43A-2F2CC71FA457}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphMatchings.Tester", "GraphMatchings.Tester\GraphMatchings.Tester.csproj", "{CF92E5C1-7A08-4F1E-9072-D50B9DC681EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphMatchings.Tester", "GraphMatchings.Tester\GraphMatchings.Tester.csproj", "{CF92E5C1-7A08-4F1E-9072-D50B9DC681EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphMatchings.GraphsGenerator", "GraphMatchings.GraphsGenerator\GraphMatchings.GraphsGenerator.csproj", "{137476F4-90BF-4CEF-8A5F-FFC663AB316E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +25,14 @@ Global
 		{8360EA34-9B0F-4FD4-A90A-0BA310E0B3C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8360EA34-9B0F-4FD4-A90A-0BA310E0B3C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8360EA34-9B0F-4FD4-A90A-0BA310E0B3C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{941A7A54-9708-459F-A43A-2F2CC71FA457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{941A7A54-9708-459F-A43A-2F2CC71FA457}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{941A7A54-9708-459F-A43A-2F2CC71FA457}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{941A7A54-9708-459F-A43A-2F2CC71FA457}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CF92E5C1-7A08-4F1E-9072-D50B9DC681EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CF92E5C1-7A08-4F1E-9072-D50B9DC681EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF92E5C1-7A08-4F1E-9072-D50B9DC681EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF92E5C1-7A08-4F1E-9072-D50B9DC681EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{137476F4-90BF-4CEF-8A5F-FFC663AB316E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{137476F4-90BF-4CEF-8A5F-FFC663AB316E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{137476F4-90BF-4CEF-8A5F-FFC663AB316E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{137476F4-90BF-4CEF-8A5F-FFC663AB316E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
