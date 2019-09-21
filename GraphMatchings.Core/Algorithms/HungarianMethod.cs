@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using Utils;
 
     public static class HungarianMethod
     {
@@ -105,10 +104,10 @@
 
             // Init matrix and helper structures
             matrix = new int[rowIndexes.Count, columnIndexes.Count];
-            stars = new bool[MatrixHelper.RowsCount(matrix), MatrixHelper.ColumnsCount(matrix)];
-            primes = new bool[MatrixHelper.RowsCount(matrix), MatrixHelper.ColumnsCount(matrix)];
-            isRowCovered = new bool[MatrixHelper.RowsCount(matrix)];
-            isColumnCovered = new bool[MatrixHelper.ColumnsCount(matrix)];
+            stars = new bool[Helper.GetRowsCount(matrix), Helper.GetColumnsCount(matrix)];
+            primes = new bool[Helper.GetRowsCount(matrix), Helper.GetColumnsCount(matrix)];
+            isRowCovered = new bool[Helper.GetRowsCount(matrix)];
+            isColumnCovered = new bool[Helper.GetColumnsCount(matrix)];
 
             // Fill matrix with values from original graph
             for (var row = 0; row < rowIndexes.Count; ++row)
@@ -126,16 +125,16 @@
         {
             var minInRow = int.MaxValue;
 
-            for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            for (var row = 0; row < Helper.GetRowsCount(matrix); ++row)
             {
                 // Update min in row
-                for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                for (var column = 0; column < Helper.GetColumnsCount(matrix); ++column)
                 {
                     minInRow = Math.Min(minInRow, matrix[row, column]);
                 }
 
                 // Delete min in row from each row cell
-                for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                for (var column = 0; column < Helper.GetColumnsCount(matrix); ++column)
                 {
                     matrix[row, column] -= minInRow;
                 }
@@ -146,9 +145,9 @@
 
         private static void Step2()
         {
-            for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            for (var row = 0; row < Helper.GetRowsCount(matrix); ++row)
             {
-                for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                for (var column = 0; column < Helper.GetColumnsCount(matrix); ++column)
                 {
                     // Star each 0 in row and column without other starred 0
                     if (matrix[row, column] == 0
@@ -168,7 +167,7 @@
             var coveredColumns = 0;
 
             // Cover columns with 0 star and count them
-            for (var column = 0; column < MatrixHelper.ColumnsCount(stars); column++)
+            for (var column = 0; column < Helper.GetColumnsCount(stars); column++)
             {
                 if (IsStarInColumn(column))
                 {
@@ -177,7 +176,7 @@
                 }
             }
 
-            if (coveredColumns == MatrixHelper.RowsCount(matrix))
+            if (coveredColumns == Helper.GetRowsCount(matrix))
             {
                 // Assigment is done, ready to read result
                 done = true;
@@ -204,7 +203,7 @@
 
                 // Find 0 star in the same row
                 var columnWith0Star = 0;
-                for (int column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                for (int column = 0; column < Helper.GetColumnsCount(matrix); ++column)
                 {
                     if (stars[rowWith0, column])
                     {
@@ -266,9 +265,9 @@
             }
 
             // Remove primes and uncover all
-            primes = new bool[MatrixHelper.RowsCount(matrix), MatrixHelper.ColumnsCount(matrix)];
-            isRowCovered = new bool[MatrixHelper.RowsCount(matrix)];
-            isColumnCovered = new bool[MatrixHelper.ColumnsCount(matrix)];
+            primes = new bool[Helper.GetRowsCount(matrix), Helper.GetColumnsCount(matrix)];
+            isRowCovered = new bool[Helper.GetRowsCount(matrix)];
+            isColumnCovered = new bool[Helper.GetColumnsCount(matrix)];
 
             step = 3;
         }
@@ -278,9 +277,9 @@
             var min = int.MaxValue;
 
             // Find min uncovered value in matrix
-            for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            for (var row = 0; row < Helper.GetRowsCount(matrix); ++row)
             {
-                for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                for (var column = 0; column < Helper.GetColumnsCount(matrix); ++column)
                 {
                     if (!isRowCovered[row] && !isColumnCovered[column])
                     {
@@ -289,9 +288,9 @@
                 }
             }
 
-            for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            for (var row = 0; row < Helper.GetRowsCount(matrix); ++row)
             {
-                for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                for (var column = 0; column < Helper.GetColumnsCount(matrix); ++column)
                 {
                     // Add min to covered rows
                     if (isRowCovered[row])
@@ -314,9 +313,9 @@
         {
             var res = new List<Tuple<int, int>>();
 
-            for (var row = 0; row < MatrixHelper.RowsCount(stars); ++row)
+            for (var row = 0; row < Helper.GetRowsCount(stars); ++row)
             {
-                for (var column = 0; column < MatrixHelper.ColumnsCount(stars); ++column)
+                for (var column = 0; column < Helper.GetColumnsCount(stars); ++column)
                 {
                     // Read cells with 0 star in matrix and map them to original graph edges
                     if (stars[row, column])
@@ -332,7 +331,7 @@
         // If there is 0 starred in given column returns row of this 0 star
         private static int? Find0StarInColumn(int column)
         {
-            for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            for (var row = 0; row < Helper.GetRowsCount(matrix); ++row)
             {
                 if (stars[row, column])
                 {
@@ -346,7 +345,7 @@
         // If there is 0 primed in given row returns column of this 0 prime
         private static int? Find0PrimeInRow(int row)
         {
-            for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+            for (var column = 0; column < Helper.GetColumnsCount(matrix); ++column)
             {
                 if (primes[row, column])
                 {
@@ -360,7 +359,7 @@
         // Checks if there is a starred 0 in a given row
         private static bool IsStarInRow(int row)
         {
-            for (var column = 0; column < MatrixHelper.ColumnsCount(stars); column++)
+            for (var column = 0; column < Helper.GetColumnsCount(stars); column++)
             {
                 if (stars[row, column])
                 {
@@ -374,7 +373,7 @@
         // Checks if there is a starred 0 in a given column
         private static bool IsStarInColumn(int column)
         {
-            for (int row = 0; row < MatrixHelper.RowsCount(stars); row++)
+            for (int row = 0; row < Helper.GetRowsCount(stars); row++)
             {
                 if (stars[row, column])
                 {
@@ -389,14 +388,14 @@
         // Sets "rowWith0" and "columnWith0" fields
         private static bool IsUncoveredZero()
         {
-            for (var row = 0; row < MatrixHelper.RowsCount(matrix); ++row)
+            for (var row = 0; row < Helper.GetRowsCount(matrix); ++row)
             {
                 if (isRowCovered[row])
                 {
                     continue;
                 }
 
-                for (var column = 0; column < MatrixHelper.ColumnsCount(matrix); ++column)
+                for (var column = 0; column < Helper.GetColumnsCount(matrix); ++column)
                 {
                     if (isColumnCovered[column])
                     {

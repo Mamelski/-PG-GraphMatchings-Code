@@ -1,5 +1,6 @@
 ﻿namespace GraphMatchings.GraphsGenerator
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
@@ -19,8 +20,13 @@
             PrepareDirectories();
 
             GenerateAndSaveSmallGraphs(nautyPath);
+            Console.WriteLine("Small graphs generated");
+
             GenerateAndSaveBigGraphs(nautyPath);
+            Console.WriteLine("Big graphs generated");
+
             GenerateAndSaveGraphsWithGivenEdges(nautyPath);
+            Console.WriteLine("Graphs with given edges generated");
         }
 
         private static void PrepareDirectories()

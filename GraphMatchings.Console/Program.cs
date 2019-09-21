@@ -7,7 +7,6 @@
     using CommandLine;
 
     using Core;
-    using Core.Utils;
 
     using Microsoft.VisualBasic.CompilerServices;
 

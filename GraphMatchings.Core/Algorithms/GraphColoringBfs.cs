@@ -3,14 +3,12 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Utils;
-
     public static class GraphColoringBfs
     {
         public static int[] Run(int[,] graph)
         {
-            var colors = new int[GraphHelper.NumberOfNodes(graph)];
-            var visited = new bool[GraphHelper.NumberOfNodes(graph)];
+            var colors = new int[Helper.GetNumberOfNodes(graph)];
+            var visited = new bool[Helper.GetNumberOfNodes(graph)];
             var queue = new Queue<int>();
             var startingNode = 0;
 
@@ -22,7 +20,7 @@
             {
                 var node = queue.Dequeue();
 
-                foreach (var neighbour in GraphHelper.GetNeighbours(graph, node))
+                foreach (var neighbour in Helper.GetNodeNeighbours(graph, node))
                 {
                     if (!visited[neighbour])
                     {

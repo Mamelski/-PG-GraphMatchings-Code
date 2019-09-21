@@ -9,7 +9,6 @@ namespace GraphMatchings.Tester
     using System.Text;
 
     using GraphMatchings.Core;
-    using GraphMatchings.Core.Utils;
 
     public class SmallWeightedGraphsTester
     {

@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Utils;
-
     public static class FordFulkersonMethod
     {
         // Entry point, runs Edmonds-Karp algorithm for given graph
@@ -27,9 +25,9 @@
 
         private static int[,] TranformGraphToFlowNetwork(int[,] graph, out int[] colors)
         {
-            var source = GraphHelper.NumberOfNodes(graph);
-            var sink = GraphHelper.NumberOfNodes(graph) + 1;
-            var flowNetworkNodesNumber = GraphHelper.NumberOfNodes(graph) + 2;
+            var source = Helper.GetNumberOfNodes(graph);
+            var sink = Helper.GetNumberOfNodes(graph) + 1;
+            var flowNetworkNodesNumber = Helper.GetNumberOfNodes(graph) + 2;
 
             // New modified graph
             var flowNetwork = new int[flowNetworkNodesNumber, flowNetworkNodesNumber];
@@ -45,7 +43,7 @@
                     flowNetwork[source, node] = 1;
 
                     // Add directed edge to all neighbours (they are in partition 2)
-                    foreach (var neighbour in GraphHelper.GetNeighbours(graph, node))
+                    foreach (var neighbour in Helper.GetNodeNeighbours(graph, node))
                     {
                         flowNetwork[node, neighbour] = 1;
                     }
@@ -62,11 +60,11 @@
 
         private static List<Tuple<int, int>> FindAugmentingPath(int[,] flowNetwork)
         {
-            var source = GraphHelper.NumberOfNodes(flowNetwork) - 2;
-            var sink = GraphHelper.NumberOfNodes(flowNetwork) - 1;
+            var source = Helper.GetNumberOfNodes(flowNetwork) - 2;
+            var sink = Helper.GetNumberOfNodes(flowNetwork) - 1;
 
-            var visited = new bool[GraphHelper.NumberOfNodes(flowNetwork)];
-            var parents = new int[GraphHelper.NumberOfNodes(flowNetwork)];
+            var visited = new bool[Helper.GetNumberOfNodes(flowNetwork)];
+            var parents = new int[Helper.GetNumberOfNodes(flowNetwork)];
             var queue = new Queue<int>();
 
             // Starting from source
@@ -78,7 +76,7 @@
             {
                 var node = queue.Dequeue();
 
-                foreach (var neighbour in GraphHelper.GetNeighbours(flowNetwork, node))
+                foreach (var neighbour in Helper.GetNodeNeighbours(flowNetwork, node))
                 {
                     // We found sink
                     if (neighbour == sink)
@@ -132,15 +130,15 @@
         private static List<Tuple<int, int>> ReadMatching(int[,] flowNetwork, int[] colors)
         {
             var matching = new List<Tuple<int, int>>();
-            var sink = GraphHelper.NumberOfNodes(flowNetwork) - 1;
+            var sink = Helper.GetNumberOfNodes(flowNetwork) - 1;
 
-            for (var node = 0; node < GraphHelper.NumberOfNodes(flowNetwork) - 2; ++node)
+            for (var node = 0; node < Helper.GetNumberOfNodes(flowNetwork) - 2; ++node)
             {
                 // Node from second partition
                 if (colors[node] == 2)
                 {
                     // Find reversed edges and add to matching
-                    foreach (var u in GraphHelper.GetNeighbours(flowNetwork, node))
+                    foreach (var u in Helper.GetNodeNeighbours(flowNetwork, node))
                     {
                         if (u != sink)
                         {
