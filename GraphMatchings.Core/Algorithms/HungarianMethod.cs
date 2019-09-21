@@ -40,7 +40,7 @@
         // Runs algorithm steps, based on "step" variable
         private static void RunSteps()
         {
-            Console.WriteLine($"Step {step}");
+          //  Console.WriteLine($"Step {step}");
 
             switch (step)
             {

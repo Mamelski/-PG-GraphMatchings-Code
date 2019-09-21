@@ -4,9 +4,11 @@ using System.Collections.Generic;
 namespace GraphMatchings.Tester
 {
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
 
     using GraphMatchings.Core;
+    using GraphMatchings.Core.Utils;
 
     public class SmallGraphsTester
     {
@@ -16,6 +18,25 @@ namespace GraphMatchings.Tester
         private static readonly Dictionary<string, List<TimeSpan>> FordFulkersonTimes = new Dictionary<string, List<TimeSpan>>();
         private static readonly Dictionary<string, List<TimeSpan>> KuhnMunkresTimes = new Dictionary<string, List<TimeSpan>>();
 
+        public static void TestSmallGraphs(string myFormatDirectory)
+        {
+            foreach (var filePath in Directory.GetFiles(myFormatDirectory))
+            {
+                var split = Path.GetFileNameWithoutExtension(filePath).Split('-');
+                var fileType = $"{split[0]}-{split[1]}";
+
+                var graph = GraphParser.Parse(filePath);
+
+                RunAndCheckResults(fileType, graph);
+            }
+
+            PrintResult();
+        }
+
+        private static void PrintResult()
+        {
+            throw new NotImplementedException();
+        }
 
         public static void RunAndCheckResults(string fileType, int[,] graph)
         {
@@ -40,11 +61,13 @@ namespace GraphMatchings.Tester
             FordFulkersonTimes[fileType].Add(Stopwatch.Elapsed);
 
             SortEdgesInBruteForceResults(ref bruteForceAlgorithmResults);
-            SortEdgesInFordFulkersonResult(ref fordFulkersonResult);
+            SortEdgesResult(ref fordFulkersonResult);
+            SortEdgesResult(ref kuhnMunkersResult);
 
-            var ok = AreResultsTheSame(bruteForceAlgorithmResults, fordFulkersonResult);
+            var fordFulkersonOk = AreResultsTheSame(bruteForceAlgorithmResults, fordFulkersonResult);
+            var kuhnMunkersOk = AreResultsTheSame(bruteForceAlgorithmResults, kuhnMunkersResult);
 
-            if (!ok)
+            if (!fordFulkersonOk || !kuhnMunkersOk)
             {
                 Console.WriteLine("Not working");
             }
@@ -101,15 +124,15 @@ namespace GraphMatchings.Tester
         }
 
         // Sort edges
-        private static void SortEdgesInFordFulkersonResult(ref List<Tuple<int, int>> fordFulkersonResult)
+        private static void SortEdgesResult(ref List<Tuple<int, int>> result)
         {
-            for (var i = 0; i < fordFulkersonResult.Count; ++i)
+            for (var i = 0; i < result.Count; ++i)
             {
-                if (fordFulkersonResult[i].Item1 > fordFulkersonResult[i].Item2)
+                if (result[i].Item1 > result[i].Item2)
                 {
-                    fordFulkersonResult[i] = new Tuple<int, int>(
-                        fordFulkersonResult[i].Item2,
-                        fordFulkersonResult[i].Item1);
+                    result[i] = new Tuple<int, int>(
+                        result[i].Item2,
+                        result[i].Item1);
                 }
             }
         }
