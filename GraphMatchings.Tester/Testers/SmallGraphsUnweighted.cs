@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace GraphMatchings.Tester
+﻿namespace GraphMatchings.Tester
 {
+    using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Text;
 
     using GraphMatchings.Core;
 
-    public class SmallGraphsTester
+    public class SmallGraphsUnweighted
     {
         private static readonly Stopwatch Stopwatch = new Stopwatch();
 
@@ -22,6 +20,7 @@ namespace GraphMatchings.Tester
         {
             CleanupResults();
             TestWithoutDummyFiles(myFormatDirectory);
+
             CleanupResults();
             TestWitDummyFiles(myFormatDirectory);
             CleanupResults();

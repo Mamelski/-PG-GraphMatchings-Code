@@ -17,6 +17,8 @@
 
         public static void Test(string inputDirectory)
         {
+            CleanUpTimes();
+            TestBruteForce(inputDirectory);
 
             CleanUpTimes();
             TestKuhnMunkres(inputDirectory);

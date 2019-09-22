@@ -10,7 +10,7 @@ namespace GraphMatchings.Tester
 
     using GraphMatchings.Core;
 
-    public class SmallWeightedGraphsTester
+    public class SmallGraphsWeighted
     {
         private static readonly Stopwatch Stopwatch = new Stopwatch();
         private static readonly Random random = new Random();
@@ -35,7 +35,6 @@ namespace GraphMatchings.Tester
                 CleanupResults();
                 foreach (var filePath in Directory.GetFiles(myFormatDirectory))
                 {
-
                     var split = Path.GetFileNameWithoutExtension(filePath).Split('-');
                     var fileType = $"{split[0]}-{split[1]}";
 
