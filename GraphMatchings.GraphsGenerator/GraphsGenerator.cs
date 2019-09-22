@@ -92,7 +92,7 @@
             FormatChanger.ChangeFromMatrixToCustomFormat(nautyPath, matrixFormatPath, customFormatPath);
         }
 
-        private static void GenerateSmallGraphs(string nautyPath, string graph6Path)
+        private static void GenerateSmallGraphs(string nautyPath, string graph6FormatOutputPath)
         {
             const int NumberOfNodes = 11;
 
@@ -102,7 +102,9 @@
                      partition1Size + partition2Size <= NumberOfNodes;
                      ++partition2Size)
                 {
-                    var outputFilePath = Path.Combine(graph6Path, $"{partition1Size}-{partition2Size}.txt");
+                    var outputFilePath = Path.Combine(
+                        graph6FormatOutputPath,
+                        $"{partition1Size}-{partition2Size}.txt");
                     var command = $"genbg -c {partition1Size} {partition2Size} > {outputFilePath}";
 
                     var cmdProcess = new Process
