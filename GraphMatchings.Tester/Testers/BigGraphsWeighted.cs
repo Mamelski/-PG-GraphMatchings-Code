@@ -8,7 +8,7 @@
 
     using GraphMatchings.Core;
 
-    public static class BigGraphsUnweighted
+    public static class BigGraphsWeighted
     {
         private static readonly Stopwatch Sw = new Stopwatch();
         private static Dictionary<string, List<long>> bruteForceAlgorithmTimes = new Dictionary<string, List<long>>();
@@ -17,34 +17,38 @@
 
         public static void Test(string inputDirectory)
         {
-            CleanUpTimes();
-            TestBruteForce(inputDirectory);
 
             CleanUpTimes();
-            TestFordFulkersonAndKuhnMunkres(inputDirectory);
+            TestKuhnMunkres(inputDirectory);
         }
 
         private static void TestBruteForce(string myFormatDirectory)
         {
-            var filesToTest = new List<string>
-                                  {
-                                      Path.Combine(myFormatDirectory, "20-0.txt"),
-                                      Path.Combine(myFormatDirectory, "20-1.txt"),
-                                      Path.Combine(myFormatDirectory, "20-2.txt"),
-                                  };
+            var possibleWeights = new List<Tuple<int, int>>
+                                      {
+                                          new Tuple<int, int>(1, 100),
+                                          new Tuple<int, int>(1, 1000),
+                                          new Tuple<int, int>(1, 10000),
+                                          new Tuple<int, int>(1, 100000),
+                                          new Tuple<int, int>(1000, 10000),
+                                          new Tuple<int, int>(10000, 100000)
+                                      };
 
-            foreach (var filePath in filesToTest)
+            var filesToTest = Path.Combine(myFormatDirectory, "20-0.txt");
+
+            foreach (var pw in possibleWeights)
             {
-                var fileType = TestHelper.GetFileType(filePath);
+                var fileType = TestHelper.GetFileType(filesToTest);
                 Console.WriteLine(fileType);
 
-                var graph = GraphParser.Parse(filePath);
+                var graph = GraphParser.Parse(filesToTest);
+                TestHelper.AddWeights(ref graph, pw.Item1, pw.Item2);
 
                 RunBruteForce(fileType, graph);
-            }
 
-            var sortedResults = PrepareUnweightedBruteForceSortedResults();
-            PrintUnweightedBruteForces(sortedResults, @"BigGraphs_Unweighted_BruteForce.txt");
+                var sortedResults = PrepareWeightedBruteForceSortedResults();
+                PrintWeightedBruteForces(sortedResults, $"BigGraphs_Weighted_BruteForce_20_0_weights_{pw.Item1}_{pw.Item2}.txt");
+            }
         }
 
         private static void RunBruteForce(string fileType, int[,] graph)
@@ -59,7 +63,7 @@
             bruteForceAlgorithmTimes[fileType].Add(Sw.ElapsedTicks);
         }
 
-        private static List<TestResults> PrepareUnweightedBruteForceSortedResults()
+        private static List<TestResults> PrepareWeightedBruteForceSortedResults()
         {
             var results = new List<TestResults>();
             foreach (var key in bruteForceAlgorithmTimes.Keys)
@@ -72,14 +76,14 @@
                                     FileType = key,
                                     NumberOfNodes = int.Parse(split[0]) + int.Parse(split[1]),
                                     NumberOfTests = bruteForceAlgorithmTimes[key].Count,
-                                    AvgBruteForce = Math.Round(avgBruteForce, 2)
+                                    AvgBruteForce = Math.Round(avgBruteForce, 0)
                                 });
             }
 
             return results.OrderBy(r => r.NumberOfNodes).ToList();
         }
 
-        private static void PrintUnweightedBruteForces(IEnumerable<TestResults> results, string outputFile)
+        private static void PrintWeightedBruteForces(IEnumerable<TestResults> results, string outputFile)
         {
             using (var sw = File.CreateText($"Results\\{outputFile}"))
             {
@@ -92,32 +96,44 @@
             }
         }
 
-        private static void TestFordFulkersonAndKuhnMunkres(string myFormatDirectory)
+        private static void TestKuhnMunkres(string myFormatDirectory)
         {
-            foreach (var filePath in Directory.GetFiles(myFormatDirectory))
+            var possibleWeights = new List<Tuple<int, int>>
+                                      {
+                                          new Tuple<int, int>(1, 100),
+                                          new Tuple<int, int>(1, 1000),
+                                          new Tuple<int, int>(1, 10000),
+                                          new Tuple<int, int>(1000, 10000),
+                                      };
+            foreach (var pw in possibleWeights)
             {
-                var fileType = TestHelper.GetFileType(filePath);
-                Console.WriteLine(fileType);
+                CleanUpTimes();
+                foreach (var filePath in Directory.GetFiles(myFormatDirectory))
+                {
+                    if (!Path.GetFileNameWithoutExtension(filePath).EndsWith("0"))
+                    {
+                        continue;
+                    }
 
-                var graph = GraphParser.Parse(filePath);
+                    var fileType = Path.GetFileNameWithoutExtension(filePath).Split("-")[0];
+                    Console.WriteLine(fileType);
 
-                RunFordFulkersonAndKuhnMunkres(fileType, graph);
+                    var graph = GraphParser.Parse(filePath);
+                    TestHelper.AddWeights(ref graph, pw.Item1, pw.Item2);
+
+                    RunKuhnMunkres(fileType, graph);
+                }
+
+                var sortedResults = PrepareWeightedKuhnMunkresSortedResults();
+                PrintWeightedKuhnMunkres(
+                    sortedResults,
+                    $"BigGraphs_Weighted_KuhnMunkres_weights_{pw.Item1}_{pw.Item2}.txt");
             }
-
-            var sortedResults = PrepareUnweightedFordFulkersonAndKuhnMunkresSortedResults();
-            PrintUnweightedFordFulkersonAndKuhnMunkres(sortedResults, @"BigGraphs_Unweighted_FordFulkersonKuhnMunkres.txt");
         }
 
-        private static void RunFordFulkersonAndKuhnMunkres(string fileType, int[,] graph)
+        private static void RunKuhnMunkres(string fileType, int[,] graph)
         {
             AddFileTypeToDictionaryIfNeeded(fileType);
-
-            Sw.Reset();
-            Sw.Start();
-            FordFulkersonMethod.Run(graph);
-            Sw.Stop();
-
-            fordFulkersonTimes[fileType].Add(Sw.ElapsedTicks);
 
             Sw.Reset();
             Sw.Start();
@@ -127,21 +143,19 @@
             kuhnMunkresTimes[fileType].Add(Sw.ElapsedTicks);
         }
 
-        private static List<TestResults> PrepareUnweightedFordFulkersonAndKuhnMunkresSortedResults()
+        private static List<TestResults> PrepareWeightedKuhnMunkresSortedResults()
         {
             var results = new List<TestResults>();
-            foreach (var key in fordFulkersonTimes.Keys)
+            foreach (var key in kuhnMunkresTimes.Keys)
             {
-                var avgFordFulkerson = fordFulkersonTimes[key].Average(ticks => ((ticks * 1000000) / Stopwatch.Frequency));
                 var avgKuhnMunkres = kuhnMunkresTimes[key].Average(ticks => ((ticks * 1000000) / Stopwatch.Frequency));
                 var split = key.Split('-');
 
                 results.Add(new TestResults
                                 {
                                     FileType = key,
-                                    NumberOfNodes = int.Parse(split[0]) + int.Parse(split[1]),
-                                    NumberOfTests = fordFulkersonTimes[key].Count,
-                                    AvgFordFulkerson = Math.Round(avgFordFulkerson, 2),
+                                    NumberOfNodes = int.Parse(split[0]),
+                                    NumberOfTests = kuhnMunkresTimes[key].Count,
                                     AvgKuhnMunkres = Math.Round(avgKuhnMunkres, 2)
                                 });
             }
@@ -149,15 +163,15 @@
             return results.OrderBy(r => r.NumberOfNodes).ToList();
         }
 
-        private static void PrintUnweightedFordFulkersonAndKuhnMunkres(IEnumerable<TestResults> results, string outputFile)
+        private static void PrintWeightedKuhnMunkres(IEnumerable<TestResults> results, string outputFile)
         {
             using (var sw = File.CreateText($"Results\\{outputFile}"))
             {
-                sw.WriteLine("NumberOfNodes\tFileType\tNumberOfTests\tAvgFordFulkerson\tAvgKuhnMunkres");
-                sw.WriteLine("Microseconds;");
+                sw.WriteLine("NumberOfNodes\tFileType\tNumberOfTests\tAvgKuhnMunkres");
+                sw.WriteLine("MIcroseconds;");
                 foreach (var result in results)
                 {
-                    sw.WriteLine($"{result.NumberOfNodes}\t{result.FileType}\t{result.NumberOfTests}\t{result.AvgFordFulkerson}\t{result.AvgKuhnMunkres}");
+                    sw.WriteLine($"{result.NumberOfNodes}\t{result.FileType}\t{result.NumberOfTests}\t{result.AvgKuhnMunkres}");
                 }
             }
         }

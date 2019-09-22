@@ -9,7 +9,7 @@
     {
         private const string SmallGraphsFolder = "SmallGraphs";
         private const string BigGraphsFolder = "BigGraphs";
-        private const string GraphsWithGivenEdgesFolder = "GraphsWithGivenEdgesFolder";
+        private const string GraphsWithGivenEdgesFolder = "GraphsWithGivenEdges";
 
         private const string Graph6FormatDirectory = "Graph6Format";
         private const string MatrixFormatDirectory = "AdjacencyMatrixFormat";
@@ -19,11 +19,11 @@
         {
             PrepareDirectories();
 
-            GenerateAndSaveSmallGraphs(nautyPath);
-            Console.WriteLine("Small graphs generated");
+            //GenerateAndSaveSmallGraphs(nautyPath);
+            //Console.WriteLine("Small graphs generated");
 
-            GenerateAndSaveBigGraphs(nautyPath);
-            Console.WriteLine("Big graphs generated");
+            //GenerateAndSaveBigGraphs(nautyPath);
+            //Console.WriteLine("Big graphs generated");
 
             GenerateAndSaveGraphsWithGivenEdges(nautyPath);
             Console.WriteLine("Graphs with given edges generated");
@@ -155,8 +155,8 @@
 
         private static void GenerateGraphsWithGivenEdges(string nautyPath, string graph6Path)
         {
-            var graphSize = 1000;
-            var edgesNumber = new List<int> { 1000, 2000, 5000, 10000 };
+            var graphSize = 100;
+            var edgesNumber = new List<int> { 100, 200, 500, 1000, 2000, 3000 };
 
             foreach (var edgeNumber in edgesNumber)
             {

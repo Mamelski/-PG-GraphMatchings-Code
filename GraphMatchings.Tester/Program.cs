@@ -11,7 +11,13 @@
         {
             //SmallGraphsTester.Test(MyFormatDirectory);
             //SmallWeightedGraphsTester.Test(MyFormatDirectory);
-            BigGraphsUnweighted.Test(@"C:\Users\Jakub\Documents\GitHub\-PG-GraphMatchings-Code\GraphMatchings.GraphsGenerator\bin\Debug\netcoreapp2.1\BigGraphs\MyFormat");
+
+            // BigGraphsUnweighted.Test(@"C:\Users\Jakub\Documents\GitHub\-PG-GraphMatchings-Code\GraphMatchings.GraphsGenerator\bin\Debug\netcoreapp2.1\BigGraphs\MyFormat");
+            // BigGraphsWeighted.Test(@"C:\Users\Jakub\Documents\GitHub\-PG-GraphMatchings-Code\GraphMatchings.GraphsGenerator\bin\Debug\netcoreapp2.1\BigGraphs\MyFormat");
+
+            // BigGraphsUnweightedWithEdges.Test(@"C:\Users\Jakub\Documents\GitHub\-PG-GraphMatchings-Code\GraphMatchings.GraphsGenerator\bin\Debug\netcoreapp2.1\GraphsWithGivenEdges\MyFormat");
+
+            BigGraphsWeightedWithEdges.Test(@"C:\Users\Jakub\Documents\GitHub\-PG-GraphMatchings-Code\GraphMatchings.GraphsGenerator\bin\Debug\netcoreapp2.1\GraphsWithGivenEdges\MyFormat");
         }
     }
 }
