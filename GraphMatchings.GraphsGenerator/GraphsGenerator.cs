@@ -19,11 +19,11 @@
         {
             PrepareDirectories();
 
-            //GenerateAndSaveSmallGraphs(nautyPath);
-            //Console.WriteLine("Small graphs generated");
+            GenerateAndSaveSmallGraphs(nautyPath);
+            Console.WriteLine("Small graphs generated");
 
             //GenerateAndSaveBigGraphs(nautyPath);
-            //Console.WriteLine("Big graphs generated");
+           // Console.WriteLine("Big graphs generated");
 
             GenerateAndSaveGraphsWithGivenEdges(nautyPath);
             Console.WriteLine("Graphs with given edges generated");
@@ -96,11 +96,14 @@
         {
             const int NumberOfNodes = 11;
 
-            for (var i = 1; i <= NumberOfNodes; ++i)
+            for (var partition1Size = 1; partition1Size <= NumberOfNodes; ++partition1Size)
             {
-                for (var j = i; i + j <= NumberOfNodes; ++j)
+                for (var partition2Size = partition1Size;
+                     partition1Size + partition2Size <= NumberOfNodes;
+                     ++partition2Size)
                 {
-                    var command = $"genbg -c {i} {j} > {graph6Path}\\{i}-{j}.txt";
+                    var outputFilePath = Path.Combine(graph6Path, $"{partition1Size}-{partition2Size}.txt");
+                    var command = $"genbg -c {partition1Size} {partition2Size} > {outputFilePath}";
 
                     var cmdProcess = new Process
                                          {
@@ -156,7 +159,7 @@
         private static void GenerateGraphsWithGivenEdges(string nautyPath, string graph6Path)
         {
             var graphSize = 100;
-            var edgesNumber = new List<int> { 100, 200, 500, 1000, 2000, 3000 };
+            var edgesNumber = new List<int> { 200, 500, 1000, 2000, 3000 };
 
             foreach (var edgeNumber in edgesNumber)
             {

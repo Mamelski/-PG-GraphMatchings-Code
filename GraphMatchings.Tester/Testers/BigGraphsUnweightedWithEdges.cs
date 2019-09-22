@@ -45,14 +45,22 @@
 
             Sw.Reset();
             Sw.Start();
-            FordFulkersonMethod.Run(graph);
+            var res = FordFulkersonMethod.Run(graph);
+            if (!res.Any())
+            {
+                Console.WriteLine("LIPA");
+            }
             Sw.Stop();
 
             fordFulkersonTimes[fileType].Add(Sw.ElapsedTicks);
 
             Sw.Reset();
             Sw.Start();
-            HungarianMethod.Run(graph);
+            res = HungarianMethod.Run(graph);
+            if (!res.Any())
+            {
+                Console.WriteLine("LIPA");
+            }
             Sw.Stop();
 
             kuhnMunkresTimes[fileType].Add(Sw.ElapsedTicks);

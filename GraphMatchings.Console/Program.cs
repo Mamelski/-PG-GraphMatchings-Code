@@ -1,14 +1,11 @@
 ﻿namespace GraphMatchings.Console
 {
     using System;
-    using System.Linq;
-    using System.Security.Principal;
+    using System.Collections.Generic;
+    using System.Text;
 
     using CommandLine;
-
     using Core;
-
-    using Microsoft.VisualBasic.CompilerServices;
 
     public class Program
     {
@@ -26,58 +23,32 @@
         {
             var isWeighted = false;
             var graph = GraphParser.Parse(pathToFile);
-
-            var bruteForceOutput = BruteForceMatchingAlgorithm.Run(graph);
-            var fordFulkersonOutput = FordFulkersonMethod.Run(graph);
-
-
-            // Sort bruteforce
-            foreach (var result in bruteForceOutput)
+            for (var i = 0; i < graph.GetLength(0); ++i)
             {
-                for(var i =0; i < result.Count;++i)
+                for (var j = 0; j < graph.GetLength(1); ++j)
                 {
-                    if (result[i].Item1 > result[i].Item2)
+                    if (graph[i, j] > 1)
                     {
-                        result[i] = new Tuple<int, int>(result[i].Item2, result[i].Item1);
+                        isWeighted = true;
                     }
                 }
             }
 
-            // Sort Ford output
-            for (var i = 0; i < fordFulkersonOutput.Count; ++i)
-            {
-                if (fordFulkersonOutput[i].Item1 > fordFulkersonOutput[i].Item2)
-                {
-                    fordFulkersonOutput[i] = new Tuple<int, int>(fordFulkersonOutput[i].Item2, fordFulkersonOutput[i].Item1);
-                }
-            }
-
-            var isOK = false;
-            // Check
-            foreach (var result in bruteForceOutput)
-            {
-                if (result.Count == fordFulkersonOutput.Count)
-                {
-                    if (result.All(r => fordFulkersonOutput.Contains(r)))
-                    {
-                        isOK = true;
-                    }
-                }
-            }
-
+            var matching = new List<Tuple<int, int>>();
 
             if (isWeighted)
             {
-                //var matching = HungarianMethod.Run(graph);
-                BruteForceMatchingAlgorithm.Run(graph);
+                matching = HungarianMethod.Run(graph);
             }
             else
             {
-                //var matching = FordFulkersonMethod.Run(graph);
-                BruteForceMatchingAlgorithm.Run(graph);
+                matching = FordFulkersonMethod.Run(graph);
             }
 
-            // TODO print
+            foreach (var edge in matching)
+            {
+                Console.WriteLine($"{edge.Item1} {edge.Item2}");
+            }
         }
     }
 }
