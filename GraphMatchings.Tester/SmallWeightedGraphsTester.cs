@@ -15,10 +15,10 @@ namespace GraphMatchings.Tester
         private static readonly Stopwatch Stopwatch = new Stopwatch();
         private static readonly Random random = new Random();
 
-        private static readonly Dictionary<string, List<long>> BruteForceAlgorithmTimes = new Dictionary<string, List<long>>();
-        private static readonly Dictionary<string, List<long>> KuhnMunkresTimes = new Dictionary<string, List<long>>();
+        private static Dictionary<string, List<long>> BruteForceAlgorithmTimes = new Dictionary<string, List<long>>();
+        private static Dictionary<string, List<long>> KuhnMunkresTimes = new Dictionary<string, List<long>>();
 
-        public static void TestWeightedSmallGraphs(string myFormatDirectory)
+        public static void Test(string myFormatDirectory)
         {
             var possibleWeights = new List<Tuple<int, int>>
                                       {
@@ -32,9 +32,9 @@ namespace GraphMatchings.Tester
 
             foreach (var pw in possibleWeights)
             {
+                CleanupResults();
                 foreach (var filePath in Directory.GetFiles(myFormatDirectory))
                 {
-                    //  Console.WriteLine(Path.GetFileNameWithoutExtension(filePath));
 
                     var split = Path.GetFileNameWithoutExtension(filePath).Split('-');
                     var fileType = $"{split[0]}-{split[1]}";
@@ -45,26 +45,42 @@ namespace GraphMatchings.Tester
                     RunAndCheckResults(fileType, graph);
                 }
 
-                PrintResult($"weighted-{pw.Item1}-{pw.Item2}.txt");
+                PrintResult($"weighted_With3dummy-{pw.Item1}-{pw.Item2}.txt");
             }
         }
 
         private static void PrintResult(string fileName)
         {
             var outputPath = $"SmallWeightedTestsResults\\{fileName}";
+
+            var results = new List<TestResults>();
+            foreach (var key in BruteForceAlgorithmTimes.Keys)
+            {
+                var avgBruteForce = BruteForceAlgorithmTimes[key].Average(ticks => (ticks * 1000000) / Stopwatch.Frequency);
+
+                var avgKuhnMunkres = KuhnMunkresTimes[key].Average(ticks => ((ticks * 1000000) / Stopwatch.Frequency));
+                var split = key.Split('-');
+
+                results.Add(new TestResults
+                                {
+                                    FileType = key,
+                                    NumberOfNodes = int.Parse(split[0]) + int.Parse(split[1]),
+                                    NumberOfTests = BruteForceAlgorithmTimes[key].Count,
+                                    AvgBruteForce = Math.Round(avgBruteForce, 0),
+                                    AvgKuhnMunkres = Math.Round(avgKuhnMunkres, 0)
+                                });
+            }
+
+            var sortedResults = results.OrderBy(r => r.NumberOfNodes);
+
             using (var sw = File.CreateText(outputPath))
             {
                 sw.WriteLine("file\tsumOfNodes\tnumberOfTests\tBruteForce\tKuhnMunkers\tMicroseconds");
-                foreach (var key in BruteForceAlgorithmTimes.Keys)
+                foreach (var result in sortedResults)
                 {
-                    var avgBruteForce = BruteForceAlgorithmTimes[key].Average(ticks => (ticks * 1000000) / Stopwatch.Frequency);
-                    var avgKuhnMunkres = KuhnMunkresTimes[key].Average(ticks => ((ticks * 1000000) / Stopwatch.Frequency));
-
-                    var split = key.Split('-');
-
-                    var sumOfNodes = int.Parse(split[0]) + int.Parse(split[1]);
-                    sw.WriteLine($"{key}\t{sumOfNodes}\t{BruteForceAlgorithmTimes[key].Count}\t{Math.Round(avgBruteForce,4)}\t{Math.Round(avgKuhnMunkres,4)}");
+                    sw.WriteLine($"{result.NumberOfNodes}\t{result.FileType}\t{result.NumberOfTests}\t{result.AvgBruteForce}\t{result.AvgKuhnMunkres}");
                 }
+
             }
         }
 
@@ -151,6 +167,12 @@ namespace GraphMatchings.Tester
                         result[i].Item1);
                 }
             }
+        }
+
+        private static void CleanupResults()
+        {
+            BruteForceAlgorithmTimes = new Dictionary<string, List<long>>();
+            KuhnMunkresTimes = new Dictionary<string, List<long>>();
         }
 
         private static void AddWeights(ref int[,] graph, int min, int max)

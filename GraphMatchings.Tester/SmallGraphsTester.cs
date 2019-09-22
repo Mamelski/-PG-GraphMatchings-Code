@@ -14,57 +14,123 @@ namespace GraphMatchings.Tester
     {
         private static readonly Stopwatch Stopwatch = new Stopwatch();
 
-        private static readonly Dictionary<string, List<long>> BruteForceAlgorithmTimes = new Dictionary<string, List<long>>();
-        private static readonly Dictionary<string, List<long>> FordFulkersonTimes = new Dictionary<string, List<long>>();
-        private static readonly Dictionary<string, List<long>> KuhnMunkresTimes = new Dictionary<string, List<long>>();
+        private static Dictionary<string, List<long>> BruteForceAlgorithmTimes = new Dictionary<string, List<long>>();
+        private static Dictionary<string, List<long>> FordFulkersonTimes = new Dictionary<string, List<long>>();
+        private static Dictionary<string, List<long>> KuhnMunkresTimes = new Dictionary<string, List<long>>();
 
-        public static void TestSmallGraphs(string myFormatDirectory)
+        public static void Test(string myFormatDirectory)
         {
+            CleanupResults();
+            TestWithoutDummyFiles(myFormatDirectory);
+            CleanupResults();
+            TestWitDummyFiles(myFormatDirectory);
+            CleanupResults();
+        }
+
+
+        private static void TestWitDummyFiles(string myFormatDirectory)
+        {
+            var sourceFile = Path.Combine(myFormatDirectory, "1-1-0.txt");
+            File.Copy(sourceFile, Path.Combine(myFormatDirectory, "0-0-1.txt"));
+            File.Copy(sourceFile, Path.Combine(myFormatDirectory, "0-0-2.txt"));
+            File.Copy(sourceFile, Path.Combine(myFormatDirectory, "0-0-3.txt"));
+
             foreach (var filePath in Directory.GetFiles(myFormatDirectory))
             {
-              //  Console.WriteLine(Path.GetFileNameWithoutExtension(filePath));
-
                 var split = Path.GetFileNameWithoutExtension(filePath).Split('-');
                 var fileType = $"{split[0]}-{split[1]}";
 
                 var graph = GraphParser.Parse(filePath);
 
-                RunAndCheckResults(fileType, graph);
+                Run3AlgorithmsAndCheckResults(fileType, graph);
             }
 
-            PrintResult();
+            PrintDummyFilesResult(@"SmallTestsResults\3algs_3DummyFiles.txt");
         }
 
-        private static void PrintResult()
+        private static void TestWithoutDummyFiles(string myFormatDirectory)
         {
-            var outputPath = @"SmallTestsResults\results.txt";
+            foreach (var filePath in Directory.GetFiles(myFormatDirectory))
+            {
+                var split = Path.GetFileNameWithoutExtension(filePath).Split('-');
+                var fileType = $"{split[0]}-{split[1]}";
+
+                var graph = GraphParser.Parse(filePath);
+
+                Run3AlgorithmsAndCheckResults(fileType, graph);
+            }
+
+            PrintDummyFilesResult(@"SmallTestsResults\3algs_noDummyFiles.txt");
+        }
+
+        private static void PrintBig(string outputPath)
+        {
+            var results = new List<TestResults>();
+            foreach (var key in FordFulkersonTimes.Keys)
+            {
+                var avgFordFulkerson = FordFulkersonTimes[key].Average(ticks => ((ticks * 1000000) / Stopwatch.Frequency));
+                var avgKuhnMunkres = KuhnMunkresTimes[key].Average(ticks => ((ticks * 1000000) / Stopwatch.Frequency));
+                var split = key.Split('-');
+
+                results.Add(new TestResults
+                                {
+                                    FileType = key,
+                                    NumberOfNodes = int.Parse(split[0]) + int.Parse(split[1]),
+                                    NumberOfTests = BruteForceAlgorithmTimes[key].Count,
+                                    AvgFordFulkerson = Math.Round(avgFordFulkerson, 0),
+                                    AvgKuhnMunkres = Math.Round(avgKuhnMunkres, 0)
+                                });
+            }
+
+            var sortedResults = results.OrderBy(r => r.NumberOfNodes);
+
             using (var sw = File.CreateText(outputPath))
             {
-                sw.WriteLine("file\tsumOfNodes\tnumberOfTests\tBruteForce\tFordFulkerson\tKuhnMunkers\tMicroseconds");
-                foreach (var key in BruteForceAlgorithmTimes.Keys)
+                sw.WriteLine("file\tsumOfNodes\tnumberOfTests\tFordFulkerson\tKuhnMunkers");
+                foreach (var result in sortedResults)
                 {
-                    var avgBruteForce = BruteForceAlgorithmTimes[key].Average(ticks => (ticks * 1000000) / Stopwatch.Frequency);
-                    var avgFordFulkerson = FordFulkersonTimes[key].Average(ticks => ((ticks * 1000000) / Stopwatch.Frequency));
-                    var avgKuhnMunkres = KuhnMunkresTimes[key].Average(ticks => ((ticks * 1000000) / Stopwatch.Frequency));
-
-                    var split = key.Split('-');
-
-                    var sumOfNodes = int.Parse(split[0]) + int.Parse(split[1]);
-                    sw.WriteLine($"{key}\t{sumOfNodes}\t{BruteForceAlgorithmTimes[key].Count}\t{Math.Round(avgBruteForce,4)}\t{Math.Round(avgFordFulkerson,4)}\t{Math.Round(avgKuhnMunkres,4)}");
+                    sw.WriteLine($"{result.NumberOfNodes}\t{result.FileType}\t{result.NumberOfTests}\t{result.AvgFordFulkerson}\t{result.AvgKuhnMunkres}");
                 }
             }
         }
 
-        public static void RunAndCheckResults(string fileType, int[,] graph)
+        private static void PrintDummyFilesResult(string outputPath)
         {
-            //if (fileType.Equals("2-2"))
-            //{
-            //    int a = 0;
-            //}
+            var results = new List<TestResults>();
+            foreach (var key in BruteForceAlgorithmTimes.Keys)
+            {
+                var avgBruteForce = BruteForceAlgorithmTimes[key].Average(ticks => (ticks * 1000000) / Stopwatch.Frequency);
+                var avgFordFulkerson = FordFulkersonTimes[key].Average(ticks => ((ticks * 1000000) / Stopwatch.Frequency));
+                var avgKuhnMunkres = KuhnMunkresTimes[key].Average(ticks => ((ticks * 1000000) / Stopwatch.Frequency));
+                var split = key.Split('-');
 
+                results.Add(new TestResults
+                                {
+                                    FileType = key,
+                                    NumberOfNodes = int.Parse(split[0]) + int.Parse(split[1]),
+                                    NumberOfTests = BruteForceAlgorithmTimes[key].Count,
+                                    AvgBruteForce = Math.Round(avgBruteForce, 0),
+                                    AvgFordFulkerson = Math.Round(avgFordFulkerson, 0),
+                                    AvgKuhnMunkres = Math.Round(avgKuhnMunkres, 0)
+                });
+            }
+
+            var sortedResults = results.OrderBy(r => r.NumberOfNodes);
+
+            using (var sw = File.CreateText(outputPath))
+            {
+                sw.WriteLine("file\tsumOfNodes\tnumberOfTests\tBruteForce\tFordFulkerson\tKuhnMunkers\tMicroseconds");
+                foreach (var result in sortedResults)
+                {
+                    sw.WriteLine($"{result.NumberOfNodes}\t{result.FileType}\t{result.NumberOfTests}\t{result.AvgBruteForce}\t{result.AvgFordFulkerson}\t{result.AvgKuhnMunkres}");
+                }
+            }
+        }
+
+        private static void Run3AlgorithmsAndCheckResults(string fileType, int[,] graph)
+        {
             AddFileTypeToDictionaryIfNeeded(fileType);
 
-            
             Stopwatch.Start();
             var bruteForceAlgorithmResults = BruteForceMatchingAlgorithm.Run(graph);
             Stopwatch.Stop();
@@ -82,9 +148,13 @@ namespace GraphMatchings.Tester
             Stopwatch.Stop();
             KuhnMunkresTimes[fileType].Add(Stopwatch.ElapsedTicks);
 
-            SortEdgesInBruteForceResults(ref bruteForceAlgorithmResults);
-            SortEdgesResult(ref fordFulkersonResult);
-            SortEdgesResult(ref kuhnMunkersResult);
+            for (var i = 0; i < bruteForceAlgorithmResults.Count; ++i)
+            {
+                bruteForceAlgorithmResults[i] = TestHelper.SortEdges(bruteForceAlgorithmResults[i]);
+            }
+
+            fordFulkersonResult = TestHelper.SortEdges(fordFulkersonResult);
+            kuhnMunkersResult = TestHelper.SortEdges(kuhnMunkersResult);
 
             var fordFulkersonOk = AreResultsTheSame(bruteForceAlgorithmResults, fordFulkersonResult);
             var kuhnMunkersOk = AreResultsTheSame(bruteForceAlgorithmResults, kuhnMunkersResult);
@@ -130,33 +200,11 @@ namespace GraphMatchings.Tester
             return false;
         }
 
-        // Sort edges
-        private static void SortEdgesInBruteForceResults(ref List<List<Tuple<int, int>>> bruteForceAlgorithmResults)
+        private static void CleanupResults()
         {
-            foreach (var result in bruteForceAlgorithmResults)
-            {
-                for (var i = 0; i < result.Count; ++i)
-                {
-                    if (result[i].Item1 > result[i].Item2)
-                    {
-                        result[i] = new Tuple<int, int>(result[i].Item2, result[i].Item1);
-                    }
-                }
-            }
-        }
-
-        // Sort edges
-        private static void SortEdgesResult(ref List<Tuple<int, int>> result)
-        {
-            for (var i = 0; i < result.Count; ++i)
-            {
-                if (result[i].Item1 > result[i].Item2)
-                {
-                    result[i] = new Tuple<int, int>(
-                        result[i].Item2,
-                        result[i].Item1);
-                }
-            }
+            BruteForceAlgorithmTimes = new Dictionary<string, List<long>>();
+            FordFulkersonTimes = new Dictionary<string, List<long>>();
+            KuhnMunkresTimes = new Dictionary<string, List<long>>();
         }
     }
 }
