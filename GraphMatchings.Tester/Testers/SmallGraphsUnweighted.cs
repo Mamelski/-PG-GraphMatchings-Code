@@ -22,7 +22,7 @@
             TestWithoutDummyFiles(myFormatDirectory);
 
             CleanupResults();
-            TestWitDummyFiles(myFormatDirectory);
+          //  TestWitDummyFiles(myFormatDirectory);
             CleanupResults();
         }
 
@@ -81,14 +81,14 @@
                                 });
             }
 
-            var sortedResults = results.OrderBy(r => r.NumberOfNodes);
+            var sortedResults = results.OrderBy(r => r.FileType);
 
             using (var sw = File.CreateText(outputPath))
             {
                 sw.WriteLine("file\tsumOfNodes\tnumberOfTests\tFordFulkerson\tKuhnMunkers");
                 foreach (var result in sortedResults)
                 {
-                    sw.WriteLine($"{result.NumberOfNodes}\t{result.FileType}\t{result.NumberOfTests}\t{result.AvgFordFulkerson}\t{result.AvgKuhnMunkres}");
+                    sw.WriteLine($"{result.NumberOfNodes} && {result.FileType} && {result.NumberOfTests} && {result.AvgFordFulkerson} && {result.AvgKuhnMunkres}");
                 }
             }
         }
@@ -121,7 +121,13 @@
                 sw.WriteLine("file\tsumOfNodes\tnumberOfTests\tBruteForce\tFordFulkerson\tKuhnMunkers\tMicroseconds");
                 foreach (var result in sortedResults)
                 {
-                    sw.WriteLine($"{result.NumberOfNodes}\t{result.FileType}\t{result.NumberOfTests}\t{result.AvgBruteForce}\t{result.AvgFordFulkerson}\t{result.AvgKuhnMunkres}");
+                    sw.WriteLine(@"$" + $"{result.FileType}" + @"$ && " +
+                                 @"$" + $"{result.NumberOfNodes}" + @"$ && " +
+                                 @"$" + $"{result.NumberOfTests}" + @"$ && " +
+                                 @"$" + $"{result.AvgBruteForce}" + @"$ && " +
+                                 @"$" + $"{result.AvgFordFulkerson}" + @"$ && " +
+                                 @"$" + $"{result.AvgKuhnMunkres}" + @"$ \\ ");
+
                 }
             }
         }

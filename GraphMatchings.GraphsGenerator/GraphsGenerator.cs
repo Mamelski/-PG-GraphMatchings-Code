@@ -17,7 +17,7 @@
 
         public static void Generate(string nautyPath)
         {
-            PrepareDirectories();
+            //PrepareDirectories();
 
             GenerateAndSaveSmallGraphs(nautyPath);
             Console.WriteLine("Small graphs generated");
