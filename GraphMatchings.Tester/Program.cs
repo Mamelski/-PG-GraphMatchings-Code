@@ -1,5 +1,7 @@
 ﻿namespace GraphMatchings.Tester
 {
+    using System.Diagnostics;
+
     using GraphMatchings.Tester.Testers;
 
     public class Program
@@ -9,7 +11,11 @@
 
         public static void Main(string[] args)
         {
-            SmallGraphsUnweighted.Test(MyFormatDirectory);
+            var sw = new Stopwatch();
+            var d = Stopwatch.IsHighResolution;
+            var a = 0;
+
+            //SmallGraphsUnweighted.Test(MyFormatDirectory);
             //SmallWeightedGraphsTester.Test(MyFormatDirectory);
 
             // BigGraphsUnweighted.Test(@"C:\Users\Jakub\Documents\GitHub\-PG-GraphMatchings-Code\GraphMatchings.GraphsGenerator\bin\Debug\netcoreapp2.1\BigGraphs\MyFormat");

@@ -22,7 +22,7 @@
             GenerateAndSaveSmallGraphs(nautyPath);
             Console.WriteLine("Small graphs generated");
 
-            //GenerateAndSaveBigGraphs(nautyPath);
+            GenerateAndSaveBigGraphs(nautyPath);
            // Console.WriteLine("Big graphs generated");
 
             GenerateAndSaveGraphsWithGivenEdges(nautyPath);
