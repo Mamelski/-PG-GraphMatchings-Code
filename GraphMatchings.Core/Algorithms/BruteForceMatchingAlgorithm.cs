@@ -1,4 +1,4 @@
-namespace GraphMatchings.Core
+namespace GraphMatchings.Core.Algorithms
 {
     using System;
     using System.Collections.Generic;
@@ -32,7 +32,7 @@ namespace GraphMatchings.Core
             resultMatchings = new List<List<Tuple<int, int>>>();
             bestScore = 0;
             lastRow = 0;
-            
+
             originalGraph = graph;
             TransformGraph();
             RunStep(0);
@@ -109,6 +109,8 @@ namespace GraphMatchings.Core
 
         private static void RunStep(int row)
         {
+
+            // TODO trochê zduplikowane mordo
             if (row == lastRow)
             {
                 // Not taking this row
@@ -125,7 +127,7 @@ namespace GraphMatchings.Core
                     matchingEdges.Push(new Tuple<int, int>(row, column));
                     CheckScore();
 
-                    // Add edge to matching
+                    // Remove edge to matching
                     matchingEdges.Pop();
                 }
 
@@ -163,12 +165,14 @@ namespace GraphMatchings.Core
                 score += originalGraph[rowIndexes[edge.Item1], columnIndexes[edge.Item2]];
             }
 
+            // Add to best scores collection
             if (score == bestScore)
             {
                 var bestM = matchingEdges.Select(c => c).ToList();
                 maksimumMatchings.Add(bestM);
             }
 
+            // New best score
             if (score > bestScore)
             {
                 bestScore = score;

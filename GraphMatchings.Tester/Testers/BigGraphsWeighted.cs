@@ -7,6 +7,7 @@
     using System.Linq;
 
     using GraphMatchings.Core;
+    using GraphMatchings.Core.Algorithms;
 
     public static class BigGraphsWeighted
     {

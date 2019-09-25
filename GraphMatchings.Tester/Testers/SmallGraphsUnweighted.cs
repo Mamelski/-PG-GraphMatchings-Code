@@ -7,6 +7,7 @@
     using System.Linq;
 
     using GraphMatchings.Core;
+    using GraphMatchings.Core.Algorithms;
 
     public class SmallGraphsUnweighted
     {
@@ -121,6 +122,7 @@
                 sw.WriteLine("file\tsumOfNodes\tnumberOfTests\tBruteForce\tFordFulkerson\tKuhnMunkers\tMicroseconds");
                 foreach (var result in sortedResults)
                 {
+                    // Latex format
                     sw.WriteLine(@"$" + $"{result.FileType}" + @"$ && " +
                                  @"$" + $"{result.NumberOfNodes}" + @"$ && " +
                                  @"$" + $"{result.NumberOfTests}" + @"$ && " +

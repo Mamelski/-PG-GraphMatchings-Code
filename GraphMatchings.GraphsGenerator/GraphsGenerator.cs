@@ -17,13 +17,13 @@
 
         public static void Generate(string nautyPath)
         {
-            //PrepareDirectories();
+            PrepareDirectories();
 
             GenerateAndSaveSmallGraphs(nautyPath);
             Console.WriteLine("Small graphs generated");
 
             GenerateAndSaveBigGraphs(nautyPath);
-           // Console.WriteLine("Big graphs generated");
+            Console.WriteLine("Big graphs generated");
 
             GenerateAndSaveGraphsWithGivenEdges(nautyPath);
             Console.WriteLine("Graphs with given edges generated");

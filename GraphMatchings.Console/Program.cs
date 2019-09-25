@@ -7,6 +7,8 @@
     using CommandLine;
     using Core;
 
+    using GraphMatchings.Core.Algorithms;
+
     public class Program
     {
         public static void Main(string[] args)

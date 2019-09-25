@@ -1,4 +1,4 @@
-﻿namespace GraphMatchings.Core
+﻿namespace GraphMatchings.Core.Algorithms
 {
     using System;
     using System.Collections.Generic;
@@ -44,8 +44,7 @@
         // Runs algorithm steps, based on "step" variable
         private static void RunSteps()
         {
-          //  Console.WriteLine($"Step {step}");
-
+            // Console.WriteLine($"Step {step}");
             switch (step)
             {
                 case 0:

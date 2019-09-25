@@ -1,4 +1,4 @@
-﻿namespace GraphMatchings.Core
+﻿namespace GraphMatchings.Core.Algorithms
 {
     using System;
     using System.Collections.Generic;
